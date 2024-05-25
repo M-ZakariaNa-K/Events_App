@@ -1,8 +1,7 @@
+import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/common/Util/Locale.dart';
 import 'package:events_app/common/Util/LocaleController.dart';
-import 'package:events_app/common/view/auth/otp_page.dart';
-import 'package:events_app/User_App/view/booking/main_booking_page.dart';
-import 'package:events_app/User_App/view/home/drawer.dart';
+import 'package:events_app/common/view/auth/login_page.dart';
 import 'package:events_app/common/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,7 +54,7 @@ class MyApp extends StatelessWidget {
             //========================
             themeMode: mode,
 
-            locale: const Locale('ar'),
+            locale: const Locale('en'),
             translations: LangLocale(),
             title: 'Events App',
             // put the home page as your main working screen

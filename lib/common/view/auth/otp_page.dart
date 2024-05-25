@@ -1,15 +1,24 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:events_app/common/components/general/Costume_TextField_widget.dart';
+import 'package:events_app/common/view/auth/create_new_password_page.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/common/components/auth/otp/number_fild_otp.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
 import 'package:events_app/common/controllers/auth/otp_timer_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
-import 'package:events_app/User_App/view/home/drawer.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class OtpPage extends StatelessWidget {
   final TimerController timerController = Get.put(TimerController());
 
-  OtpPage({super.key});
+  OtpPage({
+    Key? key,
+    required this.isForgetPassword,
+  }) : super(key: key);
+  final bool isForgetPassword;
+  final TextEditingController changeNumberController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +71,18 @@ class OtpPage extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      final shouldNavigate = await showConfirmationDialogOTP(
+                          context: context,
+                          imagePath:
+                              'assets/images/shield (1).png', // Replace with your image path
+                          title: 'Change Phone Number',
+                          changeNumberController: changeNumberController);
+
+                      if (shouldNavigate ?? false) {
+                        //Here will make the post request which has the changing number
+                      }
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
@@ -146,6 +166,9 @@ class OtpPage extends StatelessWidget {
                     borderColor: ThemesStyles.primary,
                     title: "Confirm",
                     onPressed: () {
+                      isForgetPassword
+                          ? Get.to(const CreateNewPasswordPage())
+                          : Get.offAll(const DrawerPage());
                       //Here we will Confirm the OTP code
                       // Navigator.push(
                       //   context,
@@ -159,7 +182,6 @@ class OtpPage extends StatelessWidget {
                       //     },
                       //   ),
                       // );
-                      Get.offAll(const DrawerPage());
                     },
                   ),
                 ),
@@ -170,4 +192,65 @@ class OtpPage extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<bool?> showConfirmationDialogOTP({
+  required BuildContext context,
+  required String imagePath,
+  required String title,
+  required TextEditingController changeNumberController,
+}) async {
+  final result = await showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      backgroundColor: Colors.white, //
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(imagePath, width: 100.0, height: 100.0),
+          const SizedBox(height: 20.0),
+          Text(
+            title,
+            style: const TextStyle(
+              color: ThemesStyles.primary,
+              fontSize: 16,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: CustomeTextFormField(
+              hintText: "",
+              inputType: TextInputType.phone,
+              title: "",
+              controller: changeNumberController,
+              validator: (value) {},
+              prefixIcon: const Icon(Icons.numbers),
+            ),
+          )
+        ],
+      ),
+
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(
+              color: ThemesStyles.secondary,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text(
+            'Continue',
+          ),
+        ),
+      ],
+    ),
+  );
+  return result;
 }

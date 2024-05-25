@@ -1,5 +1,6 @@
 import 'package:events_app/common/Util/lang_controller.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer_item.dart';
+import 'package:events_app/common/components/general/main_loading_widget.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,138 +23,205 @@ class DrawerWidget extends StatelessWidget {
       width: 220,
       color: Theme.of(context).brightness == Brightness.dark
           ? ThemesStyles.backgroundDark
-          : ThemesStyles.secondary,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Get.back();
-            },
-          ),
-          Center(
-            child: Padding(
+          : Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            Padding(
               padding: const EdgeInsets.only(
-                  left: 10.0, right: 10.0, top: 10, bottom: 40),
+                  left: 10.0, right: 10.0, top: 10, bottom: 20),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(
                     100), // Half of container width/height for perfect circle
                 child: SizedBox(
-                  width: 100,
-                  height: 100,
+                  width: 50,
+                  height: 50,
                   child: Image.asset(
-                    "assets/images/Logo.jpg",
+                    "assets/images/Logo.png",
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
             ),
-          ),
-          DrawerItem(
-            title: 'Home',
-            icon: Icons.home_work_outlined,
-            index: 0,
-            selectedIndex: selectedIndex,
-            onItemTapped: onItemTapped,
-            selectedColor: selectedColor,
-          ),
-
-          DrawerItem(
-            title: 'Settings',
-            icon: Icons.person_2_outlined,
-            index: 1,
-            selectedIndex: selectedIndex,
-            onItemTapped: onItemTapped,
-            selectedColor: selectedColor,
-          ),
-          // DrawerItem(
-          //   title: "reports",
-          //   icon: Icons.picture_as_pdf_outlined,
-          //   index: 2,
-          //   selectedIndex: selectedIndex,
-          //   onItemTapped: onItemTapped,
-          //   selectedColor: selectedColor,
-          // ),
-          DrawerItem(
-            title: "Logout",
-            icon: Icons.logout,
-            index: 4,
-            selectedIndex: selectedIndex,
-            onItemTapped: (value) {
-              // Show loading indicator dialog
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              );
-              //===============START function to logout==========================
-              // DioHelper()
-              //     .getData(path: 'users/logout', token: token)
-              //     .then((value) {
-              //   //===============================================
-              //   //to remove this value after loggedout cause i need it just
-              //   GetStorage().remove('isUserAdmin');
-              //   // Hide loading indicator dialog
-              //   Get.back();
-              //   window.localStorage.remove('token');
-              //   //===============================================
-              //   showToast(
-              //       text: "Successfully logged out",
-              //       state: ToastStates.SUCCESS);
-              //   token = '';
-              //   Get.offAndToNamed('/Login');
-              // });
-              //===============END function to logout==========================
-            },
-            selectedColor: selectedColor,
-          ),
-          const Spacer(
-            flex: 3,
-          ),
-          //===============================lang==========================
-          GetBuilder<LanguageRadioController>(
-              init: LanguageRadioController(),
-              builder: (LanguageRadioController controller) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          "Arabic".tr,
-                          style: const TextStyle(
-                            color: ThemesStyles.primary,
-                          ),
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              controller.toggleLanguage();
-                            },
-                            icon: const Icon(
-                              Icons.swap_horiz_rounded,
+            Text(
+              "Zakaria Al-nabulsi",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: ThemesStyles.mainFontSize,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 5.0),
+              child: Text(
+                "zakariana2003@gmail.com",
+                style: TextStyle(
+                  fontSize: ThemesStyles.littelFontSize,
+                  color: const Color.fromARGB(255, 119, 119, 119),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Divider(
+              color: Colors.grey,
+              height: 10,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DrawerItem(
+                  isLogout: false,
+                  title: 'Home',
+                  icon: Icons.home_work_outlined,
+                  index: 0,
+                  selectedIndex: selectedIndex,
+                  onItemTapped: onItemTapped,
+                  selectedColor: selectedColor,
+                ),
+                DrawerItem(
+                  isLogout: false,
+                  title: 'Profile',
+                  icon: Icons.person_2_outlined,
+                  index: 1,
+                  selectedIndex: selectedIndex,
+                  onItemTapped: onItemTapped,
+                  selectedColor: selectedColor,
+                ),
+                DrawerItem(
+                  isLogout: false,
+                  title: "Budget",
+                  icon: Icons.money,
+                  index: 2,
+                  selectedIndex: selectedIndex,
+                  onItemTapped: onItemTapped,
+                  selectedColor: selectedColor,
+                ),
+                DrawerItem(
+                  isLogout: false,
+                  title: "History",
+                  icon: Icons.history,
+                  index: 3,
+                  selectedIndex: selectedIndex,
+                  onItemTapped: onItemTapped,
+                  selectedColor: selectedColor,
+                ),
+                DrawerItem(
+                  isLogout: false,
+                  title: "Settings",
+                  icon: Icons.settings,
+                  index: 4,
+                  selectedIndex: selectedIndex,
+                  onItemTapped: onItemTapped,
+                  selectedColor: selectedColor,
+                ),
+                DrawerItem(
+                  isLogout: false,
+                  title: "About Us",
+                  icon: Icons.info_outline_rounded,
+                  index: 5,
+                  selectedIndex: selectedIndex,
+                  onItemTapped: onItemTapped,
+                  selectedColor: selectedColor,
+                ),
+              ],
+            ),
+            //===============================lang==========================
+            GetBuilder<LanguageRadioController>(
+                init: LanguageRadioController(),
+                builder: (LanguageRadioController controller) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            "Arabic".tr,
+                            style: const TextStyle(
                               color: ThemesStyles.primary,
-                              size: 18,
-                            )),
-                        Text(
-                          "English".tr,
-                          style: const TextStyle(
-                            color: ThemesStyles.primary,
+                            ),
                           ),
-                        ),
-                      ],
+                          IconButton(
+                              onPressed: () {
+                                controller.toggleLanguage();
+                              },
+                              icon: const Icon(
+                                Icons.swap_horiz_rounded,
+                                color: ThemesStyles.primary,
+                                size: 18,
+                              )),
+                          Text(
+                            "English".tr,
+                            style: const TextStyle(
+                              color: ThemesStyles.primary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                  );
+                }),
+
+            Spacer(
+              flex: 50,
+            ),
+            DrawerItem(
+              isLogout: true,
+              title: "Logout",
+              icon: Icons.logout,
+              index: 6,
+              selectedIndex: selectedIndex,
+              onItemTapped: (value) {
+                // Show loading indicator dialog
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return const Center(child: MainLoadingWidget());
+                  },
                 );
-              }),
-        ],
+                //===============START function to logout==========================
+                // DioHelper()
+                //     .getData(path: 'users/logout', token: token)
+                //     .then((value) {
+                //   //===============================================
+                //   //to remove this value after loggedout cause i need it just
+                //   GetStorage().remove('isUserAdmin');
+                //   // Hide loading indicator dialog
+                //   Get.back();
+                //   window.localStorage.remove('token');
+                //   //===============================================
+                //   showToast(
+                //       text: "Successfully logged out",
+                //       state: ToastStates.SUCCESS);
+                //   token = '';
+                //   Get.offAndToNamed('/Login');
+                // });
+                //===============END function to logout==========================
+              },
+              selectedColor: selectedColor,
+            ),
+            const Spacer(
+              flex: 3,
+            ),
+          ],
+        ),
       ),
     );
   }

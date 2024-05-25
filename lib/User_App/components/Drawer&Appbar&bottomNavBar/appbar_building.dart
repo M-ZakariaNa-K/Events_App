@@ -1,7 +1,9 @@
+import 'package:events_app/User_App/view/profile/profile_page.dart';
 import 'package:events_app/common/Util/lang_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 // AppBarBuilding function
 AppBar? appBarBuilding(
@@ -20,7 +22,7 @@ AppBar? appBarBuilding(
             ),
           ),
           actions: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Icon(
                 Icons.notifications,
@@ -28,7 +30,7 @@ AppBar? appBarBuilding(
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: ValueListenableBuilder<ThemeMode>(
                   valueListenable: notifier,
                   builder: (_, mode, ___) {
@@ -36,28 +38,33 @@ AppBar? appBarBuilding(
                       onTap: () => notifier.value = mode == ThemeMode.light
                           ? ThemeMode.dark
                           : ThemeMode.light,
-                      child: Icon(
+                      child: const Icon(
                         Icons.dark_mode,
                         color: ThemesStyles.secondary,
                       ),
                     );
                   }),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Icon(
                 Icons.language,
                 color: ThemesStyles.secondary,
               ),
             ),
-            Padding(
-              padding: LanguageRadioController().selectedValue
-                  ? EdgeInsets.only(left: 30.0, right: 8.0)
-                  : EdgeInsets.only(left: 8.0, right: 30.0),
-              child: CircleAvatar(
-                radius: 20,
-                backgroundImage: AssetImage(
-                    "assets/images/Profile.png"), // Change image path
+            GestureDetector(
+              onTap: () {
+                Get.to(ProfilePage());
+              },
+              child: Padding(
+                padding: LanguageRadioController().selectedValue
+                    ? const EdgeInsets.only(left: 30.0, right: 8.0)
+                    : const EdgeInsets.only(left: 8.0, right: 30.0),
+                child: const CircleAvatar(
+                  radius: 20,
+                  backgroundImage: AssetImage(
+                      "assets/images/Profile.png"), // Change image path
+                ),
               ),
             ),
           ],

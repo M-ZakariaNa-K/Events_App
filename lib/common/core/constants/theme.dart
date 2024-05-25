@@ -14,7 +14,7 @@ class ThemesStyles {
   static const thirdColorDark = Color(0xFFFFE4E8);
   static const backgroundDark = Color(0xFF1C1C1C);
   //text colors
-  static const textColor = Color(0xFF000000);
+  static const textColor = Color.fromARGB(255, 43, 43, 43);
   static const seconndTextColor = Colors.white;
   //static const bottomBarColor = Color(0xFFECB5E2);
   //padding all

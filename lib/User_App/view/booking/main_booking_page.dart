@@ -1,9 +1,11 @@
-import 'package:events_app/User_App/components/booking/onBoarding_Questions_Component.dart';
-import 'package:events_app/common/components/first_open/boading_widget.dart';
+import 'package:events_app/User_App/controllers/booking/radio_controller.dart';
+import 'package:events_app/User_App/view/booking/onBoardingPages/fifth_onBoarding_booking.dart';
+import 'package:events_app/User_App/view/booking/onBoardingPages/fourth_onBoarding_booking.dart';
+import 'package:events_app/User_App/view/booking/onBoardingPages/sixth_onBoarding_booking.dart';
+import 'package:events_app/User_App/view/booking/onBoardingPages/third_onBoarding_booking.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/User_App/view/booking/onBoardingPages/first_onBoarding_booking.dart';
 import 'package:events_app/User_App/view/booking/onBoardingPages/second_onBoarding_booking%20copy.dart';
-import 'package:events_app/User_App/view/home/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -11,100 +13,150 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class MainBookingPage extends StatelessWidget {
   MainBookingPage({super.key});
   final PageController _controller = PageController();
-  void nextPage() {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _numberController = TextEditingController();
+  final TextEditingController _regionController = TextEditingController();
+  String? selectedTime;
+  String? selectedEventCatigory;
+
+  // Method to save the selected data
+  void saveData(BuildContext context) {
+    final RadioController _eventKindController = Get.find(tag: 'EventKind');
+    final RadioController _mixedController = Get.find(tag: 'MixedServices');
+    final RadioController _dinnerController = Get.find(tag: 'DinnerServices');
+    final RadioController _photographyController =
+        Get.find(tag: 'PhotographyServices');
+
+    final selectedData = {
+      //====================================================
+      //0 -> public , 1 -> privte
+      'EventKind': _eventKindController.getSelectedValue(),
+      //====================================================
+      'MixedServices': _mixedController.getSelectedValue(),
+      'DinnerServices': _dinnerController.getSelectedValue(),
+      'PhotographyServices': _photographyController.getSelectedValue(),
+      'Region': _regionController.text,
+      'audiencesNumber': _numberController.text,
+      'SelectedTime': selectedTime,
+      'EventCatigory': selectedEventCatigory,
+    };
+// Check if the current page is the third slide (index 2)
+    if (_controller.page == 2) {
+      // Get the selected time from the ThirdOnBoardingBooking page
+      final Map<String, dynamic>? thirdPageData =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+      if (thirdPageData != null) {
+        selectedData['SelectedTime'] = thirdPageData['SelectedTime'];
+      }
+    }
+    print('Saved Data: $selectedData');
+    // You can now use the selectedData as needed, e.g., send to backend, save locally, etc.
+  }
+
+  void nextPage(BuildContext context) {
     if (_controller.page == 5) {
-      // If on the sixth slide, navigate to Showing Lounges AND ORGANIZERS page
-      //Get.to(DrawerPage());
+      // If on the sixth slide, save data
+      saveData(context);
+      // Optionally navigate to another page after saving data
+      // Get.to(DrawerPage());
     } else {
-      // Otherwise, navigate to the next slide
-      _controller.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.ease,
-      );
+      // Check if the current page is the fifth or second slide and validate the form
+      if (_controller.page == 4 || _controller.page == 1) {
+        if (_formKey.currentState!.validate()) {
+          _controller.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.ease,
+          );
+        }
+      } else {
+        _controller.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: ThemesStyles.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: const Icon(Icons.arrow_back_ios_new_sharp),
-        ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView(
-              controller: _controller,
-              children: [
-                //=====================First slide================
-                FirstOnBoardingBooking(),
-
-                //=====================Second slide================
-                SecondOnBoardingBooking(),
-                //=====================third slide================
-                SecondOnBoardingBooking(),
-                //=====================Fourth slide================
-                SecondOnBoardingBooking(),
-                //=====================Fiveth slide================
-                SecondOnBoardingBooking(),
-                //=====================sixth slide================
-                SecondOnBoardingBooking(),
-              ],
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Expanded(
+              child: PageView(
+                controller: _controller,
+                children: [
+                  //=====================First slide================
+                  FirstOnBoardingBooking(),
+                  //=====================Second slide================
+                  SecondOnBoardingBooking(
+                    reagionController: _regionController,
+                  ),
+                  //=====================Third slide================
+                  ThirdOnBoardingBooking(onTimeSelected: (time) {
+                    selectedTime = time; // Store the selected time
+                  }),
+                  //=====================Fourth slide================
+                  FourthOnBoardingBooking(onCategorySelected: (category) {
+                    selectedEventCatigory = category; // Store the selected time
+                  }),
+                  //=====================Fifth slide================
+                  FifthOnBoardingBooking(
+                    numberController: _numberController,
+                  ),
+                  //=====================Sixth slide================
+                  SixthOnBoardingBooking(),
+                ],
+              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20.0),
-            alignment: Alignment.bottomCenter,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    // Navigate to the previous page
-                    _controller.previousPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.ease,
-                    );
-                  },
-                  child: const Text(
-                    "BACK",
+            Container(
+              margin:
+                  const EdgeInsets.symmetric(vertical: 20, horizontal: 20.0),
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to the previous page
+                      _controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease,
+                      );
+                    },
+                    child: const Text("BACK"),
                   ),
-                ),
-                SmoothPageIndicator(
-                  controller: _controller,
-                  count: 6,
-                  effect: const ExpandingDotsEffect(
-                    activeDotColor: ThemesStyles
-                        .primary, // Change the color of the active dot
-                    dotColor: Color(
-                        0xff45444B), // Change the color of the inactive dots
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Navigate to the next page
-                    nextPage();
-                  },
-                  child: Text(
-                    "Next",
-                    style: TextStyle(
-                      color: ThemesStyles.primary,
-                      fontSize: ThemesStyles.mainFontSize,
+                  SmoothPageIndicator(
+                    controller: _controller,
+                    count: 6,
+                    effect: const ExpandingDotsEffect(
+                      activeDotColor: ThemesStyles.primary,
+                      dotColor: Color(0xff45444B),
                     ),
                   ),
-                ),
-              ],
+                  GestureDetector(
+                    onTap: () {
+                      nextPage(context);
+                    },
+                    child: Text(
+                      "NEXT",
+                      style: TextStyle(
+                        color: ThemesStyles.primary,
+                        fontSize: ThemesStyles.mainFontSize,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

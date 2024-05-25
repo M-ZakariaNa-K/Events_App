@@ -21,14 +21,12 @@ class DefultButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      //Go to LOGIN PAGE
-
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: buttonColor,
         shape: RoundedRectangleBorder(
             borderRadius:
-                BorderRadius.circular(ThemesStyles.borderradiusprimary),
+                BorderRadius.circular(ThemesStyles.borderradiusprimary + 30),
             side: BorderSide(color: borderColor, width: 2)),
         fixedSize: Size(MediaQuery.of(context).size.width * 0.9, 50.0),
       ),

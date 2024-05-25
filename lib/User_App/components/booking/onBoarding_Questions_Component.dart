@@ -7,12 +7,10 @@ class OnBoardingQuestionsComponent extends StatelessWidget {
     required this.image,
     required this.title,
     required this.supTitle,
-    required this.boandingPageNumber,
   });
   final String image;
   final String title;
   final String supTitle;
-  final int boandingPageNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +48,7 @@ class OnBoardingQuestionsComponent extends StatelessWidget {
           height: 350,
           child: Image.asset(
             image,
-            fit: BoxFit.fill,
+            fit: BoxFit.contain,
           ),
         ),
       ],

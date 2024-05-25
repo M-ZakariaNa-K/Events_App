@@ -3,18 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RegisterController extends GetxController {
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController residencePlaceController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  final TextEditingController createPasswordController = TextEditingController();
+  final TextEditingController createConfirmPasswordController =
+      TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   void register() {
     if (formKey.currentState!.validate()) {
       // If the form is valid, proceed with registration logic
-      Get.to(OtpPage());
+      Get.to(OtpPage(isForgetPassword: false,));
     } else {
       // If the form is not valid, show error messages
     }
@@ -31,3 +36,4 @@ class RegisterController extends GetxController {
     super.dispose();
   }
 }
+

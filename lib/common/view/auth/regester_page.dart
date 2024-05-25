@@ -1,10 +1,12 @@
-import 'package:events_app/common/components/auth/Costume_TextField_widget.dart';
-import 'package:events_app/common/components/general/defult_button.dart';
+import 'package:events_app/common/components/auth/Costume_login_TextField_widget.dart';
+import 'package:events_app/common/components/auth/login-defult_button.dart';
 import 'package:events_app/common/controllers/auth/regester_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/common/view/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class RegisterPage extends GetView<RegisterController> {
   const RegisterPage({super.key});
@@ -27,196 +29,263 @@ class RegisterPage extends GetView<RegisterController> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Form(
-            key: controller.formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        100), // Half of container width/height for perfect circle
-                    child: SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: Image.asset(
-                        "assets/images/Logo.jpg",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-                //1
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
-                  child: Text(
-                    "Register",
-                    style: TextStyle(
-                      fontSize: 34,
-                      color: ThemesStyles.textColor,
-                    ),
-                  ),
-                ),
-                CustomeTextFormField(
-                  hintText: 'Enter your Username',
-                  inputType: TextInputType.text,
-                  title: 'Username',
-                  controller: controller.usernameController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your Username';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                CustomeTextFormField(
-                  hintText: 'Enter your Email',
-                  inputType: TextInputType.text,
-                  title: 'Email',
-                  controller: controller.emailController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your Email';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                CustomeTextFormField(
-                  hintText: 'Enter your residence place',
-                  inputType: TextInputType.text,
-                  title: 'Residence Place',
-                  controller: controller.residencePlaceController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your residence place';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                CustomeTextFormField(
-                  inputType: TextInputType.text,
-                  hintText: '••••••••••••••••',
-                  title: 'Password',
-                  controller: controller.passwordController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                CustomeTextFormField(
-                  inputType: TextInputType.text,
-                  hintText: '••••••••••••••••',
-                  title: 'Confirm Password',
-                  controller: controller.confirmPasswordController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please confirm your password';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.04,
-                ),
-                DefultButton(
-                  textColor: ThemesStyles.seconndTextColor,
-                  buttonColor: ThemesStyles.primary,
-                  borderColor: Colors.transparent,
-                  title: "Register",
-                  onPressed: controller.register,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
-                //5
-                const Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                          height: 20, thickness: 2, color: Color(0xff696969)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        "or",
-                        style: TextStyle(color: ThemesStyles.textColor),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                          height: 20, thickness: 2, color: Color(0xff696969)),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
-                //Sign in by Google
-                DefultButton(
-                  textColor: Theme.of(context).brightness == Brightness.dark
-                      ? ThemesStyles.seconndTextColor
-                      : ThemesStyles.textColor,
-                  buttonColor: Colors.transparent,
-                  borderColor: ThemesStyles.primary,
-                  title: "Register with Google",
-                  icon: Image.asset(
-                    'assets/images/Google.png',
-                    width: 30,
-                    height: 30,
-                  ),
-                  onPressed: () {
-                    //Sign in by GOOGLE
-                  },
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        "Already have an account? ",
-                        style: TextStyle(color: Color(0xff696969)),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(() => const LoginPage());
-                        },
-                        child: const DecoratedBox(
-                          decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color: Colors.white, width: 1.0)),
-                          ),
-                          child: Text(
-                            "Login.",
-                            style: TextStyle(
-                              color: ThemesStyles.textColor,
-                            ),
+          child: GetBuilder<RegisterController>(builder: (controller) {
+            return Form(
+              key: controller.formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 40.0),
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            100), // Half of container width/height for perfect circle
+                        child: SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Image.asset(
+                            "assets/images/Logo.png",
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
+                  //1
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 20.0),
+                      child: Text(
+                        "Create New Account",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: ThemesStyles.textColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  CustomeLoginTextFormField(
+                    prefixIcon: const Icon(Icons.assignment_ind_rounded),
+                    hintText: 'First name',
+                    inputType: TextInputType.text,
+                    title: 'First name',
+                    controller: controller.firstNameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your First name';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomeLoginTextFormField(
+                    prefixIcon: const Icon(Icons.person),
+                    hintText: 'Last name',
+                    inputType: TextInputType.text,
+                    title: 'Last name',
+                    controller: controller.lastNameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your Last name';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomeLoginTextFormField(
+                    prefixIcon: const Icon(Icons.person),
+                    hintText: 'Username',
+                    inputType: TextInputType.text,
+                    title: 'Username',
+                    controller: controller.usernameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your Username';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomeLoginTextFormField(
+                    prefixIcon: const Icon(Icons.email),
+                    hintText: 'Enter your Email',
+                    inputType: TextInputType.text,
+                    title: 'Email',
+                    controller: controller.emailController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your Email';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomeLoginTextFormField(
+                    prefixIcon: const Icon(Icons.place),
+                    hintText: 'residence place',
+                    inputType: TextInputType.text,
+                    title: 'Residence Place',
+                    controller: controller.residencePlaceController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your residence place';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xffFAFAFb),
+                      borderRadius: BorderRadius.circular(20),
+                      // boxShadow: const [
+                      //   BoxShadow(
+                      //     color: Colors.red,
+                      //     spreadRadius: 5,
+                      //     blurRadius: 7,
+                      //     offset: Offset(0, 3),
+                      //   ),
+                      // ]
+                    ),
+                    child: IntlPhoneField(
+                      onChanged: (phone) {
+                        print(phone.completeNumber);
+                      },
+                      pickerDialogStyle: PickerDialogStyle(
+                        searchFieldInputDecoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: "Search",
+                          hintStyle: const TextStyle(
+                              color: Color.fromARGB(255, 87, 87, 87)),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: const BorderSide(
+                              width: 1,
+                              color: ThemesStyles.primary,
+                            ),
+                          ),
+                        ),
+                        backgroundColor: ThemesStyles.background,
+                        width: MediaQuery.sizeOf(context).width,
+                      ),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: ThemesStyles.primary, width: 2.0),
+                          borderRadius: BorderRadius.circular(
+                              ThemesStyles.borderradiusprimary + 5),
+                        ),
+                        hintText: 'Phone Number',
+                        hintStyle: TextStyle(
+                          color: Color.fromARGB(255, 220, 220, 220),
+                          fontSize: 16,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 15.0),
+                      ),
+                      initialCountryCode: 'SY',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomeLoginTextFormField(
+                    prefixIcon: const Icon(Icons.lock),
+                    inputType: TextInputType.text,
+                    hintText: '••••••••••••••••',
+                    title: 'Password',
+                    controller: controller.passwordController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomeLoginTextFormField(
+                    prefixIcon: const Icon(Icons.lock),
+                    inputType: TextInputType.text,
+                    hintText: '••••••••••••••••',
+                    title: 'Confirm Password',
+                    controller: controller.confirmPasswordController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please confirm your password';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  LoginDefultButton(
+                    buttonColor: ThemesStyles.primary,
+                    borderColor: Colors.transparent,
+                    textColor: ThemesStyles.seconndTextColor,
+                    title: "Sign up",
+                    onPressed: () {
+                      controller.register();
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            "Already have an account? ",
+                            style: TextStyle(color: Color(0xff696969)),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(() => const LoginPage());
+                            },
+                            child: const DecoratedBox(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.white, width: 1.0)),
+                              ),
+                              child: Text(
+                                "Sign in.",
+                                style: TextStyle(
+                                  color: ThemesStyles.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
         ),
       ),
     );

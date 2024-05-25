@@ -41,9 +41,26 @@ class WelcomPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 40.0),
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                        100), // Half of container width/height for perfect circle
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Image.asset(
+                        "assets/images/Logo.png",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               //1
               const Text(
-                "Welcome to UpTodo",
+                "Welcome to Eventopia",
                 style: TextStyle(
                   fontSize: 34,
                   color: ThemesStyles.textColor,
@@ -63,12 +80,13 @@ class WelcomPage extends StatelessWidget {
                 ),
               ),
               //3
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.4,
+              const Spacer(
+                flex: 2,
               ),
               //4
               //NOTE: u can find this Widgit in lip/widgits/auth
               DefultButton(
+                textColor: ThemesStyles.seconndTextColor,
                 borderColor: Colors.transparent,
                 buttonColor: ThemesStyles.primary,
                 title: "LOGIN",
@@ -93,11 +111,16 @@ class WelcomPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30.0),
                 child: DefultButton(
+                  textColor: Theme.of(context).brightness == Brightness.dark
+                      ? ThemesStyles.seconndTextColor
+                      : ThemesStyles.textColor,
                   borderColor: ThemesStyles.primary,
-                  buttonColor: ThemesStyles.background,
+                  buttonColor: Theme.of(context).brightness == Brightness.dark
+                      ? ThemesStyles.backgroundDark
+                      : ThemesStyles.background,
                   title: "CREATE ACCOUNT",
                   onPressed: () {
-                    //go to Regester Page
+                    //go to Regester Page`
                     Navigator.push(
                       context,
                       SlidToPage(

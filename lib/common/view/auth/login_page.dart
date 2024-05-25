@@ -1,11 +1,11 @@
-import 'package:events_app/common/Util/slide_to_page_route.dart';
-import 'package:events_app/common/components/auth/Costume_TextField_widget.dart';
+import 'package:events_app/common/components/auth/Costume_login_TextField_widget.dart';
+import 'package:events_app/common/components/auth/login-defult_button.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
 import 'package:events_app/common/controllers/auth/login_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/view/auth/forget_password_page.dart';
 import 'package:events_app/common/view/auth/regester_page.dart';
 import 'package:events_app/common/view/first_open/welcom_page.dart';
-import 'package:events_app/User_App/view/home/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -54,36 +54,42 @@ class LoginPage extends GetView<LoginController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            100), // Half of container width/height for perfect circle
-                        child: SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: Image.asset(
-                            "assets/images/Logo.jpg",
-                            fit: BoxFit.cover,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 40.0),
+                      child: Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              100), // Half of container width/height for perfect circle
+                          child: SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: Image.asset(
+                              "assets/images/Logo.png",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
                     ),
                     //1
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 30.0),
-                      child: Text(
-                        "Login",
-                        style: TextStyle(
-                          fontSize: 34,
-                          color: ThemesStyles.textColor,
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 20.0),
+                        child: Text(
+                          "Login to Your Account",
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: ThemesStyles.textColor,
+                          ),
                         ),
                       ),
                     ),
                     //2
-                    CustomeTextFormField(
-                      hintText: 'Enter your Username or Emile',
+                    CustomeLoginTextFormField(
+                      hintText: 'Username or Emile',
                       inputType: TextInputType.text,
                       title: 'Username|Emile',
+                      prefixIcon: const Icon(Icons.email),
                       //Emile validator
                       controller: controller.usernameController,
                       validator: (value) {
@@ -94,10 +100,11 @@ class LoginPage extends GetView<LoginController> {
                       },
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.04,
+                      height: MediaQuery.of(context).size.height * 0.03,
                     ),
                     //3
-                    CustomeTextFormField(
+                    CustomeLoginTextFormField(
+                      prefixIcon: const Icon(Icons.lock),
                       inputType: TextInputType.text,
                       hintText: '••••••••••••••••',
                       title: 'Password',
@@ -109,82 +116,97 @@ class LoginPage extends GetView<LoginController> {
                         return null;
                       },
                     ),
-                    //====================================Forget password =====================================
-                    GestureDetector(
-                      onTap: () {
-                        //here will show dialog
-                      },
-                      child: const Text(
-                        "Forget the password?",
-                        style: TextStyle(
-                          color: ThemesStyles.primary,
-                        ),
-                      ),
-                    ),
-                    //====================================Forget password =====================================
+
                     const SizedBox(
-                      height: 70,
+                      height: 50,
                     ),
                     //4
-                    DefultButton(
+                    LoginDefultButton(
                       buttonColor: ThemesStyles.primary,
                       borderColor: Colors.transparent,
                       textColor: ThemesStyles.seconndTextColor,
-                      title: "Login",
+                      title: "Sign in",
                       onPressed: () {
                         controller.login();
                       },
                     ),
+                    //====================================Forget password =====================================
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(ForgetPasswordPage());
+                        //here will show dialog
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: ThemesStyles.paddingprimary + 10),
+                        child: const Center(
+                          child: Text(
+                            "Forget the password?",
+                            style: TextStyle(
+                              color: ThemesStyles.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    //====================================Forget password =====================================
                     //=====================================Google==========================================
-                    const SizedBox(height: 30),
+
                     //5
-                    const Row(
+                    Row(
                       children: [
                         Expanded(
                           child: Divider(
                             height: 20,
                             thickness: 2,
-                            color: Color(0xff696969),
+                            color: Colors.grey.shade300,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 20),
                           child: Text(
-                            "or",
-                            style: TextStyle(color: ThemesStyles.textColor),
+                            "or continue with",
+                            style: TextStyle(color: Colors.grey),
                           ),
                         ),
                         Expanded(
                           child: Divider(
                             height: 20,
                             thickness: 2,
-                            color: Color(0xff696969),
+                            color: Colors.grey.shade300,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 10,
                     ),
                     //Sign in by Google
-                    DefultButton(
-                      buttonColor: Colors.transparent,
-                      textColor: Theme.of(context).brightness == Brightness.dark
-                          ? ThemesStyles.seconndTextColor
-                          : ThemesStyles.textColor,
-                      borderColor: ThemesStyles.primary,
-                      title: "Login with Google",
-                      icon: Image.asset(
-                        'assets/images/Google.png',
-                        width: 40,
-                        height: 40,
+                    Center(
+                      child: SizedBox(
+                        width: 90,
+                        child: LoginDefultButton(
+                          buttonColor: ThemesStyles.background,
+                          textColor:
+                              Theme.of(context).brightness == Brightness.dark
+                                  ? ThemesStyles.seconndTextColor
+                                  : ThemesStyles.textColor,
+                          borderColor: Colors.grey,
+                          title: "",
+                          icon: Image.asset(
+                            'assets/images/Google.png',
+                            width: 40,
+                            height: 40,
+                          ),
+                          onPressed: () {
+                            //Sign in by GOOGLE
+                          },
+                        ),
                       ),
-                      onPressed: () {
-                        //Sign in by GOOGLE
-                      },
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
                     Center(
                       child: Row(
@@ -205,9 +227,9 @@ class LoginPage extends GetView<LoginController> {
                                         color: Colors.white, width: 1.0)),
                               ),
                               child: Text(
-                                "Register.",
+                                "Sign up.",
                                 style: TextStyle(
-                                  color: ThemesStyles.textColor,
+                                  color: ThemesStyles.primary,
                                 ),
                               ),
                             ),

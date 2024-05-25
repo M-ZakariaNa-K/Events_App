@@ -44,7 +44,7 @@ class OffersCard extends StatelessWidget {
                               width: 70,
                               height: 70,
                               child: Image.asset(
-                                "assets/images/Logo.jpg",
+                                "assets/images/Logo.png",
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -89,7 +89,7 @@ class OffersCard extends StatelessWidget {
 //here we go to the offers page
                       },
                       child: Text(
-                        'What are you wating for! Book Now',
+                        'What are you wating for! Browse now',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: ThemesStyles.littelFontSize,
