@@ -2,6 +2,7 @@ import 'package:events_app/User_App/components/home/book_now_card.dart';
 import 'package:events_app/User_App/components/home/new_on_app_card.dart';
 import 'package:events_app/User_App/components/home/offers_card.dart';
 import 'package:events_app/User_App/components/home/person_kind_card.dart';
+import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,29 +40,42 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     //===============================1 first card===============================
-                    PersonKindCard(
-                      isNewOnApp: false,
-                      image: 'assets/images/organizer.png',
-                      content: "organizers".tr,
-                      width: _mediaquereWidth * 0.45,
+                    GestureDetector(
+                      onTap: (){
+                      },
+                      child: PersonKindCard(
+                        isNewOnApp: false,
+                        image: 'assets/images/organizer.png',
+                        content: "organizers".tr,
+                        width: _mediaquereWidth * 0.45,
+                      ),
                     ),
                     //===============================2 second card===============================
-                    PersonKindCard(
-                      isNewOnApp: false,
-                      image: 'assets/images/hall.png',
-                      content: "Lounges".tr,
-                      width: _mediaquereWidth * 0.45,
+                    GestureDetector(
+                      onTap: (){
+                      },
+                      child: PersonKindCard(
+                        isNewOnApp: false,
+                        image: 'assets/images/hall.png',
+                        content: "Lounges".tr,
+                        width: _mediaquereWidth * 0.45,
+                      ),
                     ),
                   ],
                 ),
                 //===============================3 third card===============================
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: PersonKindCard(
-                    isNewOnApp: false,
-                    image: 'assets/images/publicEvents.png',
-                    content: "PublicEvents".tr,
-                    width: _mediaquereWidth,
+                GestureDetector(
+                  onTap: (){
+                        Get.to(PublicEventPage());
+                      },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: PersonKindCard(
+                      isNewOnApp: false,
+                      image: 'assets/images/publicEvents.png',
+                      content: "PublicEvents".tr,
+                      width: _mediaquereWidth,
+                    ),
                   ),
                 ),
                 //===============================3 Book Now Card===============================

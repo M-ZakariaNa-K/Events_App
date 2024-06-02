@@ -1,6 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/appbar_building.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer.dart';
+import 'package:events_app/User_App/view/p-event/public-event.dart';
+import 'package:events_app/User_App/view/p-event/settings_page.dart';
 import 'package:events_app/User_App/view/profile/profile_page.dart';
 import 'package:events_app/User_App/view/search/search_page.dart';
 import 'package:events_app/common/core/constants/theme.dart';
@@ -24,8 +26,8 @@ class _DrawerPageState extends State<DrawerPage> {
     SecondPage(),
     //here u will go to ADD page and also in the + button u gonna go to Add page
     MainBookingPage(),
-    FirstPage(),
-    SearchPage(),
+    PublicEventPage(),
+    const SearchPage(),
   ];
 
   void _onItemTappedBottom(int index) {
@@ -51,11 +53,11 @@ class _DrawerPageState extends State<DrawerPage> {
     //Budget
     const HomePage(),
     //History
-    const AdminsPage(),
+    const SearchPage(),
     //Settings
-    const HomePage(),
+     SettingsPage(),
     //about us
-    const AdminsPage(),
+    const SearchPage(),
     //const ReportsPage(),
   ];
 
@@ -115,45 +117,7 @@ class _DrawerPageState extends State<DrawerPage> {
           ),
         ],
       ),
-      // currentIndex: _currentIndexBottom,
-
-      //     BottomNavigationBar(
-      //   type: BottomNavigationBarType.fixed,
-      //   items: <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.home,
-      //       ),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.receipt_long_outlined,
-      //       ),
-      //       label: 'Reservations',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.add,
-      //       ),
-      //       label: '',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.event,
-      //       ),
-      //       label: 'PublicEvents'.tr,
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.search,
-      //       ),
-      //       label: 'search',
-      //     ),
-      //   ],
-      //   currentIndex: _currentIndexBottom,
-      //   onTap: _onItemTappedBottom,
-      // ),
+     
     );
   }
 
@@ -162,24 +126,6 @@ class _DrawerPageState extends State<DrawerPage> {
       isButtomNavPressed = false;
       _selectedIndex = index;
     });
-  }
-}
-
-class AdminsPage extends StatelessWidget {
-  const AdminsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text("sssss");
-  }
-}
-
-class FirstPage extends StatelessWidget {
-  const FirstPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text("First Page");
   }
 }
 

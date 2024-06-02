@@ -1,4 +1,5 @@
 import 'package:events_app/User_App/view/home/drawer-page.dart';
+import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/common/components/auth/Costume_login_TextField_widget.dart';
 import 'package:events_app/common/components/auth/login-defult_button.dart';
 import 'package:events_app/common/controllers/auth/login_controller.dart';
@@ -20,7 +21,7 @@ class LoginPage extends GetView<LoginController> {
       appBar: AppBar(
         title: GestureDetector(
           onTap: () {
-            Get.offAll(const WelcomPage());
+            Get.offAll( PublicEventPage());
           },
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.end,
