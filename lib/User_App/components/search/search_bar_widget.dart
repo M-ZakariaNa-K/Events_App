@@ -11,12 +11,12 @@ class SearchBarWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Container(
-        width: 330,
+        width: MediaQuery.sizeOf(context).width - 40,
         height: 55,
         decoration: BoxDecoration(
           color: Theme.of(context).brightness == Brightness.dark
               ? const Color(0xff2B2B2B)
-              : ThemesStyles.thirdColor,
+              : const Color(0xffF5F5F5),
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextField(

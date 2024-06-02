@@ -1,9 +1,8 @@
-
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
 
 class SearchTapsWidget extends StatefulWidget {
-  SearchTapsWidget({super.key});
+  const SearchTapsWidget({super.key});
 
   @override
   State<SearchTapsWidget> createState() => _SearchTapsWidgetState();
@@ -12,7 +11,14 @@ class SearchTapsWidget extends StatefulWidget {
 class _SearchTapsWidgetState extends State<SearchTapsWidget> {
   int? selectedCardIndex;
 
-  final List<String> items = ["All", "Location", "Number"];
+  final List<String> items = ["✅ All", "💶 Location", "🧮 Number"];
+
+  @override
+  void initState() {
+    super.initState();
+    // Set the default selected card to be the first item (All)
+    selectedCardIndex = 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +31,17 @@ class _SearchTapsWidgetState extends State<SearchTapsWidget> {
             setState(() {
               selectedCardIndex = currentIndex;
             });
-            //Here will change the page data
+            // Here will change the page data
             if (selectedCardIndex == 0) {
+              // Code to handle "All" tab selection
             } else if (selectedCardIndex == 1) {
-            } else {}
+              // Code to handle "Location" tab selection
+            } else if (selectedCardIndex == 2) {
+              // Code to handle "Number" tab selection
+            }
           },
           child: Container(
-            width: 70,
+            width: 80,
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             margin: const EdgeInsets.symmetric(horizontal: 3),
             decoration: BoxDecoration(
@@ -49,7 +59,7 @@ class _SearchTapsWidgetState extends State<SearchTapsWidget> {
                 color: isSelected
                     ? ThemesStyles.seconndTextColor
                     : ThemesStyles.primary,
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
             )),

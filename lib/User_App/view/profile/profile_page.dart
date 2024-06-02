@@ -255,7 +255,6 @@
 
 // ////////=============================================///////////
 // }
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:events_app/User_App/components/profile/hidden_budget_data_widget.dart';
@@ -265,8 +264,6 @@ import 'package:events_app/User_App/components/profile/profile_button_widget.dar
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -283,7 +280,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController confirmNewPasswordController = TextEditingController();
   TextEditingController oldPasswordController = TextEditingController();
   Uint8List? _image;
-  String? _imagePath;
+  // String? _imagePath;
 
   @override
   void initState() {
@@ -291,37 +288,37 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
-  Future<void> _loadImage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? imagePath = prefs.getString('profile_image');
-    if (imagePath != null) {
-      setState(() {
-        _imagePath = imagePath;
-        _image = File(imagePath).readAsBytesSync();
-      });
-    }
-  }
+  // Future<void> _loadImage() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? imagePath = prefs.getString('profile_image');
+  //   if (imagePath != null) {
+  //     setState(() {
+  //       _imagePath = imagePath;
+  //       _image = File(imagePath).readAsBytesSync();
+  //     });
+  //   }
+  // }
 
-  Future<void> _saveImage(Uint8List imageBytes) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final imagePath = '${directory.path}/profile_image.png';
-    final imageFile = File(imagePath);
-    await imageFile.writeAsBytes(imageBytes);
+  // Future<void> _saveImage(Uint8List imageBytes) async {
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   final imagePath = '${directory.path}/profile_image.png';
+  //   final imageFile = File(imagePath);
+  //   await imageFile.writeAsBytes(imageBytes);
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('profile_image', imagePath);
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('profile_image', imagePath);
 
-    setState(() {
-      _imagePath = imagePath;
-      _image = imageBytes;
-    });
-  }
+  //   setState(() {
+  //     _imagePath = imagePath;
+  //     _image = imageBytes;
+  //   });
+  // }
 
   void selectImage() async {
     Uint8List? img = await pickImage(ImageSource.gallery);
     setState(() {
       _image = img;
-      _saveImage(_image!);
+      // _saveImage(_image!);
     });
   }
 

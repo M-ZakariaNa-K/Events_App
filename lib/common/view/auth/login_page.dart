@@ -1,10 +1,12 @@
+import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/common/components/auth/Costume_login_TextField_widget.dart';
 import 'package:events_app/common/components/auth/login-defult_button.dart';
-import 'package:events_app/common/components/general/defult_button.dart';
 import 'package:events_app/common/controllers/auth/login_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/helper/show_toast.dart';
 import 'package:events_app/common/view/auth/forget_password_page.dart';
 import 'package:events_app/common/view/auth/regester_page.dart';
+import 'package:events_app/common/view/first_open/onBoading/third_boading.dart';
 import 'package:events_app/common/view/first_open/welcom_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,7 +39,7 @@ class LoginPage extends GetView<LoginController> {
         leading: IconButton(
           color: ThemesStyles.textColor,
           onPressed: () {
-            Get.back();
+            Get.off(const ThirdBoading());
           },
           icon: const Icon(Icons.arrow_back_ios_new_sharp),
         ),
@@ -112,6 +114,8 @@ class LoginPage extends GetView<LoginController> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
+                        } else if (value.length < 6) {
+                          return 'Password must be at least 6 characters';
                         }
                         return null;
                       },
@@ -127,7 +131,19 @@ class LoginPage extends GetView<LoginController> {
                       textColor: ThemesStyles.seconndTextColor,
                       title: "Sign in",
                       onPressed: () {
-                        controller.login();
+                        if (controller.formKey.currentState!.validate()) {
+                          // If the form is valid, proceed with login logic
+                          controller.loginState(
+                            userName: controller.usernameController.text,
+                            password: controller.passwordController.text,
+                          );
+                        } else {
+                          // If the form is invalid, show a toast message
+                          showToast(
+                            msg: "Please correct the form and try again",
+                            backgroundColor: Colors.red,
+                          );
+                        }
                       },
                     ),
                     //====================================Forget password =====================================

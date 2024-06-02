@@ -1,6 +1,7 @@
 import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/common/Util/Locale.dart';
 import 'package:events_app/common/Util/LocaleController.dart';
+import 'package:events_app/common/helper/Api.dart';
 import 'package:events_app/common/view/auth/login_page.dart';
 import 'package:events_app/common/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 import 'common/core/constants/theme.dart';
 
 void main() {
+  // DioHelper.init();
   Get.put(LocalController()); // Initialize and put LocalController instance
   runApp(MyApp());
 }
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
             translations: LangLocale(),
             title: 'Events App',
             // put the home page as your main working screen
-            home: SafeArea(child: SplashPage()),
+            home: SafeArea(child: DrawerPage()),
 
             theme: ThemeData(
               useMaterial3: true,

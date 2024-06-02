@@ -95,7 +95,7 @@ class HiddenEditProfileDataWidget extends StatelessWidget {
               hintText: 'residence place',
               inputType: TextInputType.text,
               title: 'Residence Place',
-              controller: controller.residencePlaceController,
+              controller: controller.addressController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your residence place';

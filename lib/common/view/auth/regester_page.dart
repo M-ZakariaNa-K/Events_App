@@ -5,14 +5,14 @@ import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/common/view/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl_phone_field/country_picker_dialog.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 
 class RegisterPage extends GetView<RegisterController> {
+  
   const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -134,7 +134,7 @@ class RegisterPage extends GetView<RegisterController> {
                     hintText: 'residence place',
                     inputType: TextInputType.text,
                     title: 'Residence Place',
-                    controller: controller.residencePlaceController,
+                    controller: controller.addressController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your residence place';
@@ -145,63 +145,76 @@ class RegisterPage extends GetView<RegisterController> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xffFAFAFb),
-                      borderRadius: BorderRadius.circular(20),
-                      // boxShadow: const [
-                      //   BoxShadow(
-                      //     color: Colors.red,
-                      //     spreadRadius: 5,
-                      //     blurRadius: 7,
-                      //     offset: Offset(0, 3),
-                      //   ),
-                      // ]
-                    ),
-                    child: IntlPhoneField(
-                      onChanged: (phone) {
-                        print(phone.completeNumber);
-                      },
-                      pickerDialogStyle: PickerDialogStyle(
-                        searchFieldInputDecoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.search),
-                          hintText: "Search",
-                          hintStyle: const TextStyle(
-                              color: Color.fromARGB(255, 87, 87, 87)),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: const BorderSide(
-                              width: 1,
-                              color: ThemesStyles.primary,
-                            ),
-                          ),
-                        ),
-                        backgroundColor: ThemesStyles.background,
-                        width: MediaQuery.sizeOf(context).width,
-                      ),
-                      decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: ThemesStyles.primary, width: 2.0),
-                          borderRadius: BorderRadius.circular(
-                              ThemesStyles.borderradiusprimary + 5),
-                        ),
-                        hintText: 'Phone Number',
-                        hintStyle: TextStyle(
-                          color: Color.fromARGB(255, 220, 220, 220),
-                          fontSize: 16,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 15.0),
-                      ),
-                      initialCountryCode: 'SY',
-                    ),
+                   CustomeLoginTextFormField(
+                    prefixIcon: const Icon(Icons.place),
+                    hintText: 'Phone Number',
+                    inputType: TextInputType.number,
+                    title: 'Phone Number',
+                    controller: controller.phoneNumberController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your Phone Number';
+                      }
+                      return null;
+                    },
                   ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     color: const Color(0xffFAFAFb),
+                  //     borderRadius: BorderRadius.circular(20),
+                  //     // boxShadow: const [
+                  //     //   BoxShadow(
+                  //     //     color: Colors.red,
+                  //     //     spreadRadius: 5,
+                  //     //     blurRadius: 7,
+                  //     //     offset: Offset(0, 3),
+                  //     //   ),
+                  //     // ]
+                  //   ),
+                  //   child: IntlPhoneField(
+                  //     onChanged: (phone) {
+                  //       print(phone.completeNumber);
+                  //     },
+                  //     pickerDialogStyle: PickerDialogStyle(
+                  //       searchFieldInputDecoration: InputDecoration(
+                  //         prefixIcon: const Icon(Icons.search),
+                  //         hintText: "Search",
+                  //         hintStyle: const TextStyle(
+                  //             color: Color.fromARGB(255, 87, 87, 87)),
+                  //         enabledBorder: OutlineInputBorder(
+                  //           borderRadius: BorderRadius.circular(20),
+                  //           borderSide: const BorderSide(
+                  //             width: 1,
+                  //             color: ThemesStyles.primary,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       backgroundColor: ThemesStyles.background,
+                  //       width: MediaQuery.sizeOf(context).width,
+                  //     ),
+                  //     decoration: InputDecoration(
+                  //       enabledBorder: const OutlineInputBorder(
+                  //         borderSide: BorderSide(
+                  //           width: 1,
+                  //           color: Colors.transparent,
+                  //         ),
+                  //       ),
+                  //       focusedBorder: OutlineInputBorder(
+                  //         borderSide: const BorderSide(
+                  //             color: ThemesStyles.primary, width: 2.0),
+                  //         borderRadius: BorderRadius.circular(
+                  //             ThemesStyles.borderradiusprimary + 5),
+                  //       ),
+                  //       hintText: 'Phone Number',
+                  //       hintStyle: TextStyle(
+                  //         color: Color.fromARGB(255, 220, 220, 220),
+                  //         fontSize: 16,
+                  //       ),
+                  //       contentPadding: EdgeInsets.symmetric(horizontal: 15.0),
+                  //     ),
+                  //     initialCountryCode: 'SY',
+                  //   ),
+                  // ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -243,7 +256,10 @@ class RegisterPage extends GetView<RegisterController> {
                     textColor: ThemesStyles.seconndTextColor,
                     title: "Sign up",
                     onPressed: () {
-                      controller.register();
+                      if (controller.formKey.currentState!.validate()) {
+                        // If the form is valid, proceed with login logic
+                        controller.regesterState();
+                      }
                     },
                   ),
                   const SizedBox(

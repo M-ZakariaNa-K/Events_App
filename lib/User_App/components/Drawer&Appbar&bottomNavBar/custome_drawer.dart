@@ -1,9 +1,15 @@
 import 'package:events_app/common/Util/lang_controller.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer_item.dart';
+import 'package:events_app/common/components/general/custome_show_dialog.dart';
 import 'package:events_app/common/components/general/main_loading_widget.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/core/shared/shared.dart';
+import 'package:events_app/common/helper/api.dart';
+import 'package:events_app/common/view/auth/login_page.dart';
+import 'package:events_app/common/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class DrawerWidget extends StatelessWidget {
   final int selectedIndex;
@@ -178,7 +184,7 @@ class DrawerWidget extends StatelessWidget {
                   );
                 }),
 
-            Spacer(
+            const Spacer(
               flex: 50,
             ),
             DrawerItem(
@@ -189,30 +195,22 @@ class DrawerWidget extends StatelessWidget {
               selectedIndex: selectedIndex,
               onItemTapped: (value) {
                 // Show loading indicator dialog
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return const Center(child: MainLoadingWidget());
-                  },
-                );
+                showCustomeDialog(context);
+                // showDialog(
+                //   context: context,
+                //   barrierDismissible: false,
+                //   builder: (BuildContext context) {
+                //     return const Center(child: MainLoadingWidget());
+                //   },
+                // );
                 //===============START function to logout==========================
-                // DioHelper()
-                //     .getData(path: 'users/logout', token: token)
-                //     .then((value) {
-                //   //===============================================
-                //   //to remove this value after loggedout cause i need it just
-                //   GetStorage().remove('isUserAdmin');
-                //   // Hide loading indicator dialog
-                //   Get.back();
-                //   window.localStorage.remove('token');
-                //   //===============================================
-                //   showToast(
-                //       text: "Successfully logged out",
-                //       state: ToastStates.SUCCESS);
-                //   token = '';
-                //   Get.offAndToNamed('/Login');
-                // });
+                // DioHelper.get(url: "$baseUrl/auth/logout?");
+                // GetStorage().remove('token');
+                // print(token);
+                // // Hide loading indicator dialog
+                // Get.back();
+                // token = '';
+                // Get.offAll(const SplashPage());
                 //===============END function to logout==========================
               },
               selectedColor: selectedColor,

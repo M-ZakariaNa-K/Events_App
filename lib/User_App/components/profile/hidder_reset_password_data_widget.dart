@@ -1,7 +1,10 @@
 import 'package:events_app/User_App/components/profile/profile_textfild_widget.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/core/shared/shared.dart';
+import 'package:events_app/common/helper/api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HiddenResetPasswordDataWidget extends StatelessWidget {
   const HiddenResetPasswordDataWidget({
@@ -68,7 +71,17 @@ class HiddenResetPasswordDataWidget extends StatelessWidget {
                 borderColor: const Color.fromARGB(255, 206, 206, 206),
                 textColor: ThemesStyles.primary,
                 title: "Reset Password",
-                onPressed: () {},
+                onPressed: () {
+                  DioHelper.post(
+                    url: "$baseUrl/auth/reset-password",
+                    body: {
+                      'password': newPasswordController.text,
+                      'confirm_password': confirmNewPasswordController.text,
+                      //this is from the Login
+                      'email': 'zakariana2003@gmail.com',
+                    },
+                  );
+                },
               )
             ],
           ),
