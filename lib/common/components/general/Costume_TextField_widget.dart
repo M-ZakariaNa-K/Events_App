@@ -83,8 +83,11 @@ class _CustomeTextFormFieldState extends State<CustomeTextFormField> {
                         : Icons.visibility),
                   )
                 : null,
-            fillColor:
-                _isFocused ? ThemesStyles.thirdColor : const Color(0xffFAFAFA),
+            fillColor: _isFocused
+                ? ThemesStyles.thirdColor
+                : Theme.of(context).brightness == Brightness.dark
+                    ? const Color(0xff2B2B2B)
+                    : const Color(0xffFAFAFA),
             filled: true,
             hintText: widget.hintText,
             hintStyle: const TextStyle(

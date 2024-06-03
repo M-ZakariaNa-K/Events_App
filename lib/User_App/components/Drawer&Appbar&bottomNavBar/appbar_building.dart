@@ -1,3 +1,4 @@
+import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
 import 'package:events_app/User_App/view/profile/profile_page.dart';
 import 'package:events_app/common/Util/lang_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
@@ -26,7 +27,7 @@ AppBar? appBarBuilding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Icon(
                 Icons.notifications,
-                color: ThemesStyles.secondary,
+                color: ThemesStyles.background,
               ),
             ),
             Padding(
@@ -40,7 +41,7 @@ AppBar? appBarBuilding(
                           : ThemeMode.light,
                       child: const Icon(
                         Icons.dark_mode,
-                        color: ThemesStyles.secondary,
+                        color: ThemesStyles.background,
                       ),
                     );
                   }),
@@ -49,24 +50,26 @@ AppBar? appBarBuilding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Icon(
                 Icons.language,
-                color: ThemesStyles.secondary,
+                color: ThemesStyles.background,
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Get.to(ProfilePage());
-              },
-              child: Padding(
-                padding: LanguageRadioController().selectedValue
-                    ? const EdgeInsets.only(left: 30.0, right: 8.0)
-                    : const EdgeInsets.only(left: 8.0, right: 30.0),
-                child: const CircleAvatar(
-                  radius: 20,
-                  backgroundImage: AssetImage(
-                      "assets/images/Profile.png"), // Change image path
-                ),
-              ),
-            ),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 10))
+            // GestureDetector(
+            //   onTap: () {
+            //     Get.find<DrawerPageController>().changeDrawerTabIndex(1);
+
+            //   },
+            //   child: Padding(
+            //     padding: LanguageRadioController().selectedValue
+            //         ? const EdgeInsets.only(left: 30.0, right: 8.0)
+            //         : const EdgeInsets.only(left: 8.0, right: 30.0),
+            //     child: const CircleAvatar(
+            //       radius: 20,
+            //       backgroundImage: AssetImage(
+            //           "assets/images/Profile.png"), // Change image path
+            //     ),
+            //   ),
+            // ),
           ],
         )
       : null;

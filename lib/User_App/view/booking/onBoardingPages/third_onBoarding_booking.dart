@@ -53,18 +53,21 @@ class _ThirdOnBoardingBookingState extends State<ThirdOnBoardingBooking> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: ThemesStyles.thirdColor,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? const Color(0xff2B2B2B)
+                            : ThemesStyles.thirdColor,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(5),
                         ),
                         border: isSelected
-                            ? Border.all(color: Colors.red, width: 1)
+                            ? Border.all(
+                                color: ThemesStyles.secondary, width: 1)
                             : null,
                       ),
                       child: Center(
                           child: Text(
                         item,
-                        style: const TextStyle(color: ThemesStyles.textColor,),
+                        style: const TextStyle(),
                       )),
                     ),
                   ),

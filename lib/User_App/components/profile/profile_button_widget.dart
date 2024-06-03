@@ -20,7 +20,9 @@ class ProfileButtonWidget extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 243, 243, 243),
+        color: Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xff2B2B2B)
+            : const Color.fromARGB(255, 243, 243, 243),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -35,9 +37,9 @@ class ProfileButtonWidget extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: ThemesStyles.mainFontSize,
-                  color: ThemesStyles.textColor),
+                fontWeight: FontWeight.bold,
+                fontSize: ThemesStyles.mainFontSize,
+              ),
             ),
           ),
           const Spacer(),

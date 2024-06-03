@@ -48,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 IconButton(
                   icon: Icon(
                     Icons.apps_rounded,
@@ -97,23 +97,25 @@ class _SearchPageState extends State<SearchPage> {
           ),
           margin: const EdgeInsets.symmetric(vertical: 10.0),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 243, 243, 243),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xff2B2B2B)
+                : const Color.fromARGB(255, 243, 243, 243),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
             children: [
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 5),
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
+                  image: const DecorationImage(
                     image: AssetImage("assets/images/ballons.jpeg"),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.red,
+                    color: ThemesStyles.primary,
                     width: 1,
                   ),
                 ),
@@ -192,7 +194,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget _buildGridView() {
     return GridView.builder(
       itemCount: 10,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
@@ -206,7 +208,9 @@ class _SearchPageState extends State<SearchPage> {
           ),
           margin: const EdgeInsets.symmetric(vertical: 10.0),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 243, 243, 243),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xff2B2B2B)
+                : const Color.fromARGB(255, 243, 243, 243),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
@@ -214,15 +218,15 @@ class _SearchPageState extends State<SearchPage> {
               Container(
                 width: 120,
                 height: 120,
-                margin: EdgeInsets.symmetric(horizontal: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
-                  image: DecorationImage(
+                  image: const DecorationImage(
                     image: AssetImage("assets/images/ballons.jpeg"),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.red,
+                    color: ThemesStyles.primary,
                     width: 1,
                   ),
                 ),

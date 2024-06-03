@@ -32,7 +32,9 @@ class SixthOnBoardingBooking extends StatelessWidget {
             alignment: Alignment.center,
             margin: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-                color: ThemesStyles.thirdColor,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? const Color(0xff2B2B2B)
+                    : ThemesStyles.thirdColor,
                 borderRadius: BorderRadius.all(
                     Radius.circular(ThemesStyles.borderradiusprimary))),
             child: Row(
@@ -53,7 +55,6 @@ class SixthOnBoardingBooking extends StatelessWidget {
                           style: TextStyle(
                             fontSize: ThemesStyles.littelFontSize,
                             fontWeight: FontWeight.w400,
-                            color: ThemesStyles.textColor,
                           ),
                         ),
                       ),
@@ -64,7 +65,6 @@ class SixthOnBoardingBooking extends StatelessWidget {
                           style: TextStyle(
                             fontSize: ThemesStyles.littelFontSize,
                             fontWeight: FontWeight.w400,
-                            color: ThemesStyles.textColor,
                           ),
                         ),
                       ),
@@ -75,7 +75,6 @@ class SixthOnBoardingBooking extends StatelessWidget {
                           style: TextStyle(
                             fontSize: ThemesStyles.littelFontSize,
                             fontWeight: FontWeight.w400,
-                            color: ThemesStyles.textColor,
                           ),
                         ),
                       ),
@@ -123,7 +122,6 @@ class SixthOnBoardingBooking extends StatelessWidget {
                   radioData[index],
                   style: TextStyle(
                     fontSize: ThemesStyles.littelFontSize,
-                    color: ThemesStyles.textColor,
                   ),
                 ),
                 value: index,

@@ -2,6 +2,8 @@ import 'package:events_app/User_App/components/home/book_now_card.dart';
 import 'package:events_app/User_App/components/home/new_on_app_card.dart';
 import 'package:events_app/User_App/components/home/offers_card.dart';
 import 'package:events_app/User_App/components/home/person_kind_card.dart';
+import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
+import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +43,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     //===============================1 first card===============================
                     GestureDetector(
-                      onTap: (){
-                      },
+                      onTap: () {},
                       child: PersonKindCard(
                         isNewOnApp: false,
                         image: 'assets/images/organizer.png',
@@ -52,8 +53,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     //===============================2 second card===============================
                     GestureDetector(
-                      onTap: (){
-                      },
+                      onTap: () {},
                       child: PersonKindCard(
                         isNewOnApp: false,
                         image: 'assets/images/hall.png',
@@ -65,9 +65,9 @@ class _HomePageState extends State<HomePage> {
                 ),
                 //===============================3 third card===============================
                 GestureDetector(
-                  onTap: (){
-                        Get.to(PublicEventPage());
-                      },
+                  onTap: () {
+                    Get.find<DrawerPageController>().changeTabIndex(3);
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: PersonKindCard(

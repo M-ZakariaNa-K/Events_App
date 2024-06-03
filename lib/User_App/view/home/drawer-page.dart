@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/appbar_building.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer.dart';
+import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
 import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/User_App/view/p-event/settings_page.dart';
 import 'package:events_app/User_App/view/profile/profile_page.dart';
@@ -9,6 +10,7 @@ import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/User_App/view/booking/main_booking_page.dart';
 import 'package:events_app/User_App/view/home/homePage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DrawerPage extends StatefulWidget {
   const DrawerPage({super.key});
@@ -18,11 +20,12 @@ class DrawerPage extends StatefulWidget {
 }
 
 class _DrawerPageState extends State<DrawerPage> {
-  //========================================
-  int _currentIndexBottom = 0;
+  final DrawerPageController controller = Get.put(DrawerPageController());
+
   bool isButtomNavPressed = false;
+
   static final List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
+    const HomePage(),
     SecondPage(),
     //here u will go to ADD page and also in the + button u gonna go to Add page
     MainBookingPage(),
@@ -33,13 +36,11 @@ class _DrawerPageState extends State<DrawerPage> {
   void _onItemTappedBottom(int index) {
     setState(() {
       isButtomNavPressed = true;
-      //to make the lightest page in drawer is the HOME PAGE
-      _selectedIndex = 0;
-      _currentIndexBottom = index;
+      controller.changeTabIndex(
+          index); // This will update both the bottom nav and the drawer
     });
   }
 
-  //========================================
   int _selectedIndex = 0;
 
   final Color _selectedColor = ThemesStyles.primary;
@@ -49,13 +50,13 @@ class _DrawerPageState extends State<DrawerPage> {
   final List<Widget> _pages = [
     const HomePage(),
     //Profile
-    ProfilePage(),
+    const ProfilePage(),
     //Budget
     const HomePage(),
     //History
     const SearchPage(),
     //Settings
-     SettingsPage(),
+    SettingsPage(),
     //about us
     const SearchPage(),
     //const ReportsPage(),
@@ -66,64 +67,70 @@ class _DrawerPageState extends State<DrawerPage> {
     return Scaffold(
       //backgroundColor: Themes.background,
       key: scaffoldKey,
-      drawer: DrawerWidget(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
-        selectedColor: _selectedColor,
-      ),
+      drawer: Obx(() {
+        return DrawerWidget(
+          selectedIndex: controller.currentIndexDrawer.value,
+          onItemTapped: _onItemTapped,
+          selectedColor: _selectedColor,
+        );
+      }),
       appBar: appBarBuilding(context, scaffoldKey),
-      body: isButtomNavPressed
-          ? Center(child: _widgetOptions[_currentIndexBottom])
-          : Row(
-              children: [
-                // Page Content
-                Expanded(
-                  child: _pages[_selectedIndex],
-                ),
-              ],
+      body: Obx(() {
+        return isButtomNavPressed
+            ? Center(
+                child: _widgetOptions[controller.currentIndexBottom.value],
+              )
+            : Row(
+                children: [
+                  // Page Content
+                  Expanded(
+                    child: _pages[controller.currentIndexDrawer.value],
+                  ),
+                ],
+              );
+      }),
+
+      bottomNavigationBar: Obx(() {
+        return CurvedNavigationBar(
+          index: controller.currentIndexBottom
+              .value, // This ensures the circle updates correctly
+          backgroundColor: Theme.of(context).brightness == Brightness.dark
+              ? ThemesStyles.backgroundDark
+              : Colors.white,
+          color: ThemesStyles.primary,
+          animationDuration: const Duration(milliseconds: 300),
+          onTap: _onItemTappedBottom,
+          items: const [
+            Icon(
+              Icons.home,
+              color: Colors.white,
             ),
-      // bottomNavigationBar: const BottomNavBar(),
-      bottomNavigationBar:
-          // // BottomNavPage(
-          // //   currentIndex: _currentIndexBottom,
-          // // ),
-          CurvedNavigationBar(
-        backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? ThemesStyles.backgroundDark
-            : Colors.white,
-        color: ThemesStyles.primary,
-        animationDuration: const Duration(milliseconds: 300),
-        onTap: _onItemTappedBottom,
-        items: const [
-          Icon(
-            Icons.home,
-            color: Colors.white,
-          ),
-          Icon(
-            Icons.receipt_long_outlined,
-            color: Colors.white,
-          ),
-          Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-          Icon(
-            Icons.event,
-            color: Colors.white,
-          ),
-          Icon(
-            Icons.search,
-            color: Colors.white,
-          ),
-        ],
-      ),
-     
+            Icon(
+              Icons.receipt_long_outlined,
+              color: Colors.white,
+            ),
+            Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            Icon(
+              Icons.event,
+              color: Colors.white,
+            ),
+            Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+          ],
+        );
+      }),
     );
   }
 
   void _onItemTapped(int index) {
     setState(() {
       isButtomNavPressed = false;
+      controller.changeDrawerTabIndex(index);
       _selectedIndex = index;
     });
   }
