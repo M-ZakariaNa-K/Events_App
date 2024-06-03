@@ -126,6 +126,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_expandable:
+    dependency: "direct main"
+    description:
+      name: flutter_expandable
+      sha256: "142d5f0938f4c8e50d6535b4ea049db122f4e27180050ba9285eb4deac3afd77"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:

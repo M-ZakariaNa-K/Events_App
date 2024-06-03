@@ -1,8 +1,10 @@
   import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/User_App/view/home/homePage.dart';
+import 'package:events_app/User_App/view/p-event/HelpCenter.dart';
 import 'package:events_app/User_App/view/profile/profile_page.dart';
 import 'package:events_app/common/Util/lang_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/helper/api.dart';
 import 'package:events_app/common/view/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,6 +41,7 @@ class _SettingsListState extends State<SettingsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
     body: ListView(
       padding:const  EdgeInsets.all(20.0),
       children: [
@@ -133,6 +136,10 @@ class _SettingsListState extends State<SettingsList> {
               title: Text('Region',style:TextStyle(fontSize: 20),),
               trailing: Text('Pakistan',style:TextStyle(fontSize: 18),),
             ),
+          const  ListTile(
+              title: Text('About Us',style:TextStyle(fontSize: 20),),
+            ),
+            
           ],
         ),
         
@@ -213,7 +220,9 @@ class SettingsTile extends StatelessWidget {
     return ListTile(
       leading: Icon(icon, color:ThemesStyles.primary),
       title: Text(title,style:TextStyle(fontSize: 20),),
-      onTap: () {Get.to(ProfilePage());},
+      onTap: () {Get.to(HelpCenterPage());
+      // DioHelper.get(url: url);
+      },
     );
  
     
