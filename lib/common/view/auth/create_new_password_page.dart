@@ -129,7 +129,7 @@ class CreateNewPasswordPage extends StatelessWidget {
   }
 }
 
-Future<bool?> showConfirmationDialog({
+Future<bool> showConfirmationDialog({
   required BuildContext context,
   required String imagePath,
   required String title,
@@ -169,5 +169,5 @@ Future<bool?> showConfirmationDialog({
       ),
     ),
   );
-  return result;
+  return result!;
 }

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:events_app/common/core/shared/shared.dart';
+import 'package:events_app/common/helper/show_toast.dart';
+import 'package:flutter/material.dart';
 
 var _dio = Dio();
 
@@ -63,7 +65,10 @@ class DioHelper {
         if (token != "") 'Authorization': 'Bearer $token',
       };
 
-      final response = await _dio.get(url, options: Options(headers: headers));
+      final response = await _dio.get(url,
+          options: Options(
+            headers: headers,
+          ));
 
       print(response.data);
 
@@ -80,23 +85,18 @@ class DioHelper {
   }
 
   //=====================================================================================
- static Future<dynamic> post({
+  static Future<dynamic> post({
     required String url,
     required dynamic body,
-
   }) async {
     try {
-      print(1);
       final headers = <String, dynamic>{
         if (token != "") 'Authorization': 'Bearer $token',
         'Accept': 'application/json',
       };
-      print(2);
 
-      final response = await _dio.post(
-        url, data: body,
-        //  options: Options(headers: headers)
-      );
+      final response =
+          await _dio.post(url, data: body, options: Options(headers: headers));
       print(response.data);
       print('Request body: $body');
       print('Response: ${response.data}');
@@ -109,12 +109,12 @@ class DioHelper {
       }
     } catch (e) {
       print(e);
-      throw Exception('Failed to post data');
+      // throw Exception('Failed to post data');
     }
   }
 
   //=====================================================================================
- static Future<void> delete({
+  static Future<void> delete({
     required String url,
     required int orderId,
   }) async {
@@ -161,10 +161,13 @@ class DioHelper {
       } else if (e.response.statusCode == 422) {
         print("zak ${e.response}");
         print(e.response['message']);
+        print(e.response.statusCode);
+
         // showToast(text: e.response['message'], state: ToastStates.ERROR);
       } else {
         print(e.response.statusCode);
       }
+      return 0;
     });
   }
 

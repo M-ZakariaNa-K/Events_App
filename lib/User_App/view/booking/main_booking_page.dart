@@ -94,6 +94,9 @@ class MainBookingPage extends StatelessWidget {
                 children: [
                   //=====================First slide================
                   FirstOnBoardingBooking(),
+                  FourthOnBoardingBooking(onCategorySelected: (category) {
+                    selectedEventCatigory = category; // Store the selected time
+                  }),
                   //=====================Second slide================
                   SecondOnBoardingBooking(
                     reagionController: _regionController,
@@ -103,9 +106,6 @@ class MainBookingPage extends StatelessWidget {
                     selectedTime = time; // Store the selected time
                   }),
                   //=====================Fourth slide================
-                  FourthOnBoardingBooking(onCategorySelected: (category) {
-                    selectedEventCatigory = category; // Store the selected time
-                  }),
                   //=====================Fifth slide================
                   FifthOnBoardingBooking(
                     numberController: _numberController,

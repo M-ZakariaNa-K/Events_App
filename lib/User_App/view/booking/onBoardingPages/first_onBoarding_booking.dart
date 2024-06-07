@@ -15,21 +15,23 @@ class FirstOnBoardingBooking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        //1
-        const OnBoardingQuestionsComponent(
-          title: "Manage your event",
-          supTitle: "Is the event you want public or private?",
-          image: "assets/images/publiceventBooking.png",
-        ),
-        //2 radio button
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _buildRadioButtons(radioData),
-        ),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          //1
+          const OnBoardingQuestionsComponent(
+            title: "Manage your event",
+            supTitle: "Is the event you want public or private?",
+            image: "assets/images/publiceventBooking.png",
+          ),
+          //2 radio button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _buildRadioButtons(radioData),
+          ),
+        ],
+      ),
     );
   }
 

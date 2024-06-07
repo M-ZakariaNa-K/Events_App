@@ -1,12 +1,15 @@
+import 'package:events_app/common/components/general/Costume_TextField_widget.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
 import 'package:events_app/common/controllers/auth/forget_password_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/view/auth/otp_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ForgetPasswordPage extends GetView<ForgetPasswordController> {
-  const ForgetPasswordPage({super.key});
+  ForgetPasswordPage({super.key});
+  TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +35,9 @@ class ForgetPasswordPage extends GetView<ForgetPasswordController> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               //1
               Padding(
@@ -51,7 +54,7 @@ class ForgetPasswordPage extends GetView<ForgetPasswordController> {
                 ),
               ),
               //====2=====
-              Padding(
+              const Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Text(
                   "Select which contact details should we use to reset your password",
@@ -60,9 +63,7 @@ class ForgetPasswordPage extends GetView<ForgetPasswordController> {
               ),
               //====3=====
               GestureDetector(
-                onTap: () {
-           
-                },
+                onTap: () {},
                 child: Container(
                   width: 350,
                   padding: const EdgeInsets.all(20),
@@ -72,9 +73,8 @@ class ForgetPasswordPage extends GetView<ForgetPasswordController> {
                       Radius.circular(30),
                     ),
                     border: Border.all(
-                      color:  ThemesStyles.primary
-                        ,
-                      width:  1,
+                      color: ThemesStyles.primary,
+                      width: 1,
                     ),
                   ),
                   child: Row(
@@ -96,22 +96,30 @@ class ForgetPasswordPage extends GetView<ForgetPasswordController> {
                       ),
                       Expanded(
                         child: ListTile(
-                          title: Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: Text(
-                              "via Email:",
-                              style: TextStyle(
-                                  fontSize: 11, color: Colors.grey.shade500),
+                            title: Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: Text(
+                                "via Email:",
+                                style: TextStyle(
+                                    fontSize: 11, color: Colors.grey.shade500),
+                              ),
                             ),
-                          ),
-                          subtitle: const Text(
-                            "zakariana2003@gmail.com",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                            subtitle: CustomeTextFormField(
+                              hintText: "********@gmail.com",
+                              inputType: TextInputType.emailAddress,
+                              title: "",
+                              controller: emailController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  ForgetPasswordController().isEmailValid =
+                                      false;
+                                  return 'Please enter your email';
+                                }
+                                ForgetPasswordController().isEmailValid = true;
+                                return null;
+                              },
+                              prefixIcon: null,
+                            )),
                       ),
                     ],
                   ),
@@ -121,24 +129,66 @@ class ForgetPasswordPage extends GetView<ForgetPasswordController> {
               //====5=====
               Spacer(),
               GetBuilder<ForgetPasswordController>(
-                init: ForgetPasswordController(),
-                builder: (controller) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 30.0),
-                    child: DefultButton(
-                      buttonColor: ThemesStyles.primary,
-                      borderColor: Colors.transparent,
-                      textColor: Colors.white,
-                      title: "Continue",
-                      onPressed: () {
-                        controller.postOtpNumber();                        Get.to(OtpPage(
-                          isForgetPassword: true,
-                        ));
-                      },
-                    ),
-                  );
-                }
-              )
+                  init: ForgetPasswordController(),
+                  builder: (controller) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 30.0),
+                      child: DefultButton(
+                        buttonColor: ThemesStyles.primary,
+                        borderColor: Colors.transparent,
+                        textColor: Colors.white,
+                        title: "Continue",
+                        onPressed: () async {
+                          // if (true) {
+                          //   // controller.postOtpNumber(
+                          //   //     email: emailController
+                          //   //         .text); // This will now validate the email
+                          //   controller.post(
+                          //     body: {"email": emailController.text},
+                          //     url: '$baseUrl/auth/forget-password',
+                          //   );
+                          //   // Assuming you have a boolean flag to indicate email validity
+                          //   if (controller.statuscode == 200) {
+                          //     Get.to(OtpPage(
+                          //       isForgetPassword: true,
+                          //     ));
+                          //   } else {
+                          //     Get.snackbar(
+                          //       'Warning',
+                          //       'This Email is not correct, please try again',
+                          //     );
+                          //   }
+                          // }
+                          // Execute the request and wait for its response
+                          
+                          final response = await controller.post(
+                            theEmail: emailController.text ,
+                            body: {"email": emailController.text},
+                            url: '$baseUrl/auth/forget-password',
+                          );
+                          // Check the status code and perform the corresponding action
+                          if (controller.statusCode.value == 200) {
+                            Get.to(OtpPage(
+                              isForgetPassword: true,
+                            ));
+                            controller.statusCode.value = 0;
+                          } else {
+                            Get.snackbar(
+                              'Warning',
+                              'This Email is not correct, please try again',
+                            );
+                          }
+                          //  else {
+                          //   Get.snackbar(
+                          //       'Error',
+                          //       emailController.text == ""
+                          //           ? 'Please fill the email textfild.'
+                          //           : 'Invalid email address.');
+                          // }
+                        },
+                      ),
+                    );
+                  })
             ],
           ),
         ),

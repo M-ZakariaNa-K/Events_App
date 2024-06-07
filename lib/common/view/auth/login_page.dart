@@ -21,7 +21,7 @@ class LoginPage extends GetView<LoginController> {
       appBar: AppBar(
         title: GestureDetector(
           onTap: () {
-            Get.offAll( PublicEventPage());
+            Get.offAll(PublicEventPage());
           },
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -140,10 +140,12 @@ class LoginPage extends GetView<LoginController> {
                           );
                         } else {
                           // If the form is invalid, show a toast message
-                          showToast(
-                            msg: "Please correct the form and try again",
-                            backgroundColor: Colors.red,
-                          );
+                          // showToast(
+                          //   msg: "Please correct the form and try again",
+                          //   backgroundColor: Colors.red,
+                          // );
+                          Get.snackbar('Warnning',
+                              'Please correct the form and try again');
                         }
                       },
                     ),

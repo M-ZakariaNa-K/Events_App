@@ -5,305 +5,378 @@ import 'package:events_app/User_App/view/p-event/puplic_card.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/get_utils.dart';
 
 class PublicEventPage extends StatefulWidget {
-   PublicEventPage({super.key});
+  PublicEventPage({super.key});
 
   @override
   State<PublicEventPage> createState() => _PublicEventPageState();
 }
 
 class _PublicEventPageState extends State<PublicEventPage> {
- bool isAll = true;
+  bool isAll = true;
 
- bool isCultural = false;
+  bool isCultural = false;
 
- bool isEntertaining = false;
+  bool isEntertaining = false;
 
- bool isSocial = false;
+  bool isSocial = false;
 
- bool isEdiucational = false;
+  bool isEdiucational = false;
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-     body: Padding(
-       padding:  EdgeInsets.symmetric(horizontal:ThemesStyles.paddingprimary,vertical: ThemesStyles.paddingprimary),
-       child: Column(
-                     mainAxisSize: MainAxisSize.min,
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       //فعاليات عامة
-                       const PuplicEventCard(
-                         isNewOnApp: false,
-                  image: 'assets/images/person.png',
-                  content: "organizers",
-                  width: 200,
-                       ),
-                       //=====================================3=======================================
-                       Padding(
-                         padding: const EdgeInsets.symmetric(vertical:20.0),
-                         child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                           child: Row(
-                                     crossAxisAlignment: CrossAxisAlignment.start,
-                             children: [
-                                                  
-                               ElevatedButton(
-                                         onPressed: () {
-                                       setState(() {
-                                             isAll = true;
-                                             isCultural = false;
-                           
-                                             isEntertaining = false;
-                           
-                                             isSocial = false;
-                           
-                                             isEdiucational = false;
-                                       });
-                                         },
-                                         style: ElevatedButton.styleFrom(
-                                          primary:isAll ?ThemesStyles.primary: ThemesStyles.secondary,
-                                           shape: RoundedRectangleBorder(
-                                             borderRadius: BorderRadius.circular(8),
-                                           ),
-                                         ),
-                                         child: const Text(
-                                           'All',
-                                           style: TextStyle(
-                                             fontSize:11,
-                                             color: Colors.white,
-                                           ),
-                                         ),
-                                       ),
-                             Padding(
-                               padding: const EdgeInsets.symmetric(horizontal:2),
-                               child: ElevatedButton(
-                                           onPressed: () {
-                                           setState(() {
-                                             isCultural = true;
-                                             isAll = false;
-                                             isEntertaining = false;
-                           
-                                             isSocial = false;
-                           
-                                             isEdiucational = false;
-                                           });
-                                           },
-                                           style: ElevatedButton.styleFrom(
-                                               primary:isCultural ?ThemesStyles.primary: ThemesStyles.secondary,
-                                             shape: RoundedRectangleBorder(
-                                               borderRadius: BorderRadius.circular(8),
-                                             ),
-                                           ),
-                                           child: const Text(
-                                             'Cultural',
-                                             style: TextStyle(
-                                               fontSize:11,
-                                               color: Colors.white,
-                                             ),
-                                           ),
-                                         ),
-                             ),
-                             Padding(
-                               padding: const EdgeInsets.symmetric(horizontal:2),
-                               child: ElevatedButton(
-                                           onPressed: () {
-                                            setState(() {
-                                               isEdiucational =true;
-                                              isAll = false;
-                                             isCultural = false;
-                           
-                                             isEntertaining = false;
-                           
-                                             isSocial = false;
-                           
-                                            });
-                                           },
-                                           style: ElevatedButton.styleFrom(
-                                             primary:isEdiucational ?ThemesStyles.primary: ThemesStyles.secondary,
-                                             shape: RoundedRectangleBorder(
-                                               borderRadius: BorderRadius.circular(8),
-                                             ),
-                                           ),
-                                           child: const Text(
-                                             'Ediucational',
-                                             style: TextStyle(
-                                               fontSize:11,
-                                               color: Colors.white,
-                                             ),
-                                           ),
-                                         ),
-                             ),
-                             Padding(
-                               padding: const EdgeInsets.symmetric(horizontal:2),
-                               child: ElevatedButton(
-                                           onPressed: () {
-                                         setState(() {
-                                             isEntertaining =true;
-                           
-                                             isAll = false; 
-                           
-                                             isCultural = false;
-                           
-                                             isSocial = false;
-                           
-                                             isEdiucational = false;
-                                         });
-                                           },
-                                           style: ElevatedButton.styleFrom(
-                                            primary:isEntertaining ?ThemesStyles.primary: ThemesStyles.secondary,
-                                             shape: RoundedRectangleBorder(
-                                               borderRadius: BorderRadius.circular(8),
-                                             ),
-                                           ),
-                                           child: const Text(
-                                             'Entertaining',
-                                             style: TextStyle(
-                                               fontSize:11,
-                                               color: Colors.white,
-                                             ),
-                                           ),
-                                         ),
-                             ),
-                             Padding(
-                               padding: const EdgeInsets.symmetric(horizontal:2),
-                               child: ElevatedButton(
-                                           onPressed: () {
-                                         setState(() {
-                                             isSocial = true;
-                           
-                                             isAll = false;
-                           
-                                             isCultural = false;
-                           
-                                             isEntertaining = false;
-                           
-                                             isEdiucational = false;
-                                         });
-                                           },
-                                           style: ElevatedButton.styleFrom(
-                                             primary:isSocial ?ThemesStyles.primary: ThemesStyles.secondary,
-                                             shape: RoundedRectangleBorder(
-                                               borderRadius: BorderRadius.circular(8),
-                                             ),
-                                           ),
-                                           child: const Text(
-                                             'Social',
-                                             style: TextStyle(
-                                               fontSize:11,
-                                               color: Colors.white,
-                                             ),
-                                           ),
-                                         ),
-                             ),
-                             ],
-                           ),
-                         ),
-                       ),
-                    //=====================================4======================================
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: ThemesStyles.paddingprimary,
+            vertical: ThemesStyles.paddingprimary),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //فعاليات عامة
+            const PuplicEventCard(
+              isNewOnApp: false,
+              image: 'assets/images/person.png',
+              content: "organizers",
+              width: 200,
+            ),
+            //=====================================3=======================================
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     GestureDetector(
-                      onTap: (){
-                        Get.to(P_Event_Details());
+                      onTap: () {
+                        setState(() {
+                          isAll = true;
+                          isCultural = false;
+
+                          isEntertaining = false;
+
+                          isSocial = false;
+
+                          isEdiucational = false;
+                        });
                       },
-                      child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 20.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(ThemesStyles.borderradiusprimary + 10),
-                                ),
-                                color
-                                    : const Color.fromARGB(255, 243, 243, 243),
+                      child: Container(
+                        width: 90,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 5),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        decoration: BoxDecoration(
+                            color: isAll
+                                ? ThemesStyles.primary
+                                : Colors.transparent,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                            border: isAll
+                                ? null
+                                : Border.all(
+                                    color: ThemesStyles.primary, width: 1)),
+                        child: Center(
+                            child: Text(
+                          "All",
+                          style: TextStyle(
+                            color: isAll
+                                ? ThemesStyles.seconndTextColor
+                                : ThemesStyles.primary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isCultural = true;
+                          isAll = false;
+                          isEntertaining = false;
+
+                          isSocial = false;
+
+                          isEdiucational = false;
+                        });
+                      },
+                      child: Container(
+                        width: 90,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 5),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        decoration: BoxDecoration(
+                            color: isCultural
+                                ? ThemesStyles.primary
+                                : Colors.transparent,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                            border: isCultural
+                                ? null
+                                : Border.all(
+                                    color: ThemesStyles.primary, width: 1)),
+                        child: Center(
+                            child: Text(
+                          "Cultural",
+                          style: TextStyle(
+                            color: isCultural
+                                ? ThemesStyles.seconndTextColor
+                                : ThemesStyles.primary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isEdiucational = true;
+                          isAll = false;
+                          isCultural = false;
+
+                          isEntertaining = false;
+
+                          isSocial = false;
+                        });
+                      },
+                      child: Container(
+                        width: 90,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 5),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        decoration: BoxDecoration(
+                            color: isEdiucational
+                                ? ThemesStyles.primary
+                                : Colors.transparent,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                            border: isEdiucational
+                                ? null
+                                : Border.all(
+                                    color: ThemesStyles.primary, width: 1)),
+                        child: Center(
+                            child: Text(
+                          "Ediucational",
+                          style: TextStyle(
+                            color: isEdiucational
+                                ? ThemesStyles.seconndTextColor
+                                : ThemesStyles.primary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isEntertaining = true;
+
+                          isAll = false;
+
+                          isCultural = false;
+
+                          isSocial = false;
+
+                          isEdiucational = false;
+                        });
+                      },
+                      child: Container(
+                        width: 90,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 5),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        decoration: BoxDecoration(
+                            color: isEntertaining
+                                ? ThemesStyles.primary
+                                : Colors.transparent,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                            border: isEntertaining
+                                ? null
+                                : Border.all(
+                                    color: ThemesStyles.primary, width: 1)),
+                        child: Center(
+                            child: Text(
+                          "Entertaining",
+                          style: TextStyle(
+                            color: isEntertaining
+                                ? ThemesStyles.seconndTextColor
+                                : ThemesStyles.primary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isSocial = true;
+
+                          isAll = false;
+
+                          isCultural = false;
+
+                          isEntertaining = false;
+
+                          isEdiucational = false;
+                        });
+                      },
+                      child: Container(
+                        width: 90,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 5),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        decoration: BoxDecoration(
+                            color: isSocial
+                                ? ThemesStyles.primary
+                                : Colors.transparent,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                            border: isSocial
+                                ? null
+                                : Border.all(
+                                    color: ThemesStyles.primary, width: 1)),
+                        child: Center(
+                            child: Text(
+                          "Social",
+                          style: TextStyle(
+                            color: isSocial
+                                ? ThemesStyles.seconndTextColor
+                                : ThemesStyles.primary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            //=====================================4======================================
+            Expanded(
+              child: ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, i) {
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(P_Event_Details());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                        vertical: 10,
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 10.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? const Color(0xff2B2B2B)
+                            : const Color.fromARGB(255, 243, 243, 243),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                image: AssetImage("assets/images/Logo.png"),
+                                fit: BoxFit.cover,
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                                  decoration: BoxDecoration(
-                                    image:const  DecorationImage(image:AssetImage(
-                                      "assets/images/ballons.jpeg"
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: ThemesStyles.primary,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: Text(
+                                    "International Concert",
+                                    style: TextStyle(
+                                      fontSize: ThemesStyles.mainFontSize,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    fit: BoxFit.contain
-                                     ),
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(width: 1, color: ThemesStyles.textColor,)
                                   ),
-                                  width: 130,
-                                  height: 130,
-                                  // child: Image.asset("assets/images/ballons.jpeg"),
-                                  
-                                  ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom:5.0),
-                                      child: Container(
-                                        width: MediaQuery.sizeOf(context).width * 0.4,
-                                        child: Text("Mural Art Festival",
-                                          overflow: TextOverflow.ellipsis
-                                        ,style: TextStyle(
-                                          fontSize: ThemesStyles.mainFontSize,
-                                          fontWeight: FontWeight.bold,
-                                        ),),
-                                      ),
-                                    ),
-                                    // Text("عدد التذاكر المباعة: "),
-                                    // Text("عدد التذاكر الغير مباعة: "),
-                                    // ignore: sized_box_for_whitespace
-                                    Container(
-                                      width: MediaQuery.sizeOf(context).width * 0.4,
-                                      child: Text("Wed, Dec 18 - 18.00 - 22.00 PM",
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: Container(
+                                    width: 200,
+                                    child: Text(
+                                      "Wed, Dec 18, 18.00 - 22.00 PM",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        fontSize: ThemesStyles.littelFontSize,
-                                        color: ThemesStyles.primary,
-                                      )),
+                                          color: ThemesStyles.primary),
                                     ),
-                                    Row(
-                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                         mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                          Icons.money,
-                                          color: ThemesStyles.primary,
+                                  ),
+                                ),
+                                const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.attach_money,
+                                      size: 18,
+                                      color: ThemesStyles.primary,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5),
+                                      child: SizedBox(
+                                        width: 140,
+                                        child: Text(
+                                          overflow: TextOverflow.ellipsis,
+                                          "55000 SYP",
+                                          style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 170, 170, 170),
+                                          ),
                                         ),
-
-                                        Text("55000 SYP",style: TextStyle(
-                                      fontSize: ThemesStyles.littelFontSize,
-                                    ),),
-                                          ],
-                                        ),
-                                                                      // faveorite button
-                                 IconButton(
-                                  onPressed: (){}, 
-                                  icon: const Icon(
-                                          Icons.favorite,
-                                          color: ThemesStyles.primary,
-                                        ),),
-                                      ],
+                                      ),
+                                    ),
+                                    SizedBox(width: 40),
+                                    Icon(
+                                      Icons.favorite,
+                                      size: 18,
+                                      color: ThemesStyles.primary,
                                     ),
                                   ],
                                 ),
-                              ],),
-                              
+                              ],
                             ),
-                           
                           ),
+                        ],
+                      ),
                     ),
-                     
-                     ],
-                   ),
-     ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

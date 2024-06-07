@@ -17,6 +17,7 @@ class EventController extends GetxController {
 
   double get totalPrice => ticketCount.value * ticketPrice;
 }
+
 // ignore: camel_case_types
 class P_Event_Details extends StatelessWidget {
   @override
@@ -40,232 +41,277 @@ class EventScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [IconButton(
-               onPressed: (){}, 
-               icon: const Icon(
-               Icons.favorite,
-              color: ThemesStyles.primary,
-            ),),],
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.favorite,
+                  color: ThemesStyles.primary,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.transparent,
         ),
-        backgroundColor: Colors.transparent,
-      ),
-      extendBodyBehindAppBar: true,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Container(
-                  height: 400,
-                  width: 400,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: images.length,
-                    itemBuilder: (context, index) {
-                      return Image.asset(
-                        images[index],
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: SmoothPageIndicator(
-                      controller: _pageController,
-                      count: images.length,
-                      effect: WormEffect(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        extendBodyBehindAppBar: true,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
                 children: [
-                  const Center(
-                    child: Text(
-                      'National Music Festival',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: ThemesStyles.primary,
                       ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    height: 400,
+                    width: MediaQuery.sizeOf(context).width,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: images.length,
+                      itemBuilder: (context, index) {
+                        return Image.asset(
+                          images[index],
+                          fit: BoxFit.contain,
+                        );
+                      },
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  
-                      Center(
-                        child: Text(
-                          'By: Zena Alsaadi',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  Positioned(
+                    bottom: 10,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: SmoothPageIndicator(
+                        controller: _pageController,
+                        count: images.length,
+                        effect: const WormEffect(
+                          activeDotColor: ThemesStyles.primary,
                         ),
                       ),
-                 
-                   
-                  const SizedBox(height: 16),
-                   Row(
-                    children: [
-                      Container(
-                      decoration: BoxDecoration(color: Color(0xFFFBEFF6),
-                      shape: BoxShape.circle
-                      ),
-                        height: 50,
-                        width: 50,
-                        child: Icon(Icons.person, color: ThemesStyles.primary,size: 30,)),
-                      SizedBox(width: 8),
-                      Text(
-                        'going 20,000+ ',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                   Row(
-                    children: [
-                      Container(
-                       decoration: BoxDecoration(color: Color(0xFFFBEFF6),
-                      shape: BoxShape.circle
-                      ),
-                        height: 50,
-                        width: 50,
-                        
-                        child: Icon(Icons.person_remove, color: ThemesStyles.primary)),
-                      SizedBox(width: 8),
-                      Text(
-                        'almost Sold Out ',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                   Row(
-                    children: [
-                      Container(
-                         decoration: BoxDecoration(color: Color(0xFFFBEFF6),
-                      shape: BoxShape.circle
-                      ),
-                        height: 50,
-                        width: 50,child: Icon(Icons.calendar_today, color: ThemesStyles.primary)),
-                      SizedBox(width: 8),
-                      Text(
-                        'Monday, December 24, 2022',
-                        style: TextStyle(fontSize:20),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                   Row(
-                    children: [
-                      Container( decoration: BoxDecoration(color: Color(0xFFFBEFF6),
-                      shape: BoxShape.circle
-                      ),
-                        height: 50,
-                        width: 50,
-                        child: Icon(Icons.access_time, color: ThemesStyles.primary)),
-                      SizedBox(width: 8),
-                      Text(
-                        '18.00 - 23.00 PM (GMT +07:00)',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                   Row(
-                    children: [
-                      Container(
-                         decoration: BoxDecoration(color: Color(0xFFFBEFF6),
-                      shape: BoxShape.circle
-                      ),
-                        height: 50,
-                        width: 50,child: Icon(Icons.location_on, color: ThemesStyles.primary)),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Grand Park, New York City, US\nGrand City St. 100, New York, United States.',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: (){},
-                      child: const Text('See Location on Maps'),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                   Row(
-                    children: [
-                      Container( decoration: BoxDecoration(color: Color(0xFFFBEFF6),
-                      shape: BoxShape.circle
-                      ),
-                        height: 50,
-                        width: 50,
-                        child: Icon(Icons.description, color: ThemesStyles.primary)),
-                      SizedBox(width: 8),
-                      Text(
-                        'Description:GetMa\nterialController" has been created',
-                        style: TextStyle(fontSize:20),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                   Row(
-                    children: [
-                      Container( decoration: BoxDecoration(color: Color(0xFFFBEFF6),
-                      shape: BoxShape.circle
-                      ),
-                        height: 50,
-                        width: 50,
-                        child: Icon(Icons.price_change, color: ThemesStyles.primary)),
-                      SizedBox(width: 8),
-                      Text(
-                        '\$20.00 - \$100.00',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-       color: Colors.transparent,
-        child: ElevatedButton(
-                      onPressed: () {
-                        _showBookingDialog(context);
-                      },
-                      // ignore: sort_child_properties_last
-                      child:const Text(' !Book Now',style: TextStyle(color: Color(0xFFFBEFF6),),),
-                      style: ElevatedButton.styleFrom(
-                        primary: ThemesStyles.primary,
-                        padding:const  EdgeInsets.symmetric(horizontal: 55, vertical: 25),
-                        textStyle: const TextStyle(fontSize: 20),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text(
+                        'National Music Festival',
+                        style: TextStyle(
+                          fontSize: ThemesStyles.mainFontSize,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-        
+                    const SizedBox(height: 8),
+                    Center(
+                      child: Text(
+                        'By: Zena Alsaadi',
+                        style: TextStyle(
+                          fontSize: ThemesStyles.littelFontSize,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFBEFF6),
+                                shape: BoxShape.circle),
+                            height: 50,
+                            width: 50,
+                            child: Icon(
+                              Icons.person,
+                              color: ThemesStyles.primary,
+                              size: 30,
+                            )),
+                        SizedBox(width: 8),
+                        Text(
+                          'going 20,000+ ',
+                          style: TextStyle(
+                            fontSize: ThemesStyles.littelFontSize,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFBEFF6),
+                                shape: BoxShape.circle),
+                            height: 50,
+                            width: 50,
+                            child: Icon(Icons.person_remove,
+                                color: ThemesStyles.primary)),
+                        SizedBox(width: 8),
+                        Text(
+                          'almost Sold Out ',
+                          style: TextStyle(
+                            fontSize: ThemesStyles.littelFontSize,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFBEFF6),
+                                shape: BoxShape.circle),
+                            height: 50,
+                            width: 50,
+                            child: Icon(Icons.calendar_today,
+                                color: ThemesStyles.primary)),
+                        SizedBox(width: 8),
+                        Text(
+                          'Monday, December 24, 2022',
+                          style: TextStyle(
+                            fontSize: ThemesStyles.littelFontSize,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFBEFF6),
+                                shape: BoxShape.circle),
+                            height: 50,
+                            width: 50,
+                            child: Icon(Icons.access_time,
+                                color: ThemesStyles.primary)),
+                        SizedBox(width: 8),
+                        Text(
+                          '18.00 - 23.00 PM (GMT +07:00)',
+                          style: TextStyle(
+                            fontSize: ThemesStyles.littelFontSize,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFBEFF6),
+                                shape: BoxShape.circle),
+                            height: 50,
+                            width: 50,
+                            child: Icon(Icons.location_on,
+                                color: ThemesStyles.primary)),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Grand Park, New York City, US\nGrand City St. 100, New York, United States.',
+                            style: TextStyle(
+                              fontSize: ThemesStyles.littelFontSize,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: const Text('See Location on Maps'),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFBEFF6),
+                                shape: BoxShape.circle),
+                            height: 50,
+                            width: 50,
+                            child: Icon(Icons.description,
+                                color: ThemesStyles.primary)),
+                        SizedBox(width: 8),
+                        Text(
+                          'Description:GetMa\nterialController" has been created',
+                          style: TextStyle(
+                            fontSize: ThemesStyles.littelFontSize,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFBEFF6),
+                                shape: BoxShape.circle),
+                            height: 50,
+                            width: 50,
+                            child: Icon(Icons.price_change,
+                                color: ThemesStyles.primary)),
+                        SizedBox(width: 8),
+                        Text(
+                          '\$20.00 - \$100.00',
+                          style: TextStyle(
+                              fontSize: ThemesStyles.littelFontSize,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.transparent,
+          child: ElevatedButton(
+            onPressed: () {
+              _showBookingDialog(context);
+            },
+            // ignore: sort_child_properties_last
+            child: const Text(
+              ' !Book Now',
+              style: TextStyle(
+                color: Color(0xFFFBEFF6),
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: ThemesStyles.primary,
+              textStyle: TextStyle(
+                fontSize: ThemesStyles.littelFontSize,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
-  
   void _showBookingDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -300,26 +346,26 @@ class EventScreen extends StatelessWidget {
                 ),
                 keyboardType: TextInputType.number,
                 onChanged: (String value) {
-                  eventController.ticketCount.value =
-                      int.tryParse(value) ?? 1;
+                  eventController.ticketCount.value = int.tryParse(value) ?? 1;
                 },
               ),
               const SizedBox(height: 16),
               Obx(() => Text(
                     'Total Price: \$${eventController.totalPrice}',
-                    style:const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   )),
             ],
           ),
           actions: <Widget>[
             TextButton(
-              child:const  Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
-              child:const Text('Approve'),
+              child: const Text('Approve'),
               onPressed: () {
                 // Add booking confirmation logic here
                 Navigator.of(context).pop();
@@ -331,4 +377,3 @@ class EventScreen extends StatelessWidget {
     );
   }
 }
-

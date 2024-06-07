@@ -32,6 +32,7 @@ class TimerController extends GetxController {
     timer?.cancel();
     isTimerEnd = true;
     super.onClose();
+    
   }
 
   @override
