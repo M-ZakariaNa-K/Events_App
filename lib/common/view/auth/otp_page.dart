@@ -1,23 +1,25 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:events_app/common/components/general/Costume_TextField_widget.dart';
-import 'package:events_app/common/controllers/auth/forget_password_controller.dart';
-import 'package:events_app/common/core/shared/shared.dart';
-import 'package:events_app/common/helper/api.dart';
+import 'package:events_app/User_App/view/home/drawer-page.dart';
+import 'package:events_app/common/Util/slide_to_page_route.dart';
 import 'package:events_app/common/view/auth/create_new_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/common/components/auth/otp/number_fild_otp.dart';
+import 'package:events_app/common/components/general/Costume_TextField_widget.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
+import 'package:events_app/common/controllers/auth/forget_password_controller.dart';
 import 'package:events_app/common/controllers/auth/otp_timer_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/core/shared/shared.dart';
+import 'package:events_app/common/helper/api.dart';
 
 class OtpPage extends StatelessWidget {
   final TimerController timerController = Get.put(TimerController());
-
+  final String email;
   OtpPage({
     Key? key,
+    required this.email,
     required this.isForgetPassword,
   }) : super(key: key);
   final bool isForgetPassword;
@@ -96,7 +98,7 @@ class OtpPage extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Text(
-                              "Change phone number?",
+                              "Change Email Addres?",
                               style: TextStyle(
                                 color: ThemesStyles.primary,
                                 fontWeight: ThemesStyles.fontWeightBold,
@@ -215,45 +217,56 @@ class OtpPage extends StatelessWidget {
                           borderColor: ThemesStyles.primary,
                           title: "Confirm",
                           onPressed: () async {
-                            print(controller.email);
+                            print(email);
                             print(
                                 '${controller.otpNumber1}${controller.otpNumber2}${controller.otpNumber3}${controller.otpNumber4}');
+
                             final response = await DioHelper.post(
                                 url: "$baseUrl/auth/res-pass-verification",
                                 body: {
-                                  'email': '${controller.email}',
+                                  'email': '${email}',
                                   'otp':
                                       '${controller.otpNumber1}${controller.otpNumber2}${controller.otpNumber3}${controller.otpNumber4}'
                                 });
-                            print(response);
+                            print(response["data"]);
+
                             // Check the status code and perform the corresponding action
-                            // if (controller.statusCode.value == 200) {
-                            //   Get.to(OtpPage(
-                            //     isForgetPassword: true,
-                            //   ));
-                            //   controller.statusCode.value = 0;
-                            // } else {
-                            //   Get.snackbar(
-                            //     'Warning',
-                            //     'This Email is not correct, please try again',
-                            //   );
-                            // }
-                            // isForgetPassword
-                            //     ? Get.to(const CreateNewPasswordPage())
-                            //     : Get.offAll(const DrawerPage());
-                            //Here we will Confirm the OTP code
-                            // Navigator.push(
-                            //   context,
-                            //   SlidToPage(
-                            //     page: const DrawerPage(),
-                            //     onComplete: () {
-                            //       Navigator.pushReplacement(
-                            //           context,
-                            //           MaterialPageRoute(
-                            //               builder: (context) => const DrawerPage()));
-                            //     },
-                            //   ),
-                            // );
+                            if (response != null) {
+                              if (response["data"]) {
+                                isForgetPassword
+                                    ? Navigator.push(
+                                        context,
+                                        SlidToPage(
+                                          page: const CreateNewPasswordPage(),
+                                          onComplete: () {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const CreateNewPasswordPage()));
+                                          },
+                                        ),
+                                      )
+                                    : Navigator.push(
+                                        context,
+                                        SlidToPage(
+                                          page: const DrawerPage(),
+                                          onComplete: () {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const DrawerPage()));
+                                          },
+                                        ),
+                                      );
+                              } else {
+                                Get.snackbar(
+                                  'Warning',
+                                  'The OTP number is not correct, please try again',
+                                );
+                              }
+                            }
                           },
                         ),
                       ),
@@ -320,19 +333,19 @@ Future<bool?> showConfirmationDialogOTP({
         ),
         TextButton(
           onPressed: () async {
-            forgetPasswordController.email = changeEmailController.text;
-            print(forgetPasswordController.email);
-            final response = await forgetPasswordController.post(
-              theEmail: forgetPasswordController.email,
-              body: {"email": forgetPasswordController.email},
-              url: '$baseUrl/auth/forget-password',
-            );
+            // forgetPasswordController.email = changeEmailController.text;
+            // print(forgetPasswordController.email);
+            // final response = await forgetPasswordController.post(
+            //   theEmail: forgetPasswordController.email,
+            //   body: {"email": forgetPasswordController.email},
+            //   url: '$baseUrl/auth/forget-password',
+            // );
             // Check the status code and perform the corresponding action
             if (forgetPasswordController.statusCode.value == 200) {
-              Get.to(OtpPage(
-                isForgetPassword: true,
-              ));
-              forgetPasswordController.statusCode.value = 0;
+              // Get.to(OtpPage(
+              //   isForgetPassword: true,
+              // ));
+              // forgetPasswordController.statusCode.value = 0;
             } else {
               Get.snackbar(
                 'Warning',

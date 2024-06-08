@@ -26,6 +26,7 @@ class RegisterController extends GetxController {
     if (formKey.currentState!.validate()) {
       // If the form is valid, proceed with registration logic
       Get.to(OtpPage(
+        email: emailController.text,
         isForgetPassword: false,
       ));
     } else {
