@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/appbar_building.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer.dart';
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
+import 'package:events_app/User_App/view/p-event/HelpCenter.dart';
 import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/User_App/view/p-event/settings_page.dart';
 import 'package:events_app/User_App/view/profile/profile_page.dart';
@@ -29,7 +30,9 @@ class _DrawerPageState extends State<DrawerPage> {
     SecondPage(),
     //here u will go to ADD page and also in the + button u gonna go to Add page
     MainBookingPage(),
-    PublicEventPage(),
+    PublicEventPage(
+      isUserLoggedIn: true,
+    ),
     const SearchPage(),
   ];
 
@@ -58,7 +61,7 @@ class _DrawerPageState extends State<DrawerPage> {
     //Settings
     SettingsPage(),
     //about us
-    const SearchPage(),
+    const HelpCenterPage(isUserCameFromDrawer:true),
     //const ReportsPage(),
   ];
 

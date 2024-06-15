@@ -260,6 +260,10 @@ class OtpPage extends StatelessWidget {
                                           },
                                         ),
                                       );
+                                      controller.otpNumber1='';
+                                      controller.otpNumber2='';
+                                      controller.otpNumber3='';
+                                      controller.otpNumber4='';
                               } else {
                                 Get.snackbar(
                                   'Warning',

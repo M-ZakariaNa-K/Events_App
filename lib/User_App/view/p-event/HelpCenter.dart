@@ -1,33 +1,32 @@
-import 'package:events_app/common/core/constants/theme.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HelpCenterPage(),
-    );
-  }
-}
+import 'package:events_app/common/core/constants/theme.dart';
 
 class HelpCenterPage extends StatelessWidget {
-  const HelpCenterPage({Key? key}) : super(key: key);
-
+  const HelpCenterPage({
+    Key? key,
+    required this.isUserCameFromDrawer,
+  }) : super(key: key);
+  final bool isUserCameFromDrawer;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Help Center'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-      ),
+      appBar: isUserCameFromDrawer
+          ? null
+          : AppBar(
+              title: Text(
+                'Help Center',
+                style: TextStyle(fontSize: ThemesStyles.mainFontSize),
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new),
+                onPressed: () {
+                  Get.back();
+                },
+              ),
+            ),
       body: HelpCenter(),
     );
   }
@@ -37,23 +36,28 @@ class HelpCenter extends StatelessWidget {
   final List<Map<String, String>> TopBar = [
     {
       'question': 'What is Eveno?',
-      'answer': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'answer':
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
     {
       'question': 'How to make a payment?',
-      'answer': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'answer':
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
     {
       'question': 'How do I can cancel booking?',
-      'answer': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'answer':
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
     {
       'question': 'How do I can delete my account?',
-      'answer': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'answer':
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
     {
       'question': 'How do I exit the app?',
-      'answer': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'answer':
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
   ];
 
@@ -69,6 +73,7 @@ class HelpCenter extends StatelessWidget {
               Tab(text: 'Service'),
               Tab(text: 'Payment'),
             ],
+            indicatorColor: ThemesStyles.primary,
             labelColor: ThemesStyles.primary,
             unselectedLabelColor: Colors.grey,
           ),
@@ -78,19 +83,19 @@ class HelpCenter extends StatelessWidget {
                 buildFaqList(),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: const Center(
-                    child: Text(
-                      'Several services are available within the application, namely: booking halls in addition to booking the organizers service to help organize special events, and you can also attend public events that are available on our application only',
-                      style: TextStyle(fontSize: 18, color: ThemesStyles.primary),
+                  child: Text(
+                    'Several services are available within the application, namely: booking halls in addition to booking the organizers service to help organize special events, and you can also attend public events that are available on our application only',
+                    style: TextStyle(
+                      fontSize: ThemesStyles.littelFontSize,
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: const Center(
-                    child: Text(
-                      'Our application has several payment services, namely: either electronic payment or cash payment, depending on the convenience of the user',
-                      style: TextStyle(fontSize: 18, color: ThemesStyles.primary),
+                  child: Text(
+                    'Our application has several payment services, namely: either electronic payment or cash payment, depending on the convenience of the user',
+                    style: TextStyle(
+                      fontSize: ThemesStyles.littelFontSize,
                     ),
                   ),
                 ),
@@ -109,14 +114,16 @@ class HelpCenter extends StatelessWidget {
         return ExpansionTile(
           title: Text(
             TopBar[index]['question']!,
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: ThemesStyles.mainFontSize),
           ),
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 TopBar[index]['answer']!,
-                style: TextStyle(fontSize: 18, color: ThemesStyles.primary),
+                style: TextStyle(
+                    fontSize: ThemesStyles.littelFontSize,
+                    color: ThemesStyles.primary),
               ),
             ),
           ],

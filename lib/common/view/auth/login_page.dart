@@ -18,10 +18,13 @@ class LoginPage extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar:
+       AppBar(
         title: GestureDetector(
           onTap: () {
-            Get.offAll(PublicEventPage());
+            Get.to(() => PublicEventPage(
+                  isUserLoggedIn: false,
+                ));
           },
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.end,

@@ -136,7 +136,7 @@ class DrawerWidget extends StatelessWidget {
                 ),
                 DrawerItem(
                   isLogout: false,
-                  title: "About Us",
+                  title: "Help Center",
                   icon: Icons.info_outline_rounded,
                   index: 5,
                   selectedIndex: selectedIndex,
@@ -146,43 +146,43 @@ class DrawerWidget extends StatelessWidget {
               ],
             ),
             //===============================lang==========================
-            GetBuilder<LanguageRadioController>(
-                init: LanguageRadioController(),
-                builder: (LanguageRadioController controller) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            "Arabic".tr,
-                            style: const TextStyle(
-                              color: ThemesStyles.primary,
-                            ),
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                controller.toggleLanguage();
-                              },
-                              icon: const Icon(
-                                Icons.swap_horiz_rounded,
-                                color: ThemesStyles.primary,
-                                size: 18,
-                              )),
-                          Text(
-                            "English".tr,
-                            style: const TextStyle(
-                              color: ThemesStyles.primary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
+            // GetBuilder<LanguageRadioController>(
+            //     init: LanguageRadioController(),
+            //     builder: (LanguageRadioController controller) {
+            //       return Center(
+            //         child: Padding(
+            //           padding: const EdgeInsets.only(bottom: 20.0),
+            //           child: Row(
+            //             mainAxisAlignment: MainAxisAlignment.center,
+            //             crossAxisAlignment: CrossAxisAlignment.center,
+            //             mainAxisSize: MainAxisSize.min,
+            //             children: <Widget>[
+            //               Text(
+            //                 "Arabic".tr,
+            //                 style: const TextStyle(
+            //                   color: ThemesStyles.primary,
+            //                 ),
+            //               ),
+            //               IconButton(
+            //                   onPressed: () {
+            //                     controller.toggleLanguage();
+            //                   },
+            //                   icon: const Icon(
+            //                     Icons.swap_horiz_rounded,
+            //                     color: ThemesStyles.primary,
+            //                     size: 18,
+            //                   )),
+            //               Text(
+            //                 "English".tr,
+            //                 style: const TextStyle(
+            //                   color: ThemesStyles.primary,
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       );
+            //     }),
 
             const Spacer(
               flex: 50,
@@ -195,7 +195,7 @@ class DrawerWidget extends StatelessWidget {
               selectedIndex: selectedIndex,
               onItemTapped: (value) {
                 // Show loading indicator dialog
-                showCustomeDialog(context);
+                showCustomeLogOutDialog(context);
                 // showDialog(
                 //   context: context,
                 //   barrierDismissible: false,

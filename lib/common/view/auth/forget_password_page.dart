@@ -138,6 +138,7 @@ class ForgetPasswordPage extends GetView<ForgetPasswordController> {
                           textColor: Colors.white,
                           title: "Continue",
                           onPressed: () async {
+                            createPasswordEmail = emailController.text;
                             final response = await controller.post(
                               theEmail: emailController.text,
                               body: {"email": emailController.text},

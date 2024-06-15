@@ -21,61 +21,59 @@ class RegisterController extends GetxController {
   final TextEditingController createConfirmPasswordController =
       TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  var isLoading = false.obs; // Add loading state
+
   RegesterModel? regesterModel;
+
   void register() {
     if (formKey.currentState!.validate()) {
-      // If the form is valid, proceed with registration logic
-      Get.to(OtpPage(
-        email: emailController.text,
-        isForgetPassword: false,
-      ));
+      regesterState();
     } else {
       // If the form is not valid, show error messages
     }
   }
 
-  void regesterState(
-      // required String firstName,
-      // required String lastName,
-      // required String username,
-      // required String email,
-      // required String password,
-      // required String confirmPassword,
-      // required String address,
-      // required String phoneNumber,
-      ) {
-    DioHelper.postDataWithAuth(
-      url: '$baseUrl/auth/register',
-      data: {
-        'first_name': firstNameController.text,
-        'last_name': lastNameController.text,
-        'username': usernameController.text,
-        'email': emailController.text,
-        'password': passwordController.text,
-        'confirm_password': confirmPasswordController.text,
-        'address': addressController.text,
-        'phone_number': phoneNumberController.text,
-      },
-    ).then((response) async {
+  void regesterState() async {
+    isLoading.value = true; // Show loading indicator
+
+    try {
+      final response = await DioHelper.postDataWithAuth(
+        url: '$baseUrl/auth/register',
+        data: {
+          'first_name': firstNameController.text,
+          'last_name': lastNameController.text,
+          'username': usernameController.text,
+          'email': emailController.text,
+          'password': passwordController.text,
+          'confirm_password': confirmPasswordController.text,
+          'address': addressController.text,
+          'phone_number': phoneNumberController.text,
+        },
+      );
+
       final data = response.data;
-      print("zakakakak $data");
       if (data != null) {
         regesterModel = RegesterModel.fromJson(data);
         if (regesterModel != null && regesterModel!.data != null) {
           token = regesterModel!.data!.token!;
-          //User Email to save the email and use it in forget password
           userEmail = emailController.text;
           box.write('token', token);
-          print("regester: $token");
           Get.offAll(const DrawerPage());
-        } else {}
-      } else {}
-    }).catchError((error) {});
+          Get.snackbar('Success', 'Registration successful',
+              snackPosition: SnackPosition.BOTTOM);
+        }
+      }
+    } catch (error) {
+      Get.snackbar('Error', 'Registration failed: $error',
+          snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      isLoading.value = false; // Hide loading indicator
+    }
   }
 
   @override
   void dispose() {
-    // Dispose controllers to avoid memory leaks
     firstNameController.dispose();
     lastNameController.dispose();
     usernameController.dispose();
@@ -83,6 +81,9 @@ class RegisterController extends GetxController {
     addressController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+    confirmPasswordController.dispose();
+    createConfirmPasswordController.dispose();
+    createPasswordController.dispose();
     super.dispose();
   }
 }

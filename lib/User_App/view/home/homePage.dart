@@ -6,6 +6,7 @@ import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart
 import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';

@@ -1,8 +1,12 @@
-import 'package:get/get.dart';
-import 'package:events_app/common/core/constants/theme.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:events_app/common/core/shared/shared.dart';
+import 'package:events_app/common/view/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import 'package:events_app/common/core/constants/theme.dart';
 
 class EventController extends GetxController {
   var selectedDate = 'Monday, December 24, 2022'.obs;
@@ -291,12 +295,14 @@ class EventScreen extends StatelessWidget {
           color: Colors.transparent,
           child: ElevatedButton(
             onPressed: () {
-              _showBookingDialog(context);
+              token != ""
+                  ? _showBookingDialog(context)
+                  : Get.offAll(() => LoginPage());
             },
             // ignore: sort_child_properties_last
-            child: const Text(
-              ' !Book Now',
-              style: TextStyle(
+            child: Text(
+              token != "" ? ' !Book Now' : 'Sign In',
+              style: const TextStyle(
                 color: Color(0xFFFBEFF6),
               ),
             ),

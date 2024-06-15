@@ -106,7 +106,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-void showCustomeDialog(BuildContext context) {
+void showCustomeLogOutDialog(BuildContext context) {
   Get.defaultDialog(
     title: "Warning",
     middleText: "Are you sure about logging out?",

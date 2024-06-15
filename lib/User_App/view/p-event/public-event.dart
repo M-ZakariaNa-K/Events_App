@@ -1,14 +1,17 @@
-import 'package:events_app/User_App/components/home/person_kind_card.dart';
-import 'package:events_app/User_App/view/p-event/offer.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:events_app/common/core/shared/shared.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:events_app/User_App/view/p-event/p_event_details.dart';
 import 'package:events_app/User_App/view/p-event/puplic_card.dart';
 import 'package:events_app/common/core/constants/theme.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class PublicEventPage extends StatefulWidget {
-  PublicEventPage({super.key});
-
+  PublicEventPage({
+    Key? key,
+    required this.isUserLoggedIn,
+  }) : super(key: key);
+  final bool isUserLoggedIn;
   @override
   State<PublicEventPage> createState() => _PublicEventPageState();
 }
@@ -27,6 +30,26 @@ class _PublicEventPageState extends State<PublicEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: token != ""
+          ? null
+          : AppBar(
+              title: const Text("Public Events"),
+              titleTextStyle: const TextStyle(
+                color: Color(0xff464646),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              backgroundColor: Colors.transparent,
+              automaticallyImplyLeading: false,
+              elevation: 0.0,
+              leading: IconButton(
+                color: ThemesStyles.textColor,
+                onPressed: () {
+                  Get.back();
+                },
+                icon: const Icon(Icons.arrow_back_ios_new_sharp),
+              ),
+            ),
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: ThemesStyles.paddingprimary,
@@ -331,7 +354,7 @@ class _PublicEventPageState extends State<PublicEventPage> {
                                     ),
                                   ),
                                 ),
-                                const Row(
+                                Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -358,7 +381,9 @@ class _PublicEventPageState extends State<PublicEventPage> {
                                     ),
                                     SizedBox(width: 40),
                                     Icon(
-                                      Icons.favorite,
+                                      widget.isUserLoggedIn
+                                          ? Icons.favorite
+                                          : null,
                                       size: 18,
                                       color: ThemesStyles.primary,
                                     ),
