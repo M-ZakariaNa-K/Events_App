@@ -1,4 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:events_app/Investor_App/view/home/investor_homePage..dart';
+import 'package:events_app/Investor_App/view/reservations/reservations.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/appbar_building.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer.dart';
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
@@ -10,6 +12,7 @@ import 'package:events_app/User_App/view/search/search_page.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/User_App/view/booking/main_booking_page.dart';
 import 'package:events_app/User_App/view/home/homePage.dart';
+import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,9 +28,20 @@ class _DrawerPageState extends State<DrawerPage> {
 
   bool isButtomNavPressed = false;
 
-  static final List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _userBottomBarOptions = <Widget>[
     const HomePage(),
-    SecondPage(),
+    ReservationsPage(),
+
+    //here u will go to ADD page and also in the + button u gonna go to Add page
+    MainBookingPage(),
+    PublicEventPage(
+      isUserLoggedIn: true,
+    ),
+    const SearchPage(),
+  ];
+  static final List<Widget> _investorBottomBarOptions = <Widget>[
+    InvestorHomePage(),
+    ReservationsPage(),
     //here u will go to ADD page and also in the + button u gonna go to Add page
     MainBookingPage(),
     PublicEventPage(
@@ -50,7 +64,7 @@ class _DrawerPageState extends State<DrawerPage> {
 
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
-  final List<Widget> _pages = [
+  final List<Widget> _userDrawerPages = [
     const HomePage(),
     //Profile
     const ProfilePage(),
@@ -61,10 +75,23 @@ class _DrawerPageState extends State<DrawerPage> {
     //Settings
     SettingsPage(),
     //about us
-    const HelpCenterPage(isUserCameFromDrawer:true),
+    const HelpCenterPage(isUserCameFromDrawer: true),
     //const ReportsPage(),
   ];
-
+  final List<Widget> _investorDrawerPages = [
+    InvestorHomePage(),
+    //Profile
+    const ProfilePage(),
+    //Budget
+    InvestorHomePage(),
+    //History
+    const SearchPage(),
+    //Settings
+    SettingsPage(),
+    //about us
+    const HelpCenterPage(isUserCameFromDrawer: true),
+    //const ReportsPage(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,13 +108,19 @@ class _DrawerPageState extends State<DrawerPage> {
       body: Obx(() {
         return isButtomNavPressed
             ? Center(
-                child: _widgetOptions[controller.currentIndexBottom.value],
+                child: isUser
+                    ? _userBottomBarOptions[controller.currentIndexBottom.value]
+                    : _investorBottomBarOptions[
+                        controller.currentIndexBottom.value],
               )
             : Row(
                 children: [
                   // Page Content
                   Expanded(
-                    child: _pages[controller.currentIndexDrawer.value],
+                    child: isUser
+                        ? _userDrawerPages[controller.currentIndexDrawer.value]
+                        : _investorDrawerPages[
+                            controller.currentIndexDrawer.value],
                   ),
                 ],
               );
