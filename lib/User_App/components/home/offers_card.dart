@@ -1,6 +1,8 @@
+import 'package:events_app/User_App/view/p-event/offer.dart';
 import 'package:events_app/common/components/general/gradiant_Icon.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class OffersCard extends StatelessWidget {
   const OffersCard({super.key});
@@ -106,7 +108,10 @@ class OffersCard extends StatelessWidget {
                       // - _animation!.value,
                       ,
                       child: MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                            Get.to(()=> OfferPage());
+
+                        },
                         color: ThemesStyles.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),

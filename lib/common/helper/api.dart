@@ -64,6 +64,7 @@ class DioHelper {
       final headers = <String, dynamic>{
         if (token != "") 'Authorization': 'Bearer $token',
       };
+      print("zz");
 
       final response = await _dio.get(url,
           options: Options(

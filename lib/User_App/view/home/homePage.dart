@@ -4,6 +4,7 @@ import 'package:events_app/User_App/components/home/offers_card.dart';
 import 'package:events_app/User_App/components/home/person_kind_card.dart';
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
 import 'package:events_app/User_App/view/home/drawer-page.dart';
+import 'package:events_app/User_App/view/p-event/offer.dart';
 import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/common/core/shared/shared.dart';
@@ -121,10 +122,15 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 //===============================5 OFFERS Card===============================
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: ThemesStyles.paddingprimary * 2),
-                  child: const OffersCard(),
+                GestureDetector(
+
+onTap: (){
+  Get.to(OfferPage());
+},                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: ThemesStyles.paddingprimary * 2),
+                    child: const OffersCard(),
+                  ),
                 ),
               ],
             ),
