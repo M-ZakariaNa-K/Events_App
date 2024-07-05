@@ -13,6 +13,7 @@ class DefaultFormFeild extends StatelessWidget {
     this.onSubmitted,
     this.iniValue,
     this.textInputType,
+    this.enable,
   });
 
   final TextEditingController? textEditingController;
@@ -24,6 +25,7 @@ class DefaultFormFeild extends StatelessWidget {
   final bool? autoFoucs;
   final String? iniValue;
   final TextInputType? textInputType;
+  final bool? enable;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,7 @@ class DefaultFormFeild extends StatelessWidget {
         validator: validator,
         autofocus: autoFoucs!,
         initialValue: iniValue,
+        enabled: enable ?? true,
         decoration: InputDecoration(
             prefixIcon: prefixIcon,
             hintText: hintText,
@@ -78,18 +81,3 @@ class DefaultFormFeild extends StatelessWidget {
 }
 //custom
 
-class CustomSizedBox extends StatelessWidget {
-  CustomSizedBox({
-    super.key,
-    this.plusheight = 0.0,
-  });
-
-  double plusheight;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 13 + plusheight,
-    );
-  }
-}

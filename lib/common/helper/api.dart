@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/helper/show_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart' as GET;
 
 var _dio = Dio();
 
@@ -64,12 +65,12 @@ class DioHelper {
       final headers = <String, dynamic>{
         if (token != "") 'Authorization': 'Bearer $token',
       };
-      print("zz");
 
       final response = await _dio.get(url,
           options: Options(
             headers: headers,
           ));
+
 
       print(response.data);
 
@@ -80,8 +81,18 @@ class DioHelper {
             'There is a problem with status code ${response.statusCode}');
       }
     } catch (e) {
-      print(e);
-      throw Exception('Failed to load data');
+      if (e is DioException) {
+        if (e.response != null) {
+          GET.Get.snackbar("Opps....", "${e.response?.data["message"]}");
+          print('DioError: ${e.response?.data["message"]}');
+          print('DioError: ${e.response?.data}');
+        } else {
+          print('DioError: ${e.message}');
+        }
+      } else {
+        print('Error: $e');
+      }
+      // throw Exception('Failed to post data');
     }
   }
 
@@ -98,18 +109,29 @@ class DioHelper {
 
       final response =
           await _dio.post(url, data: body, options: Options(headers: headers));
-      print(response.data);
       print('Request body: $body');
       print('Response: ${response.data}');
 
       if (response.statusCode == 200) {
+        GET.Get.snackbar("Gongrats🎉", "${response.data["message"]}");
         return response.data;
       } else {
+        GET.Get.snackbar("Opps....", "${response.data["message"]}");
         throw Exception(
             'There is a problem with status code ${response.statusCode} with body ${response.data}');
       }
     } catch (e) {
-      print(e);
+      if (e is DioException) {
+        if (e.response != null) {
+          GET.Get.snackbar("Opps....", "${e.response?.data["message"]}");
+          print('DioError: ${e.response?.data["message"]}');
+          print('DioError: ${e.response?.data}');
+        } else {
+          print('DioError: ${e.message}');
+        }
+      } else {
+        print('Error: $e');
+      }
       // throw Exception('Failed to post data');
     }
   }

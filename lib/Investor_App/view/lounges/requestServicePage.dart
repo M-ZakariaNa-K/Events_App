@@ -1,7 +1,10 @@
+import 'package:events_app/Investor_App/controllers/lounges/addLoungesController..dart';
 import 'package:events_app/Investor_App/view/lounges/addLoungesPage..dart';
 import 'package:events_app/User_App/controllers/booking/radio_controller.dart';
 import 'package:events_app/common/components/auth/defaultFormField.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
+import 'package:events_app/common/core/shared/shared.dart';
+import 'package:events_app/common/helper/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,10 +16,11 @@ class RequestServicePage extends StatelessWidget {
   final RadioController _eventKindController =
       Get.put(RadioController(), tag: 'EventKindController');
 
-  final List<String> eventKindRadioData = ['Public', 'Privte'];
+  final List<String> eventKindRadioData = ['Public', 'Private'];
   @override
   Widget build(BuildContext context) {
-    TextEditingController d = TextEditingController();
+    TextEditingController enNameController = TextEditingController();
+    TextEditingController arNameController = TextEditingController();
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
@@ -53,24 +57,24 @@ class RequestServicePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: width,
-                      child: DefaultFormFeild(
-                        autoFoucs: false,
-                        hintText: "service",
-                        validator: (String? value) {
-                          if (value == '') {
-                            return "this field is required";
-                          }
-                          return null;
-                        },
-                        textEditingController: d,
-                        obscureText: false,
-                      ),
-                    )
-                        .paddingSymmetric(horizontal: width * 0.02)
-                        .marginSymmetric(
-                            horizontal: width * 0.02, vertical: height * 0.01),
+                    // Container(
+                    //   width: width,
+                    //   child: DefaultFormFeild(
+                    //     autoFoucs: false,
+                    //     hintText: "service",
+                    //     validator: (String? value) {
+                    //       if (value == '') {
+                    //         return "this field is required";
+                    //       }
+                    //       return null;
+                    //     },
+                    //     textEditingController: d,
+                    //     obscureText: false,
+                    //   ),
+                    // )
+                    //     .paddingSymmetric(horizontal: width * 0.02)
+                    //     .marginSymmetric(
+                    //         horizontal: width * 0.02, vertical: height * 0.01),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: _buildRadioButtons(
@@ -84,14 +88,14 @@ class RequestServicePage extends StatelessWidget {
                           width: width / 2.5,
                           child: DefaultFormFeild(
                             autoFoucs: false,
-                            hintText: "Price",
+                            hintText: "English name",
                             validator: (String? value) {
                               if (value == '') {
                                 return "this field is required";
                               }
                               return null;
                             },
-                            textEditingController: d,
+                            textEditingController: enNameController,
                             obscureText: false,
                           ),
                         ),
@@ -99,14 +103,14 @@ class RequestServicePage extends StatelessWidget {
                           width: width / 2.5,
                           child: DefaultFormFeild(
                             autoFoucs: false,
-                            hintText: "Proportion",
+                            hintText: "Arabic name",
                             validator: (String? value) {
                               if (value == '') {
                                 return "this field is required";
                               }
                               return null;
                             },
-                            textEditingController: d,
+                            textEditingController: arNameController,
                             obscureText: false,
                           ),
                         ),
@@ -119,12 +123,49 @@ class RequestServicePage extends StatelessWidget {
                         horizontal: 10,
                       ),
                       child: DefultButton(
-                        buttonColor: ThemesStyles.secondary,
-                        borderColor: Colors.transparent,
-                        textColor: Colors.white,
-                        title: "Request",
-                        onPressed: () {},
-                      ),
+                          buttonColor: ThemesStyles.secondary,
+                          borderColor: Colors.transparent,
+                          textColor: Colors.white,
+                          title: "Request",
+                          onPressed: () async {
+                            // Instantiate the controller once
+                            final addLoungesController = AddLoungesController();
+
+                            try {
+                              // Post the new service data
+                              await DioHelper.post(
+                                  url: "$baseUrl/service/create",
+                                  body: {
+                                    "services": [
+                                      {
+                                        "kind": _eventKindController
+                                                    .selectedValue.value ==
+                                                0
+                                            ? "public"
+                                            : "private",
+                                        "name": {
+                                          "ar": arNameController.text,
+                                          "en": enNameController.text
+                                        }
+                                      }
+                                    ]
+                                  });
+
+                              // Clear the text controllers
+                              arNameController.clear();
+                              enNameController.clear();
+
+                              // Fetch and refresh the dropdown items
+                              addLoungesController.fetchDropdownItems();
+
+                              // Go back to the previous screen
+
+                              Get.back();
+                            } catch (e) {
+                              print('Error creating service: $e');
+                              Get.snackbar("Error", "Failed to create service");
+                            }
+                          }),
                     ),
                   ],
                 ).marginOnly(top: height * 0.01),
@@ -140,7 +181,7 @@ class RequestServicePage extends StatelessWidget {
       radioData.length,
       (index) {
         return SizedBox(
-          width: 100,
+          width: 120,
           child: Obx(() => RadioListTile<int>(
                 contentPadding: EdgeInsets.zero, // Remove all padding
                 activeColor: ThemesStyles.secondary,

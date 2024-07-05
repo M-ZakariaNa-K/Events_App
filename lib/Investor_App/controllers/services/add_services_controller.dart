@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:events_app/Investor_App/controllers/lounges/lounges_controller.dart';
 import 'package:events_app/Investor_App/models/add_assets_photos_model.dart';
 import 'package:events_app/Investor_App/models/services_list_model.dart';
-import 'package:events_app/Investor_App/view/home/investor_homePage..dart';
 import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/helper/api.dart';
@@ -12,14 +11,13 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:image_picker/image_picker.dart';
 
-class AddLoungesController extends GetxController {
+class AddServiceController extends GetxController {
   var selectedImagePath = "".obs;
   var selectedImageSize = "".obs;
   var selectedImagePaths = <String>[].obs;
   var dropdownItems = <String>[].obs;
   var dropdownItemsAllData = <Map<String, dynamic>>[].obs;
   var dropdownValue = ''.obs;
-  var kind = ''.obs;
   var allDataToAPI = <String, dynamic>{}.obs;
   var firstRequisResponsData = 0.obs;
 
@@ -36,14 +34,6 @@ class AddLoungesController extends GetxController {
     }
   ].obs;
 
-  void addWorkHourController() {
-    workHourControllers.add({
-      'start': TextEditingController(),
-      'end': TextEditingController(),
-      'isEditing': true.obs
-    });
-  }
-
   //========End for the WorkHours===============
 
   void getImage(ImageSource imageSource) async {
@@ -54,8 +44,11 @@ class AddLoungesController extends GetxController {
       selectedImageSize.value =
           "${((File(selectedImagePath.value)).lengthSync() / 1024 / 1024).toStringAsFixed(2)}Mb";
       selectedImagePaths.add(pickedFile.path);
+      selectedImagePaths.refresh(); // Ensure GetX updates the list
+      print('Selected image paths: $selectedImagePaths'); // Debugging statement
     } else {
-      Get.snackbar("Error", 'message', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar("Error", 'No image selected',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 
@@ -112,7 +105,6 @@ class AddLoungesController extends GetxController {
       Map<String, dynamic> data1 = await DioHelper.post(
           url: "$baseUrl/assets/add-info", body: allDataToAPI);
       if (data1["code"] == 200) {
-        LoungesController().getloungesItems();
         Get.off(() => const DrawerPage());
       }
     } catch (e) {
@@ -124,6 +116,8 @@ class AddLoungesController extends GetxController {
   Future<void> submitData() async {
     try {
       List<dio.MultipartFile> imageFiles = [];
+
+      print('selectedImagePaths: ${selectedImagePaths}');
       for (String imagePath in selectedImagePaths) {
         File imageFile = File(imagePath);
         String fileName = imageFile.path.split('/').last;
@@ -174,23 +168,5 @@ class AddLoungesController extends GetxController {
     }
 
     return existedList;
-  }
-
-  String kindService(
-      List<Map<String, dynamic>> list1, List<Map<String, dynamic>> list2) {
-    String a = "";
-    for (var item1 in list1) {
-      var matchingItem = list2.firstWhere(
-        (item2) => item2['name'] == item1['name'],
-        // orElse: () => null,
-      );
-      if (matchingItem != null) {
-        if (dropdownValue.value == matchingItem["name"]) {
-          a = matchingItem["kind"];
-        }
-        print("Kind: ${matchingItem['kind']}");
-      }
-    }
-    return a;
   }
 }

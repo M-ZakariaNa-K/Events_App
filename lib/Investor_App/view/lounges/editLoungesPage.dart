@@ -1,20 +1,24 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:events_app/Investor_App/models/lounge_details_model.dart';
 import 'package:events_app/Investor_App/view/lounges/requestServicePage.dart';
 import 'package:events_app/User_App/controllers/booking/radio_controller.dart';
 import 'package:events_app/common/components/auth/defaultFormField.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
-
 import 'package:events_app/common/core/constants/theme.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../controllers/lounges/addLoungesController..dart';
 
-class AddLoungesPage extends GetView<AddLoungesController> {
-  AddLoungesPage({super.key});
+class EditLoungesPage extends GetView<AddLoungesController> {
+  EditLoungesPage({
+    required this.id,
+    required this.loungeDetailsItems,
+  });
+
   var size, height, width;
   // Use a tagged controller for EventKind
   final RadioController _mixedController =
@@ -25,23 +29,33 @@ class AddLoungesPage extends GetView<AddLoungesController> {
   TextEditingController hallNameARController = TextEditingController();
   TextEditingController hallNameENController = TextEditingController();
   TextEditingController capcityController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   TextEditingController dinnerPriceController = TextEditingController();
   TextEditingController mixedPriceController = TextEditingController();
-  TextEditingController startWorkHourController = TextEditingController();
-  TextEditingController endWorkHourController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
+
   TextEditingController servicesPriceController = TextEditingController();
   TextEditingController servicesProporationController = TextEditingController();
   final GlobalKey<FormState> _serviceFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _allFormKey = GlobalKey<FormState>();
-
+  final int id;
+  final LoungeDetailsDataModel loungeDetailsItems;
   @override
   Widget build(BuildContext context) {
+    hallNameARController.text = loungeDetailsItems.name;
+    hallNameENController.text = loungeDetailsItems.name;
+    capcityController.text = loungeDetailsItems.capacity.toString();
+    addressController.text = loungeDetailsItems.address;
+    _mixedController.selectedValue.value = loungeDetailsItems.mixedPrice;
+    _dinnerController.selectedValue.value = loungeDetailsItems.dinner;
+    dinnerPriceController.text = loungeDetailsItems.dinnerPrice.toString();
+    mixedPriceController.text = loungeDetailsItems.mixedPrice.toString();
+
     final addLoungeController = Get.put(AddLoungesController());
     Get.put(AddLoungesController());
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -427,7 +441,6 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                         ).marginSymmetric(horizontal: width * 0.03)
                       ],
                     ),
-
                     Obx(() {
                       return Column(
                         children: List.generate(
@@ -749,7 +762,7 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                   child: Center(
                                     child: InkWell(
                                       child: Text(
-                                        "Request a service",
+                                        "Request a services",
                                         style: TextStyle(
                                             color: ThemesStyles.primary,
                                             fontSize:
@@ -772,6 +785,129 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                         ).marginOnly(top: height * 0.01),
                       ).marginSymmetric(horizontal: width * 0.02, vertical: 10),
                     ),
+                    //====================================for EDIT=================================
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: loungeDetailsItems.services.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Number of columns
+                        crossAxisSpacing: 2.0, // Space between columns
+                        mainAxisSpacing: 10.0, // Space between rows
+                        childAspectRatio: 3 /
+                            3, // Adjust this value to change the aspect ratio of the grid items
+                      ),
+                      itemBuilder: (context, index) {
+                        return Container(
+                          width: width / 2,
+                          height: height / 5,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade400,
+                                blurRadius: 15,
+                                offset: Offset(5, 5),
+                              )
+                            ],
+                            border: Border.all(
+                                color: ThemesStyles.secondary, width: 2),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Services :",
+                                    style: TextStyle(
+                                      color: ThemesStyles.textColor,
+                                      fontSize: ThemesStyles.littelFontSize,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    loungeDetailsItems.services[index].name,
+                                    style: TextStyle(
+                                      color: ThemesStyles.textColor,
+                                      fontSize: ThemesStyles.littelFontSize,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ).marginSymmetric(horizontal: width * 0.01),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Proportion : ",
+                                    style: TextStyle(
+                                      color: ThemesStyles.textColor,
+                                      fontSize: ThemesStyles.littelFontSize,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    loungeDetailsItems
+                                            .services[index].discountedPrice ??
+                                        "",
+                                    style: TextStyle(
+                                      color: ThemesStyles.textColor,
+                                      fontSize: ThemesStyles.littelFontSize,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Price : ",
+                                    style: TextStyle(
+                                      color: ThemesStyles.textColor,
+                                      fontSize: ThemesStyles.littelFontSize,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    loungeDetailsItems.services[index].price ??
+                                        "",
+                                    style: TextStyle(
+                                      color: ThemesStyles.textColor,
+                                      fontSize: ThemesStyles.littelFontSize,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ).marginSymmetric(horizontal: width * 0.05),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: SizedBox(
+                                  width: 100,
+                                  child: DefultButton(
+                                    buttonColor: ThemesStyles.background,
+                                    borderColor: ThemesStyles.secondary,
+                                    textColor: Colors.red,
+                                    title: "Delete",
+                                    onPressed: () {
+                                      // loungeDetailsItems.services.remove(
+                                      //     controller.serviceList[index]);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ).marginSymmetric(
+                            horizontal: width * 0.02, vertical: height * 0.01);
+                      },
+                    ),
+                    //====================================for EDIT=================================
                     Obx(
                       () => GridView.builder(
                         shrinkWrap: true,
@@ -906,8 +1042,9 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                         title: "Add Hall",
                         onPressed: () async {
                           if (_allFormKey.currentState!.validate()) {
-                            await addLoungeController.submitData();
+                            addLoungeController.submitData();
 
+                            await Future.delayed(const Duration(seconds: 2));
                             //===============================================
 
                             //------------------------------------------------------
@@ -931,14 +1068,8 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                               );
                             }
                             addLoungeController.allDataToAPI["services"] = {
-                              "existed": existed,
-                              "added": [
-                                // {
-                                //   "name": {"ar": "عرس", "en": "Wedding"},
-                                //   "kind": "private",
-                                //   "price": "100"
-                                // }
-                              ],
+                              "existed": "$existed",
+                              "added": [{}, {}],
                             };
                             addLoungeController.allDataToAPI["hall"] = {
                               "name": {
@@ -962,7 +1093,7 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                   _mixedController.selectedValue.value == 0
                                       ? "${0}"
                                       : "${mixedPriceController.text}",
-                              "active_times": active_times,
+                              "active_times": "$active_times",
                             };
 
                             print(
@@ -970,7 +1101,6 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                             //------------------------------------------------------
                             //===============================================
 
-                            await addLoungeController.postLoungeData();
                             // hallNameARController.clear();
                             // hallNameENController.clear();
                             // capcityController.clear();
@@ -978,9 +1108,10 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                             // dinnerPriceController.clear();
                             // mixedPriceController.clear();
                           }
+                          addLoungeController.postLoungeData();
                         },
                       ),
-                    ).marginOnly(top: 10),
+                    ).marginOnly(top: 10)
                   ],
                 ).marginOnly(top: height * 0.01)
               ],
@@ -1021,6 +1152,16 @@ class AddLoungesPage extends GetView<AddLoungesController> {
               )),
         );
       },
+    );
+  }
+
+  EditLoungesPage copyWith({
+    int? id,
+    LoungeDetailsDataModel? loungeDetailsItems,
+  }) {
+    return EditLoungesPage(
+      id: id ?? this.id,
+      loungeDetailsItems: loungeDetailsItems ?? this.loungeDetailsItems,
     );
   }
 }

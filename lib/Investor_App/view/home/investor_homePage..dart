@@ -1,3 +1,6 @@
+import 'package:events_app/Investor_App/controllers/lounges/lounge_details_controller.dart';
+import 'package:events_app/Investor_App/controllers/lounges/lounges_controller.dart';
+import 'package:events_app/Investor_App/controllers/services/services_controller.dart';
 import 'package:events_app/Investor_App/view/lounges/LoungesDetailsPage.dart';
 import 'package:events_app/Investor_App/view/lounges/addLoungesPage..dart';
 import 'package:events_app/Investor_App/view/organizer/addServicesPage.dart';
@@ -7,6 +10,8 @@ import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io' show Platform;
+
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class InvestorHomePage extends StatelessWidget {
   InvestorHomePage({super.key});
@@ -35,65 +40,76 @@ class InvestorHomePage extends StatelessWidget {
           ),
         ).marginOnly(bottom: height * 0.02),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: isHallOwner
-            ?
-            //Here show the widget when data is EMPTY
-            //  Center(
-            //                 child: Opacity(
-            //                   opacity: 0.4,
-            //                   child: Column(
-            //                     mainAxisAlignment: MainAxisAlignment.center,
-            //                     children: [
-            //                       Image(
-            //                         image: const AssetImage(
-            //                             'assets/images/logo2_400x400-removebg-preview.png'),
-            //                         width: width * 0.5,
-            //                         height: height * 0.4,
-            //                       ),
-            //                       Text(
-            //                         'Theres no lounges to show',
-            //                         style: TextStyle(
-            //                             fontSize: ThemesStyles.mainFontSize,
-            //                             fontWeight: FontWeight.bold),
-            //                       )
-            //                     ],
-            //                   ),
-            //                 ),
-            //               )
-            HallCards(width: width, height: height)
-            : const ServiceCard(events: ['s', 's']).marginSymmetric(
-                vertical: height * 0.01, horizontal: width * 0.03),
+        body: Obx(() {
+          final loungesController = Get.put(LoungesController());
+          if (isHallOwner) {
+            if (loungesController.loungesItems.isEmpty) {
+              return Center(
+                child: Opacity(
+                  opacity: 0.4,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Image(
+                        image:
+                            AssetImage('assets/images/searchNotFoundImage.png'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 0.0),
+                        child: Text(
+                          'There are no lounges to show',
+                          style: TextStyle(
+                            fontSize: ThemesStyles.mainFontSize,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return HallCards(width: width, height: height);
+            }
+          } else {
+            final servicesController = Get.put(ServicesController());
+            if (servicesController.servicesItems.isEmpty) {
+              return Center(
+                child: Opacity(
+                  opacity: 0.4,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Image(
+                        image:
+                            AssetImage('assets/images/searchNotFoundImage.png'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 0.0),
+                        child: Text(
+                          'There are no services to show',
+                          style: TextStyle(
+                            fontSize: ThemesStyles.mainFontSize,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return const ServiceCard(events: ['s', 's']).marginSymmetric(
+                  vertical: height * 0.01, horizontal: width * 0.03);
+            }
+          }
+        }),
       ),
     );
   }
 }
 
-List<Map<String, dynamic>> lounges = [
-  {
-    "name": "Albahia - البهية",
-    "days": "Sun -> Monday",
-    "time": "8:00 AM -> 1:00 PM",
-    "location": "Al MAZA - Damascus",
-    "image": "assets/images/second_boanding.png"
-  },
-  {
-    "name": "Albahia - البهية",
-    "days": "Sun -> Monday",
-    "time": "8:00 AM -> 1:00 PM",
-    "location": "Al MAZA - Damascus",
-    "image": "assets/images/second_boanding.png"
-  },
-  {
-    "name": "Albahia - البهية",
-    "days": "Sun -> Monday",
-    "time": "8:00 AM -> 1:00 PM",
-    "location": "Al MAZA - Damascus",
-    "image": "assets/images/second_boanding.png"
-  },
-  // Add more lounges here
-];
-
-class HallCards extends StatelessWidget {
+class HallCards extends GetView<LoungesController> {
   HallCards({
     super.key,
     required this.width,
@@ -102,104 +118,136 @@ class HallCards extends StatelessWidget {
 
   var width;
   var height;
+  Future<void> _handleRefresh() async {
+    return await LoungesController().getloungesItems();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: lounges.length,
-      itemBuilder: (context, index) {
-        Map<String, dynamic> lounge = lounges[index];
-        return GestureDetector(
-          onTap: () {
-            Get.to(() => LoungesDetailsPage());
-          },
-          child: Container(
-            width: width,
-            height: height / 6,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: ThemesStyles.secondary, width: 2),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.shade300,
-                  offset: const Offset(5, 5),
-                  blurRadius: 10,
+    final loungeController = Get.put(LoungesController());
+    return ScrollConfiguration(
+      behavior: const MaterialScrollBehavior(),
+      child: LiquidPullToRefresh(
+        color: ThemesStyles.secondary,
+        height: 300,
+        backgroundColor: ThemesStyles.thirdColor,
+        onRefresh: _handleRefresh,
+        child: Obx(
+          () => ListView.builder(
+            itemCount: loungeController.loungesItems.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () async {
+                  print("imm iddd ${loungeController.loungesItems[index].id}");
+                  await loungeController.getloungeDetailsItems(
+                    id: loungeController.loungesItems[index].id,
+                  );
+                  Get.to(() => LoungesDetailsPage(
+                        id: loungeController.loungesItems[index].id,
+                      ));
+                },
+                child: Container(
+                  width: width,
+                  height: height / 6,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: ThemesStyles.secondary, width: 2),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade300,
+                        offset: const Offset(5, 5),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: width / 5,
+                        child: Image.asset(
+                            'assets/images/searchNotFoundImage.png'),
+
+                        // Image.network(
+                        //     "http://192.168.1.2:8000/storage/${loungeController.loungesItems[index].photos[0]}"),
+                      ).marginSymmetric(horizontal: width * 0.03),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                loungeController.loungesItems[index].name,
+                                style: TextStyle(
+                                  color: ThemesStyles.primary,
+                                  fontSize: ThemesStyles.mainFontSize + 2,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ).marginOnly(bottom: 10),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.pin_drop,
+                                color: ThemesStyles.primary,
+                              ),
+                              Text(
+                                loungeController.loungesItems[index].address
+                                    .toString(),
+                                style: TextStyle(
+                                  color: ThemesStyles.textColor,
+                                  fontSize: ThemesStyles.littelFontSize,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          )
+                              .marginSymmetric(horizontal: 0)
+                              .marginOnly(bottom: 0),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.schedule,
+                                color: ThemesStyles.primary,
+                              ),
+                              Text(
+                                loungeController.loungesItems[index].capacity
+                                    .toString(),
+                                style: TextStyle(
+                                  color: ThemesStyles.textColor,
+                                  fontSize: ThemesStyles.littelFontSize - 2,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(
+                                5,
+                                (i) => Icon(
+                                      Icons.star,
+                                      color: loungeController
+                                                  .loungesItems[index].rate >
+                                              i
+                                          ? Colors.amber[300]
+                                          : const Color.fromARGB(
+                                              255, 220, 220, 220),
+                                    )),
+                          ),
+                        ],
+                      ).marginOnly(top: height * 0.02),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: width / 5,
-                  child: Image.asset(lounge['image']),
-                ).marginSymmetric(horizontal: width * 0.03),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          lounge['name'],
-                          style: TextStyle(
-                            color: ThemesStyles.primary,
-                            fontSize: ThemesStyles.mainFontSize + 2,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ).marginOnly(bottom: 10),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_month_outlined,
-                          color: ThemesStyles.primary,
-                        ).paddingOnly(right: 5),
-                        Text(
-                          lounge['days'],
-                          style: TextStyle(
-                            color: ThemesStyles.textColor,
-                            fontSize: ThemesStyles.littelFontSize - 2,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ).marginOnly(right: 10),
-                        const Icon(
-                          Icons.schedule,
-                          color: ThemesStyles.primary,
-                        ).paddingOnly(right: 5),
-                        Text(
-                          lounge['time'],
-                          style: TextStyle(
-                            color: ThemesStyles.textColor,
-                            fontSize: ThemesStyles.littelFontSize - 2,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ).marginOnly(bottom: 10),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.pin_drop,
-                          color: ThemesStyles.primary,
-                        ),
-                        Text(
-                          lounge['location'],
-                          style: TextStyle(
-                            color: ThemesStyles.textColor,
-                            fontSize: ThemesStyles.littelFontSize,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ).marginOnly(top: height * 0.02),
-              ],
-            ),
+              ).marginOnly(top: 10);
+            },
           ),
-        ).marginOnly(top: 10);
-      },
+        ),
+      ),
     );
   }
 }

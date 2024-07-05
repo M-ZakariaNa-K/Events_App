@@ -54,11 +54,11 @@ class MyApp extends StatelessWidget {
             //========================
             themeMode: mode,
 
-            locale: const Locale('ar'),
+            locale: const Locale('en'),
             translations: LangLocale(),
             title: 'Events App',
             // put the home page as your main working screen
-            home: SafeArea(child: DrawerPage()),
+            home: const SafeArea(child: DrawerPage()),
 
             theme: ThemeData(
               useMaterial3: true,

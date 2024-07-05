@@ -6,6 +6,7 @@ import 'package:events_app/User_App/view/booking/onBoardingPages/third_onBoardin
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/User_App/view/booking/onBoardingPages/first_onBoarding_booking.dart';
 import 'package:events_app/User_App/view/booking/onBoardingPages/second_onBoarding_booking%20copy.dart';
+import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -16,6 +17,11 @@ class MainBookingPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _numberController = TextEditingController();
   final TextEditingController _regionController = TextEditingController();
+  final TextEditingController _startPriceController = TextEditingController();
+  final TextEditingController _endPriceController = TextEditingController();
+  final TextEditingController _startTimeController = TextEditingController();
+  final TextEditingController _endTimeController = TextEditingController();
+
   String? selectedTime;
   String? selectedEventCatigory;
 
@@ -24,8 +30,6 @@ class MainBookingPage extends StatelessWidget {
     final RadioController _eventKindController = Get.find(tag: 'EventKind');
     final RadioController _mixedController = Get.find(tag: 'MixedServices');
     final RadioController _dinnerController = Get.find(tag: 'DinnerServices');
-    final RadioController _photographyController =
-        Get.find(tag: 'PhotographyServices');
 
     final selectedData = {
       //====================================================
@@ -34,11 +38,14 @@ class MainBookingPage extends StatelessWidget {
       //====================================================
       'MixedServices': _mixedController.getSelectedValue(),
       'DinnerServices': _dinnerController.getSelectedValue(),
-      'PhotographyServices': _photographyController.getSelectedValue(),
       'Region': _regionController.text,
       'audiencesNumber': _numberController.text,
       'SelectedTime': selectedTime,
       'EventCatigory': selectedEventCatigory,
+      'min_price': _startPriceController.text,
+      'max_price': _endPriceController.text,
+      "start_time": "$starthourShared:$startminuteShared:00",
+      "end_time": "$endhourShared:$endminuteShared:00",
     };
 // Check if the current page is the third slide (index 2)
     if (_controller.page == 2) {
@@ -54,10 +61,15 @@ class MainBookingPage extends StatelessWidget {
   }
 
   void nextPage(BuildContext context) {
-    if (_controller.page == 5) {
+    if (_controller.page == 1) {
+      //Here i will sent a request of data of the second slide
+    } else if (_controller.page == 5) {
       // If on the sixth slide, save data
       saveData(context);
-      // Optionally navigate to another page after saving data
+      starthourShared = 0;
+      startminuteShared = 0;
+      endhourShared = 0;
+      endminuteShared = 0;
       // Get.to(DrawerPage());
     } else {
       // Check if the current page is the fifth or second slide and validate the form
@@ -111,7 +123,10 @@ class MainBookingPage extends StatelessWidget {
                     numberController: _numberController,
                   ),
                   //=====================Sixth slide================
-                  SixthOnBoardingBooking(),
+                  SixthOnBoardingBooking(
+                    startPriceController: _startPriceController,
+                    endPriceController: _endPriceController,
+                  ),
                 ],
               ),
             ),

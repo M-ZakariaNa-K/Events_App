@@ -1,12 +1,20 @@
-import 'package:events_app/User_App/components/booking/onBoarding_Questions_Component.dart';
-import 'package:events_app/User_App/controllers/booking/radio_controller.dart';
-import 'package:events_app/common/core/constants/theme.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SixthOnBoardingBooking extends StatelessWidget {
-  SixthOnBoardingBooking({super.key});
+import 'package:events_app/User_App/components/booking/onBoarding_Questions_Component.dart';
+import 'package:events_app/User_App/controllers/booking/radio_controller.dart';
+import 'package:events_app/common/components/general/Costume_TextField_widget.dart';
+import 'package:events_app/common/core/constants/theme.dart';
 
+class SixthOnBoardingBooking extends StatelessWidget {
+  SixthOnBoardingBooking({
+    Key? key,
+    required this.startPriceController,
+    required this.endPriceController,
+  }) : super(key: key);
+  final TextEditingController startPriceController;
+  final TextEditingController endPriceController;
   final List<String> radioData = ['No', 'Yes'];
   final selectedData = {};
   @override
@@ -15,8 +23,6 @@ class SixthOnBoardingBooking extends StatelessWidget {
         Get.put(RadioController(), tag: 'MixedServices');
     final RadioController _dinnerController =
         Get.put(RadioController(), tag: 'DinnerServices');
-    final RadioController _photographyController =
-        Get.put(RadioController(), tag: 'PhotographyServices');
 
     return SingleChildScrollView(
       child: Column(
@@ -68,16 +74,6 @@ class SixthOnBoardingBooking extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 19.0),
-                        child: Text(
-                          "Prevent Photography",
-                          style: TextStyle(
-                            fontSize: ThemesStyles.littelFontSize,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -88,13 +84,54 @@ class SixthOnBoardingBooking extends StatelessWidget {
                           "Mixed Services", _mixedController),
                       _buildRadioButtonGroup(
                           "Dinner Services", _dinnerController),
-                      _buildRadioButtonGroup(
-                          "Prevent Photography", _photographyController),
                     ],
                   ),
                 ),
               ],
             ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 30.0),
+            width: 350,
+            child: Text(
+              "Please enter your range of paying:",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: ThemesStyles.mainFontSize,
+                // color: ThemesStyles.textColor.withOpacity(.8),
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 150,
+                child: CustomeTextFormField(
+                  hintText: "Min Price Range",
+                  inputType: TextInputType.number,
+                  title: "",
+                  controller: startPriceController,
+                  validator: (value) {},
+                  prefixIcon: null,
+                ),
+              ),
+              const Padding(
+                padding:  EdgeInsets.symmetric(horizontal: 10.0),
+                child: Text("<->"),
+              ),
+              SizedBox(
+                width: 150,
+                child: CustomeTextFormField(
+                  hintText: "Max Price Range",
+                  inputType: TextInputType.number,
+                  title: "",
+                  controller: endPriceController,
+                  validator: (value) {},
+                  prefixIcon: null,
+                ),
+              ),
+            ],
           ),
         ],
       ),
