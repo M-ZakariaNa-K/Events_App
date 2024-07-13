@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:events_app/Investor_App/controllers/lounges/editLoungesController.dart';
+import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -51,7 +53,7 @@ class EditLoungesPage extends GetView<AddLoungesController> {
     mixedPriceController.text = loungeDetailsItems.mixedPrice.toString();
 
     final addLoungeController = Get.put(AddLoungesController());
-    Get.put(AddLoungesController());
+    final editLoungeController = Get.put(EditLoungesController());
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
@@ -75,94 +77,126 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
+                      // Display fetched images
                       Container(
-                        height: height * 0.15,
-                        width: width,
-                        child: Obx(
-                          () => ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              itemCount: controller.selectedImagePaths.length +
-                                  1, // Increase itemCount by 1
-                              itemBuilder: (context, index) {
-                                // Check if the current index is 0
-                                if (index == 0) {
-                                  // Return the Container for adding a new picture
-                                  return Container(
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(
-                                          width: 2,
-                                          color: ThemesStyles.secondary),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    width: width * 0.3,
-                                    height: height * 0.15,
-                                    child: GestureDetector(
+                          height: height * 0.15,
+                          width: width,
+                          child: Obx(() => ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount: editLoungeController
+                                        .loungeDetailsItems.isNotEmpty
+                                    ? editLoungeController.loungeDetailsItems[0]
+                                            .photos.length +
+                                        1
+                                    : 1,
+                                itemBuilder: (context, index) {
+                                  // Check if the current index is for adding a new picture
+                                  if (index == 0) {
+                                    return GestureDetector(
                                       onTap: () {
                                         controller
                                             .getImage(ImageSource.gallery);
                                       },
-                                      child: const Center(
-                                        child: Icon(
-                                          size: 30,
-                                          Icons.add_a_photo,
-                                          color: ThemesStyles.secondary,
+                                      child: Container(
+                                        clipBehavior: Clip.hardEdge,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            width: 2,
+                                            color: ThemesStyles.secondary,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
-                                      ),
-                                    ),
-                                  ).marginOnly(left: width * 0.0);
-                                } else {
-                                  // Adjust the index to account for the first item
-                                  final imagePath =
-                                      controller.selectedImagePaths[index - 1];
-                                  return Stack(
-                                    children: [
-                                      Container(
-                                              clipBehavior: Clip.hardEdge,
-                                              decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      spreadRadius: 0.5,
-                                                      blurRadius: 2,
-                                                      color:
-                                                          Colors.grey.shade300,
-                                                      offset:
-                                                          const Offset(5, 2))
-                                                ],
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                              width: width * 0.3,
-                                              height: height,
-                                              child: Image.file(File(imagePath),
-                                                  fit: BoxFit.fill))
-                                          .marginOnly(left: width * 0.03),
-                                      Positioned(
-                                        top: 0,
-                                        left: 0,
-                                        child: Container(
-                                          width: 40,
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                              color: ThemesStyles.secondary,
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: IconButton(
-                                            icon: const Icon(Icons.delete,
-                                                color: Colors.red),
-                                            onPressed: () => controller
-                                                .removeImage(imagePath),
+                                        width: width * 0.3,
+                                        height: height * 0.15,
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.add_a_photo,
+                                            size: 30,
+                                            color: ThemesStyles.secondary,
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ).marginOnly(left: width * 0.05);
-                                }
-                              }),
-                        ).marginSymmetric(horizontal: width * 0.01),
-                      ),
+                                      ),
+                                    ).marginOnly(left: width * 0.0);
+                                  } else {
+                                    // Display fetched images
+                                    final imagePath = editLoungeController
+                                            .loungeDetailsItems.isNotEmpty
+                                        ? editLoungeController
+                                            .loungeDetailsItems[0]
+                                            .photos[index - 1]
+                                        : null;
+
+                                    return Stack(
+                                      children: [
+                                        Container(
+                                          clipBehavior: Clip.hardEdge,
+                                          decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                spreadRadius: 0.5,
+                                                blurRadius: 2,
+                                                color: Colors.grey.shade300,
+                                                offset: const Offset(5, 2),
+                                              ),
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          width: width * 0.3,
+                                          height: height,
+                                          child: imagePath != null
+                                              ? Image.network(
+                                                  'http://10.0.2.2:8000/storage/$imagePath',
+                                                  fit: BoxFit.fill,
+                                                  errorBuilder: (context, error,
+                                                      stackTrace) {
+                                                    return const Center(
+                                                      child: Text(
+                                                        'Failed to load image',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                              : Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                        ).marginOnly(left: width * 0.03),
+                                        Positioned(
+                                          top: 0,
+                                          left: 0,
+                                          child: Container(
+                                            width: 40,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              color: ThemesStyles.secondary,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: IconButton(
+                                              icon: const Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                              ),
+                                              onPressed: () {
+                                                if (imagePath != null) {
+                                                  // Remove image logic here
+                                                  editLoungeController
+                                                      .removeImage(imagePath);
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ).marginOnly(left: width * 0.05);
+                                  }
+                                },
+                              )).marginSymmetric(horizontal: width * 0.01)),
                     ],
                   ),
                 ),
@@ -443,122 +477,301 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                     ),
                     Obx(() {
                       return Column(
-                        children: List.generate(
-                          addLoungeController.workHourControllers.length,
-                          (i) {
-                            final workHourController =
-                                addLoungeController.workHourControllers[i];
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 10.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    width: width / 2.3,
-                                    child: workHourController['isEditing'].value
-                                        ? TextField(
-                                            controller:
-                                                workHourController['start'],
-                                            onSubmitted: (value) {
-                                              workHourController['start']
-                                                          .text !=
-                                                      ""
-                                                  ? workHourController[
-                                                          'isEditing']
-                                                      .value = false
-                                                  : workHourController[
-                                                          'isEditing']
-                                                      .value = true;
-                                            },
-                                            decoration: const InputDecoration(
-                                              hintText: 'Start',
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0xff979797),
-                                                ),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.red,
-                                                ),
-                                              ),
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                vertical:
-                                                    5.0, // Adjust vertical padding
-                                                horizontal:
-                                                    10.0, // Adjust horizontal padding
-                                              ),
-                                            ),
-                                          )
-                                        : Center(
-                                            child: InkWell(
-                                              onTap: () {
-                                                workHourController['isEditing']
-                                                    .value = true;
-                                              },
-                                              child: Text(
+                        children: [
+                          Column(
+                            children: List.generate(
+                              editLoungeController.workHourControllers.length,
+                              (i) {
+                                final workHourController =
+                                    editLoungeController.workHourControllers[i];
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        width: width / 2.3,
+                                        child: Obx(() {
+                                          return workHourController['isEditing']
+                                                  .value
+                                              ? TextField(
+                                                  controller:
+                                                      workHourController[
+                                                          'start'],
+                                                  onSubmitted: (value) {
+                                                    workHourController[
+                                                                'isEditing']
+                                                            .value =
+                                                        workHourController[
+                                                                'start']
+                                                            .text
+                                                            .isNotEmpty;
+                                                  },
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    hintText: 'Start',
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Color(0xff979797),
+                                                      ),
+                                                    ),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: Colors.red,
+                                                      ),
+                                                    ),
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                      vertical: 5.0,
+                                                      horizontal: 10.0,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Center(
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      workHourController[
+                                                              'isEditing']
+                                                          .value = true;
+                                                    },
+                                                    child: Text(
+                                                        workHourController[
+                                                                'start']
+                                                            .text),
+                                                  ),
+                                                );
+                                        }),
+                                      ),
+                                      // Container(
+                                      //   width: width / 2.3,
+                                      //   child: TextField(
+                                      //     controller:
+                                      //         workHourController['start'],
+                                      //     onSubmitted: (value) {
+                                      //       workHourController['isEditing']
+                                      //               .value =
+                                      //           workHourController['start']
+                                      //               .text
+                                      //               .isNotEmpty;
+                                      //     },
+                                      //     decoration: const InputDecoration(
+                                      //       hintText: 'Start',
+                                      //       enabledBorder: OutlineInputBorder(
+                                      //         borderSide: BorderSide(
+                                      //           color: Color(0xff979797),
+                                      //         ),
+                                      //       ),
+                                      //       focusedBorder: OutlineInputBorder(
+                                      //         borderSide: BorderSide(
+                                      //           color: Colors.red,
+                                      //         ),
+                                      //       ),
+                                      //       contentPadding:
+                                      //           EdgeInsets.symmetric(
+                                      //         vertical: 5.0,
+                                      //         horizontal: 10.0,
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      Container(
+                                        width: width / 2.3,
+                                        child: Obx(() {
+                                          return workHourController['isEditing']
+                                                  .value
+                                              ? TextField(
+                                                  controller:
+                                                      workHourController['end'],
+                                                  onSubmitted: (value) {
+                                                    workHourController[
+                                                                'isEditing']
+                                                            .value =
+                                                        workHourController[
+                                                                'end']
+                                                            .text
+                                                            .isNotEmpty;
+                                                  },
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    hintText: 'End',
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Color(0xff979797),
+                                                      ),
+                                                    ),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: Colors.red,
+                                                      ),
+                                                    ),
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                      vertical: 5.0,
+                                                      horizontal: 10.0,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Center(
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      workHourController[
+                                                              'isEditing']
+                                                          .value = true;
+                                                    },
+                                                    child: Text(
+                                                        workHourController[
+                                                                'end']
+                                                            .text),
+                                                  ),
+                                                );
+                                        }),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          //===================================================
+                          Column(
+                            children: List.generate(
+                              addLoungeController.workHourControllers.length,
+                              (i) {
+                                final workHourController =
+                                    addLoungeController.workHourControllers[i];
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        width: width / 2.3,
+                                        child: workHourController['isEditing']
+                                                .value
+                                            ? TextField(
+                                                controller:
+                                                    workHourController['start'],
+                                                onSubmitted: (value) {
                                                   workHourController['start']
-                                                      .text),
-                                            ),
-                                          ),
-                                  ),
-                                  Container(
-                                    width: width / 2.3,
-                                    child: workHourController['isEditing'].value
-                                        ? TextField(
-                                            controller:
-                                                workHourController['end'],
-                                            onSubmitted: (value) {
-                                              workHourController['end'].text !=
-                                                      ""
-                                                  ? workHourController[
-                                                          'isEditing']
-                                                      .value = false
-                                                  : workHourController[
-                                                          'isEditing']
-                                                      .value = true;
-                                            },
-                                            decoration: const InputDecoration(
-                                              hintText: 'End',
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0xff979797),
+                                                              .text !=
+                                                          ""
+                                                      ? workHourController[
+                                                              'isEditing']
+                                                          .value = false
+                                                      : workHourController[
+                                                              'isEditing']
+                                                          .value = true;
+                                                },
+                                                decoration:
+                                                    const InputDecoration(
+                                                  hintText: 'Start',
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0xff979797),
+                                                    ),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                    vertical:
+                                                        5.0, // Adjust vertical padding
+                                                    horizontal:
+                                                        10.0, // Adjust horizontal padding
+                                                  ),
+                                                ),
+                                              )
+                                            : Center(
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    workHourController[
+                                                            'isEditing']
+                                                        .value = true;
+                                                  },
+                                                  child: Text(
+                                                      workHourController[
+                                                              'start']
+                                                          .text),
                                                 ),
                                               ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.red,
-                                                ),
-                                              ),
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                vertical:
-                                                    5.0, // Adjust vertical padding
-                                                horizontal:
-                                                    10.0, // Adjust horizontal padding
-                                              ),
-                                            ),
-                                          )
-                                        : Center(
-                                            child: InkWell(
-                                              onTap: () {
-                                                workHourController['isEditing']
-                                                    .value = true;
-                                              },
-                                              child: Text(
+                                      ),
+                                      Container(
+                                        width: width / 2.3,
+                                        child: workHourController['isEditing']
+                                                .value
+                                            ? TextField(
+                                                controller:
+                                                    workHourController['end'],
+                                                onSubmitted: (value) {
                                                   workHourController['end']
-                                                      .text),
-                                            ),
-                                          ),
+                                                              .text !=
+                                                          ""
+                                                      ? workHourController[
+                                                              'isEditing']
+                                                          .value = false
+                                                      : workHourController[
+                                                              'isEditing']
+                                                          .value = true;
+                                                },
+                                                decoration:
+                                                    const InputDecoration(
+                                                  hintText: 'End',
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0xff979797),
+                                                    ),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                    vertical:
+                                                        5.0, // Adjust vertical padding
+                                                    horizontal:
+                                                        10.0, // Adjust horizontal padding
+                                                  ),
+                                                ),
+                                              )
+                                            : Center(
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    workHourController[
+                                                            'isEditing']
+                                                        .value = true;
+                                                  },
+                                                  child: Text(
+                                                      workHourController['end']
+                                                          .text),
+                                                ),
+                                              ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       );
                     }),
                     //=============================================================
@@ -1041,74 +1254,7 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                         textColor: Colors.white,
                         title: "Add Hall",
                         onPressed: () async {
-                          if (_allFormKey.currentState!.validate()) {
-                            addLoungeController.submitData();
-
-                            await Future.delayed(const Duration(seconds: 2));
-                            //===============================================
-
-                            //------------------------------------------------------
-                            List<Map<String, dynamic>> existed =
-                                addLoungeController.createExistedList(
-                                    addLoungeController.serviceList,
-                                    addLoungeController.dropdownItemsAllData);
-                            List<Map<String, dynamic>> active_times = [];
-                            for (int i = 0;
-                                i <
-                                    addLoungeController
-                                        .workHourControllers.length;
-                                i++) {
-                              active_times.add(
-                                {
-                                  "start_time":
-                                      "${addLoungeController.workHourControllers[i]["start"].text}",
-                                  "end_time":
-                                      "${addLoungeController.workHourControllers[i]["end"].text}"
-                                },
-                              );
-                            }
-                            addLoungeController.allDataToAPI["services"] = {
-                              "existed": "$existed",
-                              "added": [{}, {}],
-                            };
-                            addLoungeController.allDataToAPI["hall"] = {
-                              "name": {
-                                "ar": hallNameARController.text,
-                                "en": hallNameENController.text
-                              },
-                              "capacity": "${capcityController.text}",
-                              "address": addressController.text,
-                              "dinner":
-                                  _dinnerController.selectedValue.value == 0
-                                      ? false
-                                      : true,
-                              "dinner_price":
-                                  _dinnerController.selectedValue.value == 0
-                                      ? "${0}"
-                                      : "${dinnerPriceController.text}",
-                              "mixed": _mixedController.selectedValue.value == 0
-                                  ? false
-                                  : true,
-                              "mixed_price":
-                                  _mixedController.selectedValue.value == 0
-                                      ? "${0}"
-                                      : "${mixedPriceController.text}",
-                              "active_times": "$active_times",
-                            };
-
-                            print(
-                                ' addLoungeController.allDataToAP: ${addLoungeController.allDataToAPI}');
-                            //------------------------------------------------------
-                            //===============================================
-
-                            // hallNameARController.clear();
-                            // hallNameENController.clear();
-                            // capcityController.clear();
-                            // addressController.clear();
-                            // dinnerPriceController.clear();
-                            // mixedPriceController.clear();
-                          }
-                          addLoungeController.postLoungeData();
+                          if (_allFormKey.currentState!.validate()) {}
                         },
                       ),
                     ).marginOnly(top: 10)

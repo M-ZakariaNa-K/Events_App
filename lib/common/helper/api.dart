@@ -64,13 +64,13 @@ class DioHelper {
     try {
       final headers = <String, dynamic>{
         if (token != "") 'Authorization': 'Bearer $token',
+        'Connection': 'Keep-Alive',
       };
 
       final response = await _dio.get(url,
           options: Options(
             headers: headers,
           ));
-
 
       print(response.data);
 
@@ -139,15 +139,26 @@ class DioHelper {
   //=====================================================================================
   static Future<void> delete({
     required String url,
-    required int orderId,
   }) async {
     try {
       final headers = <String, dynamic>{
         'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
       };
 
-      final response =
-          await _dio.delete(url, options: Options(headers: headers));
+      final response = await _dio.delete(
+        url,
+        options: Options(
+          headers: headers,
+          followRedirects: true,
+          maxRedirects: 5, // Set the maximum number of redirects
+          validateStatus: (status) {
+            return status != null && status < 500;
+          },
+        ),
+      );
+
+      print('response: ${response}');
 
       if (response.statusCode == 200) {
         print(response.data);

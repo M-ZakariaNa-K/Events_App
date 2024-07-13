@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:events_app/User_App/view/profile/profile_page.dart';
+import 'package:events_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -84,6 +85,22 @@ class _SettingsListState extends State<SettingsList> {
               value: isdark ? false : true,
               onChanged: (bool value) {
                 setState(() {
+                  if (isdark) {
+                    ValueListenableBuilder<ThemeMode>(
+                        valueListenable: notifier,
+                        builder: (_, mode, ___) {
+                          return GestureDetector(
+                            onTap: () => notifier.value =
+                                mode == ThemeMode.light
+                                    ? ThemeMode.dark
+                                    : ThemeMode.light,
+                            child: const Icon(
+                              Icons.dark_mode,
+                              color: ThemesStyles.background,
+                            ),
+                          );
+                        });
+                  }
                   isdark = !isdark;
                 });
               },
@@ -253,7 +270,9 @@ class SettingsTile extends StatelessWidget {
       leading: Icon(icon, color: ThemesStyles.primary),
       title: Text(
         title,
-        style: TextStyle(fontSize: ThemesStyles.littelFontSize),
+        style: TextStyle(
+          fontSize: ThemesStyles.littelFontSize,
+        ),
       ),
       onTap: onPressed,
     );

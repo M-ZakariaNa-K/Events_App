@@ -77,7 +77,7 @@ class AddLoungesController extends GetxController {
   void fetchDropdownItems() async {
     try {
       Map<String, dynamic> data1 =
-          await DioHelper.get(url: "$baseUrl/service/list");
+          await DioHelper.get(url: "$baseUrl/service/list?identifier=all");
       final servicesListModel = ServicesListModel.fromJson(data1);
 
       dropdownItems.clear();

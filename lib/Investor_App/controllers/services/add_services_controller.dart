@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:events_app/Investor_App/controllers/lounges/lounges_controller.dart';
 import 'package:events_app/Investor_App/models/add_assets_photos_model.dart';
 import 'package:events_app/Investor_App/models/services_list_model.dart';
 import 'package:events_app/User_App/view/home/drawer-page.dart';
@@ -70,7 +69,7 @@ class AddServiceController extends GetxController {
   void fetchDropdownItems() async {
     try {
       Map<String, dynamic> data1 =
-          await DioHelper.get(url: "$baseUrl/service/list");
+          await DioHelper.get(url: "$baseUrl/service/list?identifier=all");
       final servicesListModel = ServicesListModel.fromJson(data1);
 
       dropdownItems.clear();
@@ -98,7 +97,7 @@ class AddServiceController extends GetxController {
   }
 
   //============================upload THE WHOLE REQUEST to the api============================
-  Future<void> postLoungeData() async {
+  Future<void> postServicesData() async {
     try {
       print("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
       print(allDataToAPI);
@@ -136,8 +135,7 @@ class AddServiceController extends GetxController {
       );
       final assetsPhotoModel = AddAssetsPhotosModel.fromJson(response1);
       firstRequisResponsData.value = assetsPhotoModel.data.id;
-      allDataToAPI["id"] =
-          assetsPhotoModel.data.id.toString(); // Ensure id is added as a string
+      allDataToAPI["id"] = assetsPhotoModel.data.id.toString();
     } catch (e) {
       print('Error submitting data: $e');
       // Get.snackbar("Error", "Error submitting data");

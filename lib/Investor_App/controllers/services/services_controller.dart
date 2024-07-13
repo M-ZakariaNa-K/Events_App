@@ -1,26 +1,27 @@
 import 'package:events_app/Investor_App/models/lounge_details_model.dart';
-import 'package:events_app/Investor_App/models/lounges_model.dart';
+import 'package:events_app/Investor_App/models/services_homepage_model.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/helper/api.dart';
 import 'package:get/state_manager.dart';
 
-class ServicesController extends GetxController {
-  var servicesItems = <LoungesDataModel>[].obs;
-  // var loungeDetailsItems = <LoungeDetailsDataModel>[].obs;
+class ServicesHomePageController extends GetxController {
+  var servicesItems = <ServicesHomepageDataModel>[].obs;
+  var servicesDetailsItems = <LoungeDetailsDataModel>[].obs;
+  var servicesLoading = true.obs;
 
-  Future<void> getServicesItems(
-      // { required int id}
-      ) async {
+  Future<void> getServicesItems() async {
     try {
+      servicesLoading.value = true;
       Map<String, dynamic> data1 =
           await DioHelper.get(url: "$baseUrl/assets/list-for-investor");
-      final a = LoungesModel.fromJson(data1);
-      print(a);
+      final a = ServicesHomepageModel.fromJson(data1);
       for (int i = 0; i < a.data.length; i++) {
-        // loungesItems.add(a.data[i]);
+        servicesItems.add(a.data[i]);
       }
     } catch (e) {
       print('Error fetching ServicesItems items: $e');
+    } finally {
+      servicesLoading.value = false;
     }
   }
 
@@ -39,6 +40,13 @@ class ServicesController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    //  await getServicesItems();
+    await getServicesItems();
+  }
+
+  @override
+  void onClose() {
+    servicesItems.clear();
+    servicesDetailsItems.clear();
+    super.onClose();
   }
 }

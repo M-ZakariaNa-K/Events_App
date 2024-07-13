@@ -1,26 +1,33 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:events_app/User_App/controllers/home/recently_added_controller.dart';
+import 'package:events_app/User_App/model/resently_added_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:get/get.dart';
 
 class NewOnAppCard extends StatelessWidget {
   const NewOnAppCard({
     Key? key,
     required this.isOrganizer,
     required this.image,
+    required this.recentlyAddedItems,
   }) : super(key: key);
   final bool isOrganizer;
   final String image;
+  final List<RecentlyAddedDataModel>? recentlyAddedItems;
 
   @override
   Widget build(BuildContext context) {
+    // final recentlyController =
+    //     Get.put(RecentlyAddedController(isOrganizer: isOrganizer));
     return SizedBox(
       height: 160,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         // physics: const NeverScrollableScrollPhysics(),
-        itemCount: 100,
+        itemCount: recentlyAddedItems!.length,
         itemBuilder: (context, index) {
           return Stack(
             children: [
@@ -64,7 +71,7 @@ class NewOnAppCard extends StatelessWidget {
                         ),
                         //THE content
                         Text(
-                          "Zakaria Al-nabuilsi",
+                          recentlyAddedItems![index].name,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontWeight: ThemesStyles.fontWeightBold,

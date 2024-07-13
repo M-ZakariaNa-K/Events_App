@@ -1,9 +1,15 @@
+import 'package:events_app/Investor_App/view/home/investor_homePage..dart';
 import 'package:events_app/User_App/components/home/book_now_card.dart';
 import 'package:events_app/User_App/components/home/new_on_app_card.dart';
 import 'package:events_app/User_App/components/home/offers_card.dart';
 import 'package:events_app/User_App/components/home/person_kind_card.dart';
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
-import 'package:events_app/User_App/view/home/drawer-page.dart';
+import 'package:events_app/User_App/controllers/home/recently_added_controller.dart';
+import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
+import 'package:events_app/User_App/controllers/loungees&organizers/services_user_controller.dart';
+import 'package:events_app/User_App/model/resently_added_model.dart';
+import 'package:events_app/User_App/view/loanges&organizers/OrganizersPage.dart';
+import 'package:events_app/User_App/view/loanges&organizers/loanges_page.dart';
 import 'package:events_app/User_App/view/p-event/offer.dart';
 import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/common/core/constants/theme.dart';
@@ -21,7 +27,28 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future<void> _handleRefresh() async {
-    return await Future.delayed(Duration(seconds: 2));
+    return await Future.delayed(const Duration(seconds: 2));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getRecentlyAdded();
+    // setState(() {});
+  }
+
+  Future<void> getRecentlyAdded() async {
+    final recentlyAddedOrganizerController =
+        RecentlyAddedController(isOrganizer: true);
+
+    sharedResntlyOrganizerAddedItems = await recentlyAddedOrganizerController
+        .getRecentlyAddedItems(role: "Organizer");
+    final recentlyAddedLoungeController =
+        RecentlyAddedController(isOrganizer: false);
+    sharedResntlyLoungeAddedItems = await recentlyAddedLoungeController
+        .getRecentlyAddedItems(role: "HallOwner");
+    setState(() {});
   }
 
   @override
@@ -45,7 +72,16 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     //===============================1 first card===============================
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        final organizerController =
+                            Get.put(ServicesUserController());
+                        await organizerController.getServicesItems(
+                          role: "Organizer",
+                          service_id: 1,
+                          identifier: "price",
+                        );
+                        Get.to(() => const OrganizersUserPage());
+                      },
                       child: PersonKindCard(
                         isNewOnApp: false,
                         image: 'assets/images/organizer.png',
@@ -55,7 +91,16 @@ class _HomePageState extends State<HomePage> {
                     ),
                     //===============================2 second card===============================
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        final loungeController =
+                            Get.put(LoungesUserController());
+                        await loungeController.getloungesItems(
+                          role: "Hallowner",
+                          service_id: null,
+                          identifier: "price",
+                        );
+                        Get.to(() => const LoungesUserPage());
+                      },
                       child: PersonKindCard(
                         isNewOnApp: false,
                         image: 'assets/images/hall.png',
@@ -99,7 +144,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    const NewOnAppCard(
+                    NewOnAppCard(
+                      recentlyAddedItems: sharedResntlyLoungeAddedItems,
                       isOrganizer: false,
                       image: "assets/images/hall.png",
                     ),
@@ -115,7 +161,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    const NewOnAppCard(
+                    NewOnAppCard(
+                      recentlyAddedItems: sharedResntlyOrganizerAddedItems,
                       isOrganizer: true,
                       image: "assets/images/event-planner.png",
                     ),
@@ -123,10 +170,10 @@ class _HomePageState extends State<HomePage> {
                 ),
                 //===============================5 OFFERS Card===============================
                 GestureDetector(
-
-onTap: (){
-  Get.to(OfferPage());
-},                  child: Padding(
+                  onTap: () {
+                    Get.to(OfferPage());
+                  },
+                  child: Padding(
                     padding: EdgeInsets.symmetric(
                         vertical: ThemesStyles.paddingprimary * 2),
                     child: const OffersCard(),

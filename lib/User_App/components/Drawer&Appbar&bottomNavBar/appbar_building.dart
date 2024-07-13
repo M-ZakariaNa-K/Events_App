@@ -1,5 +1,6 @@
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
 import 'package:events_app/User_App/view/profile/profile_page.dart';
+import 'package:events_app/User_App/view/search/search_page.dart';
 import 'package:events_app/common/Util/lang_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/main.dart';
@@ -28,6 +29,18 @@ AppBar? appBarBuilding(
               child: Icon(
                 Icons.notifications,
                 color: ThemesStyles.background,
+              ),
+            ),
+            GestureDetector(
+              onTap: (){
+                Get.to(()=>  const SearchPage(),);
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Icon(
+                  Icons.search,
+                  color: ThemesStyles.background,
+                ),
               ),
             ),
             Padding(

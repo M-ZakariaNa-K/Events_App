@@ -1,9 +1,14 @@
-import 'package:events_app/common/core/constants/theme.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-class SearchTapsWidget extends StatefulWidget {
-  const SearchTapsWidget({super.key});
+import 'package:events_app/common/core/constants/theme.dart';
 
+class SearchTapsWidget extends StatefulWidget {
+  const SearchTapsWidget({
+    Key? key,
+    required this.isSearch,
+  }) : super(key: key);
+  final bool isSearch;
   @override
   State<SearchTapsWidget> createState() => _SearchTapsWidgetState();
 }
@@ -33,6 +38,11 @@ class _SearchTapsWidgetState extends State<SearchTapsWidget> {
             });
             // Here will change the page data
             if (selectedCardIndex == 0) {
+              if (widget.isSearch) {
+                //Here make the request of search
+              } else {
+                //Here make the request of lounge and Organizers
+              }
               // Code to handle "All" tab selection
             } else if (selectedCardIndex == 1) {
               // Code to handle "Location" tab selection

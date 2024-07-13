@@ -2,6 +2,7 @@ import 'package:events_app/User_App/components/search/search_bar_widget.dart';
 import 'package:events_app/User_App/components/search/search_taps_widget.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -16,72 +17,92 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ThemesStyles.paddingprimary),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          //=================Search Bar================
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // const Icon(Icons.arrow_back_ios_new_rounded),
-              SearchBarWidget(),
-            ],
-          ),
-          //=================Taps================
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: SearchTapsWidget(),
-          ),
-          //=================Number of found================
-          //sEARCH result
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Search"),
+        titleTextStyle: const TextStyle(
+          color: Color(0xff464646),
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        elevation: 0.0,
+        leading: IconButton(
+          color: ThemesStyles.textColor,
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(Icons.arrow_back_ios_new_sharp),
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: ThemesStyles.paddingprimary),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            //=================Search Bar================
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  "0 found",
-                  style: TextStyle(
-                    fontSize: ThemesStyles.mainFontSize,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Spacer(),
-                IconButton(
-                  icon: Icon(
-                    Icons.apps_rounded,
-                    color: isGridView ? ThemesStyles.primary : Colors.grey,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isGridView = true;
-                    });
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.line_weight_sharp,
-                    color: !isGridView ? ThemesStyles.primary : Colors.grey,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isGridView = false;
-                    });
-                  },
-                ),
+                // const Icon(Icons.arrow_back_ios_new_rounded),
+                SearchBarWidget(),
               ],
             ),
-          ),
-          //=================Body================
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: isGridView ? _buildGridView() : _buildListView(),
+            //=================Taps================
+            const Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 10.0),
+              child: SearchTapsWidget(isSearch: true,),
             ),
-          ),
-        ],
+            //=================Number of found================
+            //sEARCH result
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Text(
+                    "0 found",
+                    style: TextStyle(
+                      fontSize: ThemesStyles.mainFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: Icon(
+                      Icons.apps_rounded,
+                      color: isGridView ? ThemesStyles.primary : Colors.grey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isGridView = true;
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.line_weight_sharp,
+                      color: !isGridView ? ThemesStyles.primary : Colors.grey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isGridView = false;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            //=================Body================
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: isGridView ? _buildGridView() : _buildListView(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

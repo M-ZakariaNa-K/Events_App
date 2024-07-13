@@ -10,8 +10,11 @@ class FirstOnBoardingBooking extends StatelessWidget {
   // Use a tagged controller for EventKind
   final RadioController _eventKindController =
       Get.put(RadioController(), tag: 'EventKind');
+  final RadioController _roleController =
+      Get.put(RadioController(), tag: 'role');
 
   final List<String> radioData = ['Public', 'Private'];
+  final List<String> roleData = ['Organizer', 'Hall owner'];
 
   @override
   Widget build(BuildContext context) {
@@ -28,26 +31,34 @@ class FirstOnBoardingBooking extends StatelessWidget {
           //2 radio button
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: _buildRadioButtons(radioData),
+            children: _buildRadioButtons(radioData, false),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _buildRadioButtons(roleData, true),
           ),
         ],
       ),
     );
   }
 
-  List<Widget> _buildRadioButtons(List<String> radioData) {
+  List<Widget> _buildRadioButtons(List<String> radioData, bool isrole) {
     return List<Widget>.generate(
       radioData.length,
       (index) {
         return SizedBox(
-          width: 150,
+          width: 180,
           child: Obx(() => RadioListTile<int>(
                 activeColor: ThemesStyles.secondary,
-                title: Text(radioData[index]),
+                title: Text(isrole ? roleData[index] : radioData[index]),
                 value: index,
-                groupValue: _eventKindController.selectedValue.value,
+                groupValue: isrole
+                    ? _roleController.selectedValue.value
+                    : _eventKindController.selectedValue.value,
                 onChanged: (int? value) {
-                  _eventKindController.setSelectedValue(value!);
+                  isrole
+                      ? _roleController.setSelectedValue(value!)
+                      : _eventKindController.setSelectedValue(value!);
                 },
               )),
         );

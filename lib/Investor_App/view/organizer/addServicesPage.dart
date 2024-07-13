@@ -206,10 +206,10 @@ class AddServicesPage extends GetView<AddServiceController> {
                         ),
                         Container(
                           width: width / 2.5,
-                          child: Obx(
-                            () => Container(
-                              height: 50,
-                              child: TextFormField(
+                          child: Container(
+                            height: 50,
+                            child: Obx(
+                              () => TextFormField(
                                 controller: servicesProporationController,
                                 enableSuggestions: false,
                                 keyboardType: TextInputType.number,
@@ -283,8 +283,7 @@ class AddServicesPage extends GetView<AddServiceController> {
                                   "name":
                                       addServiceController.dropdownValue.value,
                                   // "proporation":
-                                  //     servicesProporationController
-                                  //         .text,
+                                  //     servicesProporationController.text,
                                   "price": servicesPriceController.text,
                                 });
                                 servicesProporationController.clear();
@@ -453,7 +452,9 @@ class AddServicesPage extends GetView<AddServiceController> {
                 textColor: Colors.white,
                 title: "Add Services",
                 onPressed: () async {
-                  if (_allFormKey.currentState!.validate()) {
+                  if (
+                      // _allFormKey.currentState!.validate()
+                      addServiceController.serviceList.isNotEmpty) {
                     await addServiceController.submitData();
 
                     //===============================================
@@ -479,7 +480,7 @@ class AddServicesPage extends GetView<AddServiceController> {
                     //------------------------------------------------------
                     //===============================================
 
-                    await addServiceController.postLoungeData();
+                    await addServiceController.postServicesData();
                     // hallNameARController.clear();
                     // hallNameENController.clear();
                     // capcityController.clear();

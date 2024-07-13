@@ -4,6 +4,7 @@ import 'package:events_app/Investor_App/view/reservations/reservations.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/appbar_building.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer.dart';
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
+import 'package:events_app/User_App/view/Favorate/favorate_page.dart';
 import 'package:events_app/User_App/view/p-event/HelpCenter.dart';
 import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/User_App/view/p-event/settings_page.dart';
@@ -37,7 +38,7 @@ class _DrawerPageState extends State<DrawerPage> {
     PublicEventPage(
       isUserLoggedIn: true,
     ),
-    const SearchPage(),
+    const FavoratePage(),
   ];
   static final List<Widget> _investorBottomBarOptions = <Widget>[
     InvestorHomePage(),
@@ -154,7 +155,7 @@ class _DrawerPageState extends State<DrawerPage> {
               color: Colors.white,
             ),
             Icon(
-              Icons.search,
+              Icons.favorite,
               color: Colors.white,
             ),
           ],

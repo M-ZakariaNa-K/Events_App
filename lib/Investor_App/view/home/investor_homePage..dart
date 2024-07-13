@@ -5,6 +5,7 @@ import 'package:events_app/Investor_App/view/lounges/LoungesDetailsPage.dart';
 import 'package:events_app/Investor_App/view/lounges/addLoungesPage..dart';
 import 'package:events_app/Investor_App/view/organizer/addServicesPage.dart';
 import 'package:events_app/Investor_App/view/organizer/serviceDetailsPage.dart';
+import 'package:events_app/common/components/general/main_loading_widget.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,9 @@ class InvestorHomePage extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: ThemesStyles.paddingprimary),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).brightness == Brightness.dark
+              ? const Color.fromARGB(255, 65, 65, 65)
+              : ThemesStyles.thirdColor,
           onPressed: () {
             isHallOwner
                 ? Get.to(() => AddLoungesPage())
@@ -43,6 +47,9 @@ class InvestorHomePage extends StatelessWidget {
         body: Obx(() {
           final loungesController = Get.put(LoungesController());
           if (isHallOwner) {
+            if (loungesController.loangesLoading.value) {
+              return const Center(child: MainLoadingWidget());
+            }
             if (loungesController.loungesItems.isEmpty) {
               return Center(
                 child: Opacity(
@@ -72,7 +79,10 @@ class InvestorHomePage extends StatelessWidget {
               return HallCards(width: width, height: height);
             }
           } else {
-            final servicesController = Get.put(ServicesController());
+            final servicesController = Get.put(ServicesHomePageController());
+            if (servicesController.servicesLoading.value) {
+              return Center(child: MainLoadingWidget());
+            }
             if (servicesController.servicesItems.isEmpty) {
               return Center(
                 child: Opacity(
@@ -99,7 +109,7 @@ class InvestorHomePage extends StatelessWidget {
                 ),
               );
             } else {
-              return const ServiceCard(events: ['s', 's']).marginSymmetric(
+              return const ServiceCard().marginSymmetric(
                   vertical: height * 0.01, horizontal: width * 0.03);
             }
           }
@@ -252,16 +262,18 @@ class HallCards extends GetView<LoungesController> {
   }
 }
 
-class ServiceCard extends StatelessWidget {
-  final List<String> events;
-
-  const ServiceCard({Key? key, required this.events}) : super(key: key);
+class ServiceCard extends GetView<ServicesHomePageController> {
+  const ServiceCard({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final servicesShowController = Get.put(ServicesHomePageController());
+
     return GridView.builder(
       padding: const EdgeInsets.all(10),
-      itemCount: events.length,
+      itemCount: servicesShowController.servicesItems.length,
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Number of columns
@@ -272,20 +284,20 @@ class ServiceCard extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () {
-            Get.to(() => ServiceDetailsPage());
+            // Get.to(() => ServiceDetailsPage());
           },
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              // color: Colors.white,
               border: Border.all(color: ThemesStyles.secondary, width: 2),
               borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.shade300,
-                  offset: const Offset(5, 5),
-                  blurRadius: 10,
-                )
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Colors.grey.shade300,
+              //     offset: const Offset(5, 5),
+              //     blurRadius: 10,
+              //   )
+              // ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,9 +311,8 @@ class ServiceCard extends StatelessWidget {
                       color: ThemesStyles.primary,
                     ),
                     Text(
-                      'BirthDay',
+                      servicesShowController.servicesItems[index].name,
                       style: TextStyle(
-                        color: ThemesStyles.textColor,
                         fontSize: ThemesStyles.littelFontSize,
                         fontWeight: FontWeight.normal,
                       ),
@@ -318,9 +329,8 @@ class ServiceCard extends StatelessWidget {
                           color: ThemesStyles.primary,
                         ),
                         Text(
-                          "200\$",
+                          servicesShowController.servicesItems[index].price,
                           style: TextStyle(
-                            color: ThemesStyles.textColor,
                             fontSize: ThemesStyles.littelFontSize,
                             fontWeight: FontWeight.normal,
                           ),
@@ -334,10 +344,9 @@ class ServiceCard extends StatelessWidget {
                           color: ThemesStyles.primary,
                         ),
                         Text(
-                          "20\$",
+                          "${servicesShowController.servicesItems[index].discountedPrice ?? 0}",
                           style: TextStyle(
                             decoration: TextDecoration.lineThrough,
-                            color: ThemesStyles.textColor,
                             fontSize: ThemesStyles.littelFontSize,
                             fontWeight: FontWeight.normal,
                           ),

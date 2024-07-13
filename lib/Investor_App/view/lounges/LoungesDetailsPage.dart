@@ -456,20 +456,24 @@ class LoungesDetailsPage extends GetView<LoungeDetailsController> {
                           ),
                         ),
                         GetBuilder<EditLoungesController>(
-                          init: EditLoungesController(),
-                          builder: (controller) {
-                            return DefultButton(
-                              buttonColor: ThemesStyles.secondary,
-                              borderColor: Colors.transparent,
-                              textColor: Colors.white,
-                              title: "Edit",
-                              onPressed: () async{
-                                var loungeDetailsItems =await controller.getloungeDetailsItems(id: id);
-                                Get.to(() => EditLoungesPage(id: id,loungeDetailsItems: loungeDetailsItems[0],));
-                              },
-                            );
-                          }
-                        ),
+                            init: EditLoungesController(),
+                            builder: (controller) {
+                              return DefultButton(
+                                buttonColor: ThemesStyles.secondary,
+                                borderColor: Colors.transparent,
+                                textColor: Colors.white,
+                                title: "Edit",
+                                onPressed: () async {
+                                  var loungeDetailsItems = await controller
+                                      .getLoungeDetailsItems(id: id);
+                                  Get.to(() => EditLoungesPage(
+                                        id: id,
+                                        loungeDetailsItems:
+                                            loungeDetailsItems[0],
+                                      ));
+                                },
+                              );
+                            }),
                       ],
                     )
                         .marginSymmetric(
