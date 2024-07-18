@@ -8,13 +8,16 @@ import 'package:get/get.dart';
 class EditLoungesController extends GetxController {
   var loungeDetailsItems = <LoungeDetailsDataModel>[].obs;
   var workHourControllers = <Map<String, dynamic>>[].obs;
-  var selectedImagePaths = <String>[].obs; // Add this line
+  var selectedImagePaths = <String>[].obs; 
   var allApiData = <String, dynamic>{}.obs;
+  var editedList = <Map<String, dynamic>>[].obs;
+  var addedList = <Map<String, dynamic>>[].obs;
 
   void addWorkHourController() {
     workHourControllers.clear();
     for (var activeTime in loungeDetailsItems[0].activeTimes) {
       workHourControllers.add({
+        'id': activeTime.id,
         'start': TextEditingController(text: activeTime.startTime),
         'end': TextEditingController(text: activeTime.endTime),
         'isEditing': true.obs,
@@ -37,6 +40,22 @@ class EditLoungesController extends GetxController {
 
       addWorkHourController();
       return loungeDetailsItems;
+    } catch (e) {
+      print('Error fetching loungeDetailsItems items: $e');
+    }
+  }
+
+  Future<void> postEditedLoungeDetailsItems(
+      {required Map<String, dynamic> body}) async {
+    try {
+      Map<String, dynamic> data1 =
+          await DioHelper.post(url: "$baseUrl/assets/update-hall", body: body);
+      if (data1["code"] == 200) {
+        Get.snackbar('Success', 'Edited successful',
+            snackPosition: SnackPosition.TOP);
+        addedList.clear();
+        editedList.clear();
+      }
     } catch (e) {
       print('Error fetching loungeDetailsItems items: $e');
     }

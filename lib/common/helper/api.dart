@@ -65,6 +65,7 @@ class DioHelper {
       final headers = <String, dynamic>{
         if (token != "") 'Authorization': 'Bearer $token',
         'Connection': 'Keep-Alive',
+        'Accept': 'application/json'
       };
 
       final response = await _dio.get(url,
@@ -162,7 +163,7 @@ class DioHelper {
 
       if (response.statusCode == 200) {
         print(response.data);
-        print('Order deleted successfully');
+        print('Item deleted successfully');
       } else {
         print('Failed to delete order. Status Code: ${response.statusCode}');
         print('Response Body: ${response.data}');

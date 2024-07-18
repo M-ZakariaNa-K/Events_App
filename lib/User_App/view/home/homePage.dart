@@ -27,6 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future<void> _handleRefresh() async {
+    await getRecentlyAdded();
     return await Future.delayed(const Duration(seconds: 2));
   }
 
@@ -34,8 +35,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    sharedResntlyOrganizerAddedItems = [];
+    sharedResntlyLoungeAddedItems = [];
     getRecentlyAdded();
-    // setState(() {});
   }
 
   Future<void> getRecentlyAdded() async {
@@ -44,11 +46,15 @@ class _HomePageState extends State<HomePage> {
 
     sharedResntlyOrganizerAddedItems = await recentlyAddedOrganizerController
         .getRecentlyAddedItems(role: "Organizer");
+
     final recentlyAddedLoungeController =
         RecentlyAddedController(isOrganizer: false);
+
     sharedResntlyLoungeAddedItems = await recentlyAddedLoungeController
         .getRecentlyAddedItems(role: "HallOwner");
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -77,8 +83,8 @@ class _HomePageState extends State<HomePage> {
                             Get.put(ServicesUserController());
                         await organizerController.getServicesItems(
                           role: "Organizer",
-                          service_id: 1,
-                          identifier: "price",
+                          service_id: null,
+                          identifier: "all",
                         );
                         Get.to(() => const OrganizersUserPage());
                       },
@@ -95,9 +101,9 @@ class _HomePageState extends State<HomePage> {
                         final loungeController =
                             Get.put(LoungesUserController());
                         await loungeController.getloungesItems(
-                          role: "Hallowner",
+                          role: "HallOwner",
                           service_id: null,
-                          identifier: "price",
+                          identifier: "all",
                         );
                         Get.to(() => const LoungesUserPage());
                       },

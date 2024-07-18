@@ -1,6 +1,8 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:events_app/Investor_App/controllers/lounges/addLoungesController..dart';
 import 'package:events_app/Investor_App/controllers/services/add_services_controller.dart';
+import 'package:events_app/Investor_App/controllers/services/services_controller.dart';
 import 'package:events_app/Investor_App/view/lounges/requestServicePage.dart';
 import 'package:events_app/common/components/auth/defaultFormField.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
@@ -10,14 +12,24 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddServicesPage extends GetView<AddServiceController> {
-  AddServicesPage({super.key});
+  AddServicesPage({super.key, required this.isTheFirstVisit});
   var size, height, width;
-
+  final bool isTheFirstVisit;
   TextEditingController addressController = TextEditingController();
   TextEditingController servicesPriceController = TextEditingController();
   TextEditingController servicesProporationController = TextEditingController();
+  TextEditingController startTimeController = TextEditingController();
+  TextEditingController endTimeController = TextEditingController();
+
   final GlobalKey<FormState> _serviceFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _allFormKey = GlobalKey<FormState>();
+  String formatTimeOfDay(TimeOfDay time) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    final formattedTime =
+        "${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}:00";
+    return formattedTime;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,103 +51,246 @@ class AddServicesPage extends GetView<AddServiceController> {
         key: _allFormKey,
         child: ListView(
           children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  Container(
-                    height: height * 0.15,
-                    width: width,
-                    child: Obx(
-                      () => ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: controller.selectedImagePaths.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return Container(
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    width: 2, color: ThemesStyles.secondary),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              width: width * 0.3,
-                              height: height * 0.15,
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.getImage(ImageSource.gallery);
-                                },
-                                child: const Center(
-                                  child: Icon(
-                                    size: 30,
-                                    Icons.add_a_photo,
-                                    color: ThemesStyles.secondary,
+            if (isTheFirstVisit)
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Container(
+                      height: height * 0.15,
+                      width: width,
+                      child: Obx(
+                        () => ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: controller.selectedImagePaths.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == 0) {
+                              return Container(
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      width: 2, color: ThemesStyles.secondary),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                width: width * 0.3,
+                                height: height * 0.15,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    controller.getImage(ImageSource.gallery);
+                                  },
+                                  child: const Center(
+                                    child: Icon(
+                                      size: 30,
+                                      Icons.add_a_photo,
+                                      color: ThemesStyles.secondary,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ).marginOnly(left: width * 0.0);
-                          } else {
-                            final imagePath =
-                                controller.selectedImagePaths[index - 1];
-                            return Stack(
-                              children: [
-                                Container(
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        spreadRadius: 0.5,
-                                        blurRadius: 2,
-                                        color: Colors.grey.shade300,
-                                        offset: const Offset(5, 2),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  width: width * 0.3,
-                                  height: height,
-                                  child: Image.file(File(imagePath),
-                                      fit: BoxFit.fill),
-                                ).marginOnly(left: width * 0.03),
-                                Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  child: Container(
-                                    width: 40,
-                                    height: 40,
+                              ).marginOnly(left: width * 0.0);
+                            } else {
+                              final imagePath =
+                                  controller.selectedImagePaths[index - 1];
+                              return Stack(
+                                children: [
+                                  Container(
+                                    clipBehavior: Clip.hardEdge,
                                     decoration: BoxDecoration(
-                                      color: ThemesStyles.secondary,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          spreadRadius: 0.5,
+                                          blurRadius: 2,
+                                          color: Colors.grey.shade300,
+                                          offset: const Offset(5, 2),
+                                        ),
+                                      ],
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.delete,
-                                          color: Colors.red),
-                                      onPressed: () =>
-                                          controller.removeImage(imagePath),
+                                    width: width * 0.3,
+                                    height: height,
+                                    child: Image.file(File(imagePath),
+                                        fit: BoxFit.fill),
+                                  ).marginOnly(left: width * 0.03),
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: ThemesStyles.secondary,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: IconButton(
+                                        icon: const Icon(Icons.delete,
+                                            color: Colors.red),
+                                        onPressed: () =>
+                                            controller.removeImage(imagePath),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ).marginOnly(left: width * 0.05);
-                          }
-                        },
-                      ),
-                    ).marginSymmetric(horizontal: width * 0.01),
-                  ),
-                ],
+                                ],
+                              ).marginOnly(left: width * 0.05);
+                            }
+                          },
+                        ),
+                      ).marginSymmetric(horizontal: width * 0.01),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            if (isTheFirstVisit)
+              Text(
+                "Work Hours",
+                style: TextStyle(
+                    color: ThemesStyles.textColor,
+                    fontWeight: ThemesStyles.fontWeightBold,
+                    fontSize: ThemesStyles.mainFontSize),
+              ).marginSymmetric(horizontal: width * 0.03, vertical: 20),
+            if (isTheFirstVisit)
+              Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: width / 2.3,
+                      child: addServiceController.isTextFildEditing.value
+                          ? TextField(
+                              keyboardType: TextInputType.datetime,
+                              controller: startTimeController,
+                              onSubmitted: (value) {
+                                startTimeController.text != ""
+                                    ? addServiceController
+                                        .isTextFildEditing.value = false
+                                    : addServiceController
+                                        .isTextFildEditing.value = true;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Start',
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xff979797),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 5.0, // Adjust vertical padding
+                                  horizontal: 10.0, // Adjust horizontal padding
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.access_time),
+                                  onPressed: () async {
+                                    TimeOfDay? pickedTime =
+                                        await showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.now(),
+                                      builder: (context, child) {
+                                        return MediaQuery(
+                                          data: MediaQuery.of(context).copyWith(
+                                              alwaysUse24HourFormat: true),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    if (pickedTime != null) {
+                                      startTimeController.text =
+                                          formatTimeOfDay(pickedTime);
+                                    }
+                                  },
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: InkWell(
+                                onTap: () {
+                                  addServiceController.isTextFildEditing.value =
+                                      true;
+                                },
+                                child: Text(startTimeController.text),
+                              ),
+                            ),
+                    ),
+                    Container(
+                      width: width / 2.3,
+                      child: addServiceController.isTextFildEditing.value
+                          ? TextField(
+                              keyboardType: TextInputType.datetime,
+                              controller: endTimeController,
+                              onSubmitted: (value) {
+                                endTimeController.text != ""
+                                    ? addServiceController
+                                        .isTextFildEditing.value = false
+                                    : addServiceController
+                                        .isTextFildEditing.value = true;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'End',
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xff979797),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 5.0, // Adjust vertical padding
+                                  horizontal: 10.0, // Adjust horizontal padding
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.access_time),
+                                  onPressed: () async {
+                                    TimeOfDay? pickedTime =
+                                        await showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.now(),
+                                      builder: (context, child) {
+                                        return MediaQuery(
+                                          data: MediaQuery.of(context).copyWith(
+                                              alwaysUse24HourFormat: true),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    if (pickedTime != null) {
+                                      endTimeController.text =
+                                          formatTimeOfDay(pickedTime);
+                                    }
+                                  },
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: InkWell(
+                                onTap: () {
+                                  addServiceController.isTextFildEditing.value =
+                                      true;
+                                },
+                                child: Text(endTimeController.text),
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
+              ),
             Text(
               "Services",
               style: TextStyle(
                   color: ThemesStyles.textColor,
                   fontWeight: ThemesStyles.fontWeightBold,
                   fontSize: ThemesStyles.mainFontSize),
-            ).marginSymmetric(
-              horizontal: width * 0.03,
-            ),
+            )
+                .marginSymmetric(
+                  horizontal: width * 0.03,
+                )
+                .marginOnly(top: 20),
             Form(
               key: _serviceFormKey,
               child: Container(
@@ -208,59 +363,55 @@ class AddServicesPage extends GetView<AddServiceController> {
                           width: width / 2.5,
                           child: Container(
                             height: 50,
-                            child: Obx(
-                              () => TextFormField(
-                                controller: servicesProporationController,
-                                enableSuggestions: false,
-                                keyboardType: TextInputType.number,
-                                obscureText: false,
-                                textInputAction: TextInputAction.next,
-                                cursorColor: ThemesStyles.primary,
-                                enabled: addServiceController
-                                        .dropdownValue.value ==
-                                    "Birhtday", // Adjust the condition as per your logic
-                                validator: (String? value) {
-                                  if (addServiceController
-                                              .dropdownValue.value ==
-                                          "Birhtday" &&
-                                      (value == null || value.isEmpty)) {
-                                    return "This field is required";
-                                  }
-                                  return null;
-                                },
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                    hintText: "Proportion",
-                                    hintStyle: TextStyle(
-                                        color: ThemesStyles.textColor
-                                            .withAlpha(80),
-                                        fontSize:
-                                            ThemesStyles.mainFontSize - 2),
-                                    floatingLabelStyle: const TextStyle(
+                            child: TextFormField(
+                              controller: servicesProporationController,
+                              enableSuggestions: false,
+                              keyboardType: TextInputType.number,
+                              obscureText: false,
+                              textInputAction: TextInputAction.next,
+                              cursorColor: ThemesStyles.primary,
+                              // enabled: addServiceController
+                              //         .dropdownValue.value ==
+                              //     "Birhtday", // Adjust the condition as per your logic
+                              // validator: (String? value) {
+                              //   if (addServiceController
+                              //               .dropdownValue.value ==
+                              //           "Birhtday" &&
+                              //       (value == null || value.isEmpty)) {
+                              //     return "This field is required";
+                              //   }
+                              //   return null;
+                              // },
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: "Proportion",
+                                hintStyle: TextStyle(
+                                    color: ThemesStyles.textColor.withAlpha(80),
+                                    fontSize: ThemesStyles.mainFontSize - 2),
+                                floatingLabelStyle: const TextStyle(
+                                  color: ThemesStyles.primary,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: ThemesStyles.primary.withAlpha(80),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: const BorderSide(
                                       color: ThemesStyles.primary,
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color:
-                                            ThemesStyles.primary.withAlpha(80),
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(
-                                          color: ThemesStyles.primary,
-                                        )),
-                                    errorBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(
-                                          color: Colors.red,
-                                        )),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(
-                                          color: ThemesStyles.primary,
-                                        ))),
+                                    )),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: const BorderSide(
+                                      color: Colors.red,
+                                    )),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color: ThemesStyles.primary,
+                                    )),
                               ),
                             ),
                           ),
@@ -310,7 +461,10 @@ class AddServicesPage extends GetView<AddServiceController> {
                                     decorationColor: ThemesStyles.primary),
                               ),
                               onTap: () {
-                                Get.to(() => RequestServicePage());
+                                Get.to(() => RequestServicePage(
+                                      isEditPage: false,
+                                      isOrganizer: true,
+                                    ));
                               },
                             ),
                           ),
@@ -445,50 +599,81 @@ class AddServicesPage extends GetView<AddServiceController> {
                 },
               ).marginSymmetric(horizontal: width * 0.03),
             ),
-            Center(
-              child: DefultButton(
-                buttonColor: ThemesStyles.primary,
-                borderColor: Colors.transparent,
-                textColor: Colors.white,
-                title: "Add Services",
-                onPressed: () async {
-                  if (
-                      // _allFormKey.currentState!.validate()
-                      addServiceController.serviceList.isNotEmpty) {
-                    await addServiceController.submitData();
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0, top: 10),
+              child: Center(
+                child: DefultButton(
+                  buttonColor: ThemesStyles.primary,
+                  borderColor: Colors.transparent,
+                  textColor: Colors.white,
+                  title: "Add Services",
+                  onPressed: () async {
+                    if (
+                        // _allFormKey.currentState!.validate()
+                        addServiceController.serviceList.isNotEmpty &&
+                            isTheFirstVisit) {
+                              final servicesShowController = Get.put(ServicesHomePageController());
+                              servicesShowController.isFirstTimeForOrganizer.value = false;
+                              
+                      await addServiceController.submitData();
 
-                    //===============================================
+                      //===============================================
 
-                    //------------------------------------------------------
-                    List<Map<String, dynamic>> existed =
-                        addServiceController.createExistedList(
-                            addServiceController.serviceList,
-                            addServiceController.dropdownItemsAllData);
-                    addServiceController.allDataToAPI["services"] = {
-                      "existed": existed,
-                      "added": [
-                        // {
-                        //   "name": {"ar": "عرس", "en": "Wedding"},
-                        //   "kind": "private",
-                        //   "price": "100"
-                        // }
-                      ],
-                    };
+                      //------------------------------------------------------
+                      List<Map<String, dynamic>> existed =
+                          addServiceController.createExistedList(
+                              addServiceController.serviceList,
+                              addServiceController.dropdownItemsAllData);
+                      addServiceController.allDataToAPI["services"] = {
+                        "existed": existed,
+                        "added": [
+                          // {
+                          //   "name": {"ar": "عرس", "en": "Wedding"},
+                          //   "kind": "private",
+                          //   "price": "100"
+                          // }
+                        ],
+                      };
+                      addServiceController
+                              .allDataToAPI["organizer_start_time"] =
+                          startTimeController.text;
+                      addServiceController.allDataToAPI["organizer_end_time"] =
+                          endTimeController.text;
+                      print(
+                          ' addServiceController.allDataToAP: ${addServiceController.allDataToAPI}');
+                      //------------------------------------------------------
+                      //===============================================
 
-                    print(
-                        ' addServiceController.allDataToAP: ${addServiceController.allDataToAPI}');
-                    //------------------------------------------------------
-                    //===============================================
+                      await addServiceController.postServicesData();
+                    }
+                    if (
+                        // _allFormKey.currentState!.validate()
+                        addServiceController.serviceList.isNotEmpty &&
+                            !isTheFirstVisit) {
+                      List<Map<String, dynamic>> existed =
+                          addServiceController.createExistedList(
+                              addServiceController.serviceList,
+                              addServiceController.dropdownItemsAllData);
+                      addServiceController.allDataToAPISecondTime["services"] =
+                          {
+                        "existed": existed,
+                        "added": [
+                          // {
+                          //   "name": {"ar": "عرس", "en": "Wedding"},
+                          //   "kind": "private",
+                          //   "price": "100"
+                          // }
+                        ],
+                      };
 
-                    await addServiceController.postServicesData();
-                    // hallNameARController.clear();
-                    // hallNameENController.clear();
-                    // capcityController.clear();
-                    // addressController.clear();
-                    // dinnerPriceController.clear();
-                    // mixedPriceController.clear();
-                  }
-                },
+                      await addServiceController.postServicesDataSecondTime();
+                      print(
+                          ' addServiceController.allDataToAP: ${addServiceController.allDataToAPISecondTime}');
+                      //------------------------------------------------------
+                      //===============================================
+                    }
+                  },
+                ),
               ),
             )
           ],

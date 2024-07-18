@@ -1,8 +1,11 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:events_app/Investor_App/controllers/lounges/lounges_controller.dart';
+import 'package:events_app/Investor_App/controllers/services/services_controller.dart';
 import 'package:events_app/Investor_App/view/home/investor_homePage..dart';
 import 'package:events_app/Investor_App/view/reservations/reservations.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/appbar_building.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer.dart';
+import 'package:events_app/User_App/controllers/Favorates/Favorate_controller.dart';
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
 import 'package:events_app/User_App/view/Favorate/favorate_page.dart';
 import 'package:events_app/User_App/view/p-event/HelpCenter.dart';
@@ -53,6 +56,25 @@ class _DrawerPageState extends State<DrawerPage> {
 
   void _onItemTappedBottom(int index) {
     setState(() {
+      if (index == 0 && !isUser && !isHallOwner) {
+        final servicesController = Get.put(ServicesHomePageController());
+        servicesController.servicesItems.clear();
+        servicesController.getServicesItems();
+      }
+      if (index == 0 && !isUser && isHallOwner) {
+        final loungeController = Get.put(LoungesController());
+        loungeController.loungesItems.clear();
+        loungeController.getloungesItems();
+      }
+      if (index == 3) {
+        // Here u will show the public events
+      }
+      if (index == 4) {
+        final favoriteController = Get.put(FavorateController());
+        favoriteController.favoriteItems.clear();
+        favoriteController.getFavorateItems();
+      }
+
       isButtomNavPressed = true;
       controller.changeTabIndex(
           index); // This will update both the bottom nav and the drawer
@@ -68,7 +90,7 @@ class _DrawerPageState extends State<DrawerPage> {
   final List<Widget> _userDrawerPages = [
     const HomePage(),
     //Profile
-    const ProfilePage(),
+    const ProfilePage(isComeFromSettings: false,),
     //Budget
     const HomePage(),
     //History
@@ -82,7 +104,7 @@ class _DrawerPageState extends State<DrawerPage> {
   final List<Widget> _investorDrawerPages = [
     InvestorHomePage(),
     //Profile
-    const ProfilePage(),
+    const ProfilePage(isComeFromSettings: false,),
     //Budget
     InvestorHomePage(),
     //History

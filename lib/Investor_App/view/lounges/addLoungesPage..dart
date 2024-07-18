@@ -46,6 +46,9 @@ class AddLoungesPage extends GetView<AddLoungesController> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
+              addLoungeController.serviceList.clear();
+              addLoungeController.workHourControllers.clear();
+              addLoungeController.selectedImagePaths.clear();
               Get.back();
             },
             icon: const Icon(Icons.arrow_back_ios_new),
@@ -446,6 +449,8 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                     width: width / 2.3,
                                     child: workHourController['isEditing'].value
                                         ? TextField(
+                                            keyboardType:
+                                                TextInputType.datetime,
                                             controller:
                                                 workHourController['start'],
                                             onSubmitted: (value) {
@@ -642,19 +647,19 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                         obscureText: false,
                                         textInputAction: TextInputAction.next,
                                         cursorColor: ThemesStyles.primary,
-                                        enabled: addLoungeController
-                                                .dropdownValue.value ==
-                                            "Birhtday", // Adjust the condition as per your logic
-                                        validator: (String? value) {
-                                          if (addLoungeController
-                                                      .dropdownValue.value ==
-                                                  "Birhtday" &&
-                                              (value == null ||
-                                                  value.isEmpty)) {
-                                            return "This field is required";
-                                          }
-                                          return null;
-                                        },
+                                        // enabled: addLoungeController
+                                        //         .dropdownValue.value ==
+                                        //     "Birhtday", // Adjust the condition as per your logic
+                                        // validator: (String? value) {
+                                        //   if (addLoungeController
+                                        //               .dropdownValue.value ==
+                                        //           "Birhtday" &&
+                                        //       (value == null ||
+                                        //           value.isEmpty)) {
+                                        //     return "This field is required";
+                                        //   }
+                                        //   return null;
+                                        // },
                                         autofocus: false,
                                         decoration: InputDecoration(
                                             hintText: "Proportion",
@@ -735,6 +740,7 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                         });
                                         servicesProporationController.clear();
                                         servicesPriceController.clear();
+
                                         addLoungeController
                                             .dropdownValue.value = '';
                                       }
@@ -761,7 +767,10 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                                 ThemesStyles.primary),
                                       ),
                                       onTap: () {
-                                        Get.to(() => RequestServicePage());
+                                        Get.to(() => RequestServicePage(
+                                              isEditPage: false,
+                                              isOrganizer: false,
+                                            ));
                                       },
                                     ),
                                   ),
@@ -971,6 +980,9 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                             //===============================================
 
                             await addLoungeController.postLoungeData();
+                            addLoungeController.serviceList.clear();
+                            addLoungeController.workHourControllers.clear();
+                            addLoungeController.selectedImagePaths.clear();
                             // hallNameARController.clear();
                             // hallNameENController.clear();
                             // capcityController.clear();

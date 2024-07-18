@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import 'package:events_app/common/core/constants/theme.dart';
@@ -42,7 +43,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
             // NumberPicker
             NumberPicker(
               minValue: 0,
-              maxValue: 12,
+              maxValue: 23,
               value: widget.hour,
               zeroPad: true,
               infiniteLoop: true,

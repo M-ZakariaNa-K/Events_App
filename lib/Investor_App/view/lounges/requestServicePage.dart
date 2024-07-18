@@ -1,5 +1,9 @@
 import 'package:events_app/Investor_App/controllers/lounges/addLoungesController..dart';
+import 'package:events_app/Investor_App/controllers/lounges/editLoungesController.dart';
+import 'package:events_app/Investor_App/controllers/services/add_services_controller.dart';
+import 'package:events_app/Investor_App/controllers/services/services_controller.dart';
 import 'package:events_app/Investor_App/view/lounges/addLoungesPage..dart';
+import 'package:events_app/Investor_App/view/lounges/editLoungesPage.dart';
 import 'package:events_app/User_App/controllers/booking/radio_controller.dart';
 import 'package:events_app/common/components/auth/defaultFormField.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
@@ -11,8 +15,11 @@ import 'package:get/get.dart';
 import '../../../common/core/constants/theme.dart';
 
 class RequestServicePage extends StatelessWidget {
-  RequestServicePage({super.key});
+  RequestServicePage(
+      {super.key, required this.isEditPage, required this.isOrganizer});
   var size, height, width;
+  final bool isEditPage;
+  final bool isOrganizer;
   final RadioController _eventKindController =
       Get.put(RadioController(), tag: 'EventKindController');
 
@@ -21,6 +28,7 @@ class RequestServicePage extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController enNameController = TextEditingController();
     TextEditingController arNameController = TextEditingController();
+    TextEditingController priceController = TextEditingController();
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
@@ -57,24 +65,6 @@ class RequestServicePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Container(
-                    //   width: width,
-                    //   child: DefaultFormFeild(
-                    //     autoFoucs: false,
-                    //     hintText: "service",
-                    //     validator: (String? value) {
-                    //       if (value == '') {
-                    //         return "this field is required";
-                    //       }
-                    //       return null;
-                    //     },
-                    //     textEditingController: d,
-                    //     obscureText: false,
-                    //   ),
-                    // )
-                    //     .paddingSymmetric(horizontal: width * 0.02)
-                    //     .marginSymmetric(
-                    //         horizontal: width * 0.02, vertical: height * 0.01),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: _buildRadioButtons(
@@ -116,7 +106,24 @@ class RequestServicePage extends StatelessWidget {
                         ),
                       ],
                     ),
-
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                        width: width,
+                        child: DefaultFormFeild(
+                          autoFoucs: false,
+                          hintText: "Price",
+                          validator: (String? value) {
+                            if (value == '') {
+                              return "this field is required";
+                            }
+                            return null;
+                          },
+                          textEditingController: priceController,
+                          obscureText: false,
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20.0,
@@ -133,9 +140,10 @@ class RequestServicePage extends StatelessWidget {
 
                             try {
                               // Post the new service data
-                              await DioHelper.post(
-                                  url: "$baseUrl/service/create",
-                                  body: {
+                              Map<String, dynamic> response =
+                                  await DioHelper.post(
+                                      url: "$baseUrl/service/create",
+                                      body: {
                                     "services": [
                                       {
                                         "kind": _eventKindController
@@ -146,14 +154,53 @@ class RequestServicePage extends StatelessWidget {
                                         "name": {
                                           "ar": arNameController.text,
                                           "en": enNameController.text
-                                        }
+                                        },
+                                        "price": priceController.text
                                       }
                                     ]
                                   });
+                              if (response["code"] == 200) {
+                                final serviceListController =
+                                    Get.put(AddServiceController());
+                                serviceListController.dropdownItems.clear();
+                                await serviceListController.fetchDropdownItems();
 
-                              // Clear the text controllers
-                              arNameController.clear();
-                              enNameController.clear();
+                                Get.snackbar(
+                                    "Great🎉", "Your request was accepted");
+                                // Clear the text controllers
+                                // arNameController.clear();
+                                // enNameController.clear();
+                                // priceController.clear();
+                              }
+//========================================Edit Page================================================
+                              if (isEditPage && !isOrganizer) {
+                                //For lounges editeng
+                                final editController =
+                                    Get.put(EditLoungesController());
+                                editController.addedList.add({
+                                  "name": {
+                                    "ar": arNameController.text,
+                                    "en": enNameController.text
+                                  },
+                                  "kind": _eventKindController
+                                              .selectedValue.value ==
+                                          0
+                                      ? "public"
+                                      : "private",
+                                  "price": priceController.text
+                                });
+                              }
+                              if (isEditPage && isOrganizer) {
+                                //For organizer editeng
+                              }
+                              if (!isEditPage && isOrganizer) {
+                                //For organizer adding
+                              }
+                              if (!isEditPage && !isOrganizer) {
+                                //For organizer adding
+                              }
+//========================================Add Page=================================================
+//=================================================================================================
 
                               // Fetch and refresh the dropdown items
                               addLoungesController.fetchDropdownItems();

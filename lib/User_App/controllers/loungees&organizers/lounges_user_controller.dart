@@ -42,11 +42,41 @@ class LoungesUserController extends GetxController {
     try {
       Map<String, dynamic> data1 =
           await DioHelper.get(url: "$baseUrl/assets/get?id=$id");
+
       final a = LoungeDetailsModel.fromJson(data1);
       loungeDetailsItems.add(a.data);
       print('loungeDetailsItems: ${loungeDetailsItems}');
     } catch (e) {
       print('Error fetching loungeDetailsItems items: $e');
+    }
+  }
+
+  Future<void> toggleFavorite(int loungeId) async {
+    final loungeIndex =
+        loungesItems.indexWhere((lounge) => lounge.id == loungeId);
+    if (loungeIndex == -1) return;
+
+    final currentStatus = loungesItems[loungeIndex].isFavorite;
+    loungesItems[loungeIndex].isFavorite = !currentStatus;
+    loungesItems.refresh();
+
+    try {
+      if (!currentStatus) {
+        // Add to favorites
+        await DioHelper.get(
+          url: "$baseUrl/assets/favorite?id=$loungeId",
+        );
+      } else {
+        // Remove from favorites
+        await DioHelper.delete(
+          url: "$baseUrl/assets/delete-favorite?id=$loungeId",
+        );
+      }
+    } catch (e) {
+      // Revert the change in case of an error
+      loungesItems[loungeIndex].isFavorite = currentStatus;
+      loungesItems.refresh();
+      print('Error toggling favorite status: $e');
     }
   }
 
@@ -59,6 +89,7 @@ class LoungesUserController extends GetxController {
   @override
   void onClose() {
     loungesItems.clear();
+    loungeDetailsItems.clear();
     super.onClose();
   }
 }

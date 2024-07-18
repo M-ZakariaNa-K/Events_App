@@ -48,7 +48,7 @@ class _SettingsListState extends State<SettingsList> {
               title: 'See Profile',
               icon: Icons.person,
               onPressed: () {
-                Get.to(() => const ProfilePage());
+                Get.to(() => const ProfilePage(isComeFromSettings: true,));
               },
             ),
           ],

@@ -1,8 +1,8 @@
 import 'package:events_app/User_App/controllers/offers/offers_controller.dart';
+import 'package:events_app/common/components/general/main_loading_widget.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 
 class OfferPage extends StatelessWidget {
   @override
@@ -24,17 +24,48 @@ class OfferPage extends StatelessWidget {
           children: [
             const Text(
               'Newly',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ThemesStyles.primary),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: ThemesStyles.primary),
             ),
             Expanded(
               child: GetX<OffersController>(
                 init: OffersController(),
                 builder: (controller) {
+                  if (controller.offersLoading.value) {
+                    return const MainLoadingWidget();
+                  }
                   if (controller.offersItems.isEmpty) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                      child: Opacity(
+                        opacity: 0.4,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Image(
+                              image: AssetImage(
+                                  'assets/images/searchNotFoundImage.png'),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 0.0),
+                              child: Text(
+                                'There are no offers to show',
+                                style: TextStyle(
+                                  fontSize: ThemesStyles.mainFontSize,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
                   }
                   return GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 8,
@@ -54,7 +85,6 @@ class OfferPage extends StatelessWidget {
   }
 }
 
-
 class OfferCard extends StatelessWidget {
   final int index;
 
@@ -65,7 +95,8 @@ class OfferCard extends StatelessWidget {
       builder: (controller) {
         final offer = controller.offersItems[index];
         return Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -85,7 +116,8 @@ class OfferCard extends StatelessWidget {
                     padding: EdgeInsets.all(8.0),
                     child: Text(
                       offer.name,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Container(
@@ -133,4 +165,3 @@ class OfferCard extends StatelessWidget {
     );
   }
 }
-

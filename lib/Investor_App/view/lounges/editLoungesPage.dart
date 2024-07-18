@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:events_app/Investor_App/controllers/lounges/editLoungesController.dart';
+import 'package:events_app/common/components/general/custome_show_dialog.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -15,43 +17,93 @@ import 'package:events_app/common/core/constants/theme.dart';
 
 import '../../controllers/lounges/addLoungesController..dart';
 
-class EditLoungesPage extends GetView<AddLoungesController> {
+class TimeTextInputFormatter extends TextInputFormatter {
+  final RegExp _regExp =
+      RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$');
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (_regExp.hasMatch(newValue.text)) {
+      return newValue;
+    } else {
+      return oldValue;
+    }
+  }
+}
+
+class EditLoungesPage extends StatefulWidget {
   EditLoungesPage({
     required this.id,
     required this.loungeDetailsItems,
   });
 
+  final int id;
+  final LoungeDetailsDataModel loungeDetailsItems;
+
+  @override
+  State<EditLoungesPage> createState() => _EditLoungesPageState();
+}
+
+class _EditLoungesPageState extends State<EditLoungesPage> {
   var size, height, width;
+
   // Use a tagged controller for EventKind
   final RadioController _mixedController =
       Get.put(RadioController(), tag: 'MixedServices');
+
   final RadioController _dinnerController =
       Get.put(RadioController(), tag: 'DinnerServices');
+
   final List<String> radioData = ['No', 'Yes'];
+
   TextEditingController hallNameARController = TextEditingController();
+
   TextEditingController hallNameENController = TextEditingController();
+
   TextEditingController capcityController = TextEditingController();
+
   TextEditingController addressController = TextEditingController();
+
   TextEditingController dinnerPriceController = TextEditingController();
+
   TextEditingController mixedPriceController = TextEditingController();
 
   TextEditingController servicesPriceController = TextEditingController();
+
   TextEditingController servicesProporationController = TextEditingController();
+
   final GlobalKey<FormState> _serviceFormKey = GlobalKey<FormState>();
+
   final GlobalKey<FormState> _allFormKey = GlobalKey<FormState>();
-  final int id;
-  final LoungeDetailsDataModel loungeDetailsItems;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    hallNameARController.text = widget.loungeDetailsItems.arName;
+    hallNameENController.text = widget.loungeDetailsItems.enName;
+    capcityController.text = widget.loungeDetailsItems.capacity.toString();
+    addressController.text = widget.loungeDetailsItems.address;
+    _mixedController.selectedValue.value = widget.loungeDetailsItems.mixedPrice;
+    _dinnerController.selectedValue.value = widget.loungeDetailsItems.dinner;
+    dinnerPriceController.text =
+        widget.loungeDetailsItems.dinnerPrice.toString();
+    mixedPriceController.text = widget.loungeDetailsItems.mixedPrice.toString();
+  }
+
+  String formatTimeOfDay(TimeOfDay time) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    final formattedTime =
+        "${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}:00";
+    return formattedTime;
+  }
+
   @override
   Widget build(BuildContext context) {
-    hallNameARController.text = loungeDetailsItems.name;
-    hallNameENController.text = loungeDetailsItems.name;
-    capcityController.text = loungeDetailsItems.capacity.toString();
-    addressController.text = loungeDetailsItems.address;
-    _mixedController.selectedValue.value = loungeDetailsItems.mixedPrice;
-    _dinnerController.selectedValue.value = loungeDetailsItems.dinner;
-    dinnerPriceController.text = loungeDetailsItems.dinnerPrice.toString();
-    mixedPriceController.text = loungeDetailsItems.mixedPrice.toString();
-
     final addLoungeController = Get.put(AddLoungesController());
     final editLoungeController = Get.put(EditLoungesController());
     size = MediaQuery.of(context).size;
@@ -95,7 +147,7 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                                   if (index == 0) {
                                     return GestureDetector(
                                       onTap: () {
-                                        controller
+                                        addLoungeController
                                             .getImage(ImageSource.gallery);
                                       },
                                       child: Container(
@@ -216,21 +268,7 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                       children: [
                         Container(
                           width: width / 2.3,
-                          child:
-                              //  CustomeTextFormField(
-                              //   hintText: "Name in English",
-                              //   inputType: TextInputType.text,
-                              //   title: "",
-                              //   controller: d,
-                              //   validator: (String? value) {
-                              //     if (value == '') {
-                              //       return "this field is required";
-                              //     }
-                              //     return null;
-                              //   },
-                              //   prefixIcon: null,
-                              // ),
-                              DefaultFormFeild(
+                          child: DefaultFormFeild(
                             autoFoucs: false,
                             hintText: "Name in English",
                             validator: (String? value) {
@@ -245,21 +283,7 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                         ),
                         Container(
                           width: width / 2.3,
-                          child:
-                              // CustomeTextFormField(
-                              //   hintText: "الاسم باللغة العربية",
-                              //   inputType: TextInputType.text,
-                              //   title: "",
-                              //   controller: d,
-                              //   validator: (String? value) {
-                              //     if (value == '') {
-                              //       return "this field is required";
-                              //     }
-                              //     return null;
-                              //   },
-                              //   prefixIcon: null,
-                              // ),
-                              DefaultFormFeild(
+                          child: DefaultFormFeild(
                             autoFoucs: false,
                             hintText: "الاسم باللغة العربية",
                             validator: (String? value) {
@@ -497,6 +521,8 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                                           return workHourController['isEditing']
                                                   .value
                                               ? TextField(
+                                                  keyboardType:
+                                                      TextInputType.datetime,
                                                   controller:
                                                       workHourController[
                                                           'start'],
@@ -509,8 +535,7 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                                                             .text
                                                             .isNotEmpty;
                                                   },
-                                                  decoration:
-                                                      const InputDecoration(
+                                                  decoration: InputDecoration(
                                                     hintText: 'Start',
                                                     enabledBorder:
                                                         OutlineInputBorder(
@@ -529,6 +554,38 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                                                         EdgeInsets.symmetric(
                                                       vertical: 5.0,
                                                       horizontal: 10.0,
+                                                    ),
+                                                    //============validation work hour==========
+                                                    suffixIcon: IconButton(
+                                                      icon: Icon(
+                                                          Icons.access_time),
+                                                      onPressed: () async {
+                                                        TimeOfDay? pickedTime =
+                                                            await showTimePicker(
+                                                          context: context,
+                                                          initialTime:
+                                                              TimeOfDay.now(),
+                                                          builder:
+                                                              (context, child) {
+                                                            return MediaQuery(
+                                                              data: MediaQuery.of(
+                                                                      context)
+                                                                  .copyWith(
+                                                                      alwaysUse24HourFormat:
+                                                                          true),
+                                                              child: child!,
+                                                            );
+                                                          },
+                                                        );
+                                                        if (pickedTime !=
+                                                            null) {
+                                                          workHourController[
+                                                                      'start']
+                                                                  .text =
+                                                              formatTimeOfDay(
+                                                                  pickedTime);
+                                                        }
+                                                      },
                                                     ),
                                                   ),
                                                 )
@@ -585,6 +642,8 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                                           return workHourController['isEditing']
                                                   .value
                                               ? TextField(
+                                                  keyboardType:
+                                                      TextInputType.datetime,
                                                   controller:
                                                       workHourController['end'],
                                                   onSubmitted: (value) {
@@ -596,8 +655,7 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                                                             .text
                                                             .isNotEmpty;
                                                   },
-                                                  decoration:
-                                                      const InputDecoration(
+                                                  decoration: InputDecoration(
                                                     hintText: 'End',
                                                     enabledBorder:
                                                         OutlineInputBorder(
@@ -616,6 +674,37 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                                                         EdgeInsets.symmetric(
                                                       vertical: 5.0,
                                                       horizontal: 10.0,
+                                                    ),
+                                                    suffixIcon: IconButton(
+                                                      icon: Icon(
+                                                          Icons.access_time),
+                                                      onPressed: () async {
+                                                        TimeOfDay? pickedTime =
+                                                            await showTimePicker(
+                                                          context: context,
+                                                          initialTime:
+                                                              TimeOfDay.now(),
+                                                          builder:
+                                                              (context, child) {
+                                                            return MediaQuery(
+                                                              data: MediaQuery.of(
+                                                                      context)
+                                                                  .copyWith(
+                                                                      alwaysUse24HourFormat:
+                                                                          true),
+                                                              child: child!,
+                                                            );
+                                                          },
+                                                        );
+                                                        if (pickedTime !=
+                                                            null) {
+                                                          workHourController[
+                                                                      'end']
+                                                                  .text =
+                                                              formatTimeOfDay(
+                                                                  pickedTime);
+                                                        }
+                                                      },
                                                     ),
                                                   ),
                                                 )
@@ -987,7 +1076,10 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                                                 ThemesStyles.primary),
                                       ),
                                       onTap: () {
-                                        Get.to(() => RequestServicePage());
+                                        Get.to(() => RequestServicePage(
+                                              isEditPage: true,
+                                              isOrganizer: false,
+                                            ));
                                       },
                                     ),
                                   ),
@@ -999,10 +1091,18 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                       ).marginSymmetric(horizontal: width * 0.02, vertical: 10),
                     ),
                     //====================================for EDIT=================================
+                    Text(
+                      "Exseted Service",
+                      style: TextStyle(
+                          color: ThemesStyles.textColor,
+                          fontWeight: ThemesStyles.fontWeightBold,
+                          fontSize: ThemesStyles.mainFontSize),
+                    ),
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: loungeDetailsItems.services.length,
+                      itemCount: editLoungeController
+                          .loungeDetailsItems[0].services.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, // Number of columns
@@ -1012,120 +1112,507 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                             3, // Adjust this value to change the aspect ratio of the grid items
                       ),
                       itemBuilder: (context, index) {
-                        return Container(
-                          width: width / 2,
-                          height: height / 5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade400,
-                                blurRadius: 15,
-                                offset: Offset(5, 5),
-                              )
-                            ],
-                            border: Border.all(
-                                color: ThemesStyles.secondary, width: 2),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Services :",
-                                    style: TextStyle(
-                                      color: ThemesStyles.textColor,
-                                      fontSize: ThemesStyles.littelFontSize,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    loungeDetailsItems.services[index].name,
-                                    style: TextStyle(
-                                      color: ThemesStyles.textColor,
-                                      fontSize: ThemesStyles.littelFontSize,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
+                        // Ensure safe access to the list items
+                        if (editLoungeController
+                            .loungeDetailsItems[0].services.isEmpty) {
+                          return Center(
+                            child: Text("No services available"),
+                          );
+                        }
+
+                        // Debug print to check the current index and list length
+                        print('Current index: $index');
+                        print(
+                            'Services list length: ${widget.loungeDetailsItems.services.length}');
+
+                        // Access the service item safely
+                        final service = editLoungeController
+                            .loungeDetailsItems[0].services[index];
+
+                        return Stack(
+                          children: [
+                            Container(
+                              width: width / 2,
+                              height: height / 5,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 15,
+                                    offset: Offset(5, 5),
+                                  )
                                 ],
-                              ).marginSymmetric(horizontal: width * 0.01),
-                              Row(
+                                border: Border.all(
+                                    color: ThemesStyles.secondary, width: 2),
+                              ),
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "Proportion : ",
-                                    style: TextStyle(
-                                      color: ThemesStyles.textColor,
-                                      fontSize: ThemesStyles.littelFontSize,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Services :",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        service.name,
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  ).marginSymmetric(horizontal: width * 0.01),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Proportion : ",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        editLoungeController
+                                                .editedList.isNotEmpty
+                                            ? editLoungeController
+                                                    .editedList[index]
+                                                ["discounted-price"]
+                                            : service.discountedPrice ?? "",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    loungeDetailsItems
-                                            .services[index].discountedPrice ??
-                                        "",
-                                    style: TextStyle(
-                                      color: ThemesStyles.textColor,
-                                      fontSize: ThemesStyles.littelFontSize,
-                                      fontWeight: FontWeight.normal,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Price : ",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Obx(
+                                        () => Text(
+                                          editLoungeController
+                                                  .editedList.isNotEmpty
+                                              ? editLoungeController
+                                                  .editedList[index]["price"]
+                                              : service.price ?? "",
+                                          style: TextStyle(
+                                            color: ThemesStyles.textColor,
+                                            fontSize:
+                                                ThemesStyles.littelFontSize,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ).marginSymmetric(horizontal: width * 0.05),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: SizedBox(
+                                      width: 100,
+                                      child: DefultButton(
+                                        buttonColor: ThemesStyles.background,
+                                        borderColor: ThemesStyles.secondary,
+                                        textColor: Colors.red,
+                                        title: "Delete",
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0),
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      20.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Center(
+                                                        child: Text(
+                                                            "Are you sure you want to delete this service"),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 20),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child:
+                                                                Text('Cancel'),
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 10),
+                                                          ElevatedButton(
+                                                            onPressed: () {
+                                                              //Here and Just here from Backend delete
+
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child:
+                                                                Text('Submit'),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Price : ",
-                                    style: TextStyle(
-                                      color: ThemesStyles.textColor,
-                                      fontSize: ThemesStyles.littelFontSize,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    loungeDetailsItems.services[index].price ??
-                                        "",
-                                    style: TextStyle(
-                                      color: ThemesStyles.textColor,
-                                      fontSize: ThemesStyles.littelFontSize,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ],
-                              ).marginSymmetric(horizontal: width * 0.05),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: SizedBox(
-                                  width: 100,
-                                  child: DefultButton(
-                                    buttonColor: ThemesStyles.background,
-                                    borderColor: ThemesStyles.secondary,
-                                    textColor: Colors.red,
-                                    title: "Delete",
-                                    onPressed: () {
-                                      // loungeDetailsItems.services.remove(
-                                      //     controller.serviceList[index]);
-                                    },
-                                  ),
+                            ).marginSymmetric(
+                                horizontal: width * 0.02,
+                                vertical: height * 0.01),
+                            Positioned(
+                              bottom: 1,
+                              right: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: ThemesStyles.thirdColor,
+                                  borderRadius: BorderRadius.circular(1000),
+                                ),
+                                child: IconButton(
+                                  onPressed: () {
+                                    // addLoungeController.serviceList[index]["id"];
+
+                                    TextEditingController
+                                        proporationController =
+                                        TextEditingController();
+                                    TextEditingController priceController =
+                                        TextEditingController();
+
+                                    proporationController
+                                        .text = editLoungeController
+                                            .editedList.isNotEmpty
+                                        ? editLoungeController.editedList[index]
+                                            ["discounted-price"]
+                                        : service.discountedPrice ?? "";
+                                    priceController.text = editLoungeController
+                                            .editedList.isNotEmpty
+                                        ? editLoungeController.editedList[index]
+                                            ["price"]
+                                        : service.price;
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Dialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const SizedBox(height: 10),
+                                                TextField(
+                                                  enabled:
+                                                      service.kind == "public",
+                                                  controller:
+                                                      proporationController,
+                                                  decoration: InputDecoration(
+                                                    labelText: 'Proporation',
+                                                    labelStyle: const TextStyle(
+                                                        color: ThemesStyles
+                                                            .primary),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 10),
+                                                TextField(
+                                                  controller: priceController,
+                                                  decoration: InputDecoration(
+                                                    labelText: 'Price',
+                                                    labelStyle: const TextStyle(
+                                                        color: ThemesStyles
+                                                            .primary),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 20),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text('Cancel'),
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        // Remove the oldest data
+                                                        editLoungeController
+                                                            .editedList
+                                                            .removeWhere(
+                                                          (item) =>
+                                                              item['id'] ==
+                                                              service.id,
+                                                        );
+
+                                                        // Add the new values
+                                                        editLoungeController
+                                                            .editedList
+                                                            .add({
+                                                          "id": service.id,
+                                                          "price":
+                                                              priceController
+                                                                  .text,
+                                                          "discounted-price":
+                                                              proporationController
+                                                                  .text,
+                                                        });
+
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text('Submit'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(Icons.edit),
                                 ),
                               ),
-                            ],
-                          ),
-                        ).marginSymmetric(
-                            horizontal: width * 0.02, vertical: height * 0.01);
+                            ),
+                          ],
+                        );
                       },
                     ),
+
                     //====================================for EDIT=================================
+                    Text(
+                      "Added Services",
+                      style: TextStyle(
+                          color: ThemesStyles.textColor,
+                          fontWeight: ThemesStyles.fontWeightBold,
+                          fontSize: ThemesStyles.mainFontSize),
+                    ),
+                    addLoungeController.serviceList.isEmpty
+                        ? Center(
+                            child: Text(
+                              "There is no services have added yet",
+                              style: TextStyle(
+                                  fontSize: ThemesStyles.littelFontSize),
+                            ),
+                          )
+                        : Obx(
+                            () => GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: addLoungeController.serviceList.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, // Number of columns
+                                crossAxisSpacing: 2.0, // Space between columns
+                                mainAxisSpacing: 10.0, // Space between rows
+                                childAspectRatio: 3 /
+                                    3, // Adjust this value to change the aspect ratio of the grid items
+                              ),
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  child: Container(
+                                    width: width / 2,
+                                    height: height / 5,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.shade400,
+                                          blurRadius: 15,
+                                          offset: Offset(5, 5),
+                                        )
+                                      ],
+                                      border: Border.all(
+                                          color: ThemesStyles.secondary,
+                                          width: 2),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Services :",
+                                              style: TextStyle(
+                                                fontSize:
+                                                    ThemesStyles.littelFontSize,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              addLoungeController
+                                                  .serviceList[index]["name"],
+                                              style: TextStyle(
+                                                color: ThemesStyles.textColor,
+                                                fontSize:
+                                                    ThemesStyles.littelFontSize,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ],
+                                        ).marginSymmetric(
+                                            horizontal: width * 0.01),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Proportion : ",
+                                              style: TextStyle(
+                                                color: ThemesStyles.textColor,
+                                                fontSize:
+                                                    ThemesStyles.littelFontSize,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              addLoungeController
+                                                          .serviceList[index]
+                                                      ["proporation"] ??
+                                                  "",
+                                              style: TextStyle(
+                                                color: ThemesStyles.textColor,
+                                                fontSize:
+                                                    ThemesStyles.littelFontSize,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Price : ",
+                                              style: TextStyle(
+                                                color: ThemesStyles.textColor,
+                                                fontSize:
+                                                    ThemesStyles.littelFontSize,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              addLoungeController
+                                                          .serviceList[index]
+                                                      ["price"] ??
+                                                  "",
+                                              style: TextStyle(
+                                                color: ThemesStyles.textColor,
+                                                fontSize:
+                                                    ThemesStyles.littelFontSize,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ],
+                                        ).marginSymmetric(
+                                            horizontal: width * 0.05),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10.0),
+                                          child: SizedBox(
+                                            width: 100,
+                                            child: DefultButton(
+                                              buttonColor:
+                                                  ThemesStyles.background,
+                                              borderColor:
+                                                  ThemesStyles.secondary,
+                                              textColor: Colors.red,
+                                              title: "Delete",
+                                              onPressed: () {
+                                                addLoungeController.serviceList
+                                                    .remove(addLoungeController
+                                                        .serviceList[index]);
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ).marginSymmetric(
+                                      horizontal: width * 0.02,
+                                      vertical: height * 0.01),
+                                );
+                              },
+                            ),
+                          ),
+                    Text(
+                      "Requested Services",
+                      style: TextStyle(
+                          color: ThemesStyles.textColor,
+                          fontWeight: ThemesStyles.fontWeightBold,
+                          fontSize: ThemesStyles.mainFontSize),
+                    ),
                     Obx(
                       () => GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: addLoungeController.serviceList.length,
+                        itemCount: editLoungeController.addedList.length,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2, // Number of columns
@@ -1135,125 +1622,208 @@ class EditLoungesPage extends GetView<AddLoungesController> {
                               3, // Adjust this value to change the aspect ratio of the grid items
                         ),
                         itemBuilder: (context, index) {
-                          return Container(
-                            width: width / 2,
-                            height: height / 5,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade400,
-                                  blurRadius: 15,
-                                  offset: Offset(5, 5),
-                                )
-                              ],
-                              border: Border.all(
-                                  color: ThemesStyles.secondary, width: 2),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Services :",
-                                      style: TextStyle(
-                                        color: ThemesStyles.textColor,
-                                        fontSize: ThemesStyles.littelFontSize,
-                                        fontWeight: FontWeight.bold,
+                          final addeedItem =
+                              editLoungeController.addedList[index];
+
+                          print(
+                              ' addeedItem["name"]["en"]: ${editLoungeController.addedList[index]["name"]["en"]}');
+                          return GestureDetector(
+                            child: Container(
+                              width: width / 2,
+                              height: height / 5,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 15,
+                                    offset: Offset(5, 5),
+                                  )
+                                ],
+                                border: Border.all(
+                                    color: ThemesStyles.secondary, width: 2),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Services :",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      addLoungeController.serviceList[index]
-                                          ["name"],
-                                      style: TextStyle(
-                                        color: ThemesStyles.textColor,
-                                        fontSize: ThemesStyles.littelFontSize,
-                                        fontWeight: FontWeight.normal,
+                                      Text(
+                                        addeedItem["name"]["en"],
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.normal,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ).marginSymmetric(horizontal: width * 0.01),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Proportion : ",
-                                      style: TextStyle(
-                                        color: ThemesStyles.textColor,
-                                        fontSize: ThemesStyles.littelFontSize,
-                                        fontWeight: FontWeight.bold,
+                                    ],
+                                  ).marginSymmetric(horizontal: width * 0.01),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Proportion : ",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      addLoungeController.serviceList[index]
-                                              ["proporation"] ??
-                                          "",
-                                      style: TextStyle(
-                                        color: ThemesStyles.textColor,
-                                        fontSize: ThemesStyles.littelFontSize,
-                                        fontWeight: FontWeight.normal,
+                                      Text(
+                                        addeedItem["proporation"] ?? "",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.normal,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Price : ",
-                                      style: TextStyle(
-                                        color: ThemesStyles.textColor,
-                                        fontSize: ThemesStyles.littelFontSize,
-                                        fontWeight: FontWeight.bold,
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Price : ",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      addLoungeController.serviceList[index]
-                                              ["price"] ??
-                                          "",
-                                      style: TextStyle(
-                                        color: ThemesStyles.textColor,
-                                        fontSize: ThemesStyles.littelFontSize,
-                                        fontWeight: FontWeight.normal,
+                                      Text(
+                                        addeedItem["price"] ?? "",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.normal,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ).marginSymmetric(horizontal: width * 0.05),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: SizedBox(
-                                    width: 100,
-                                    child: DefultButton(
-                                      buttonColor: ThemesStyles.background,
-                                      borderColor: ThemesStyles.secondary,
-                                      textColor: Colors.red,
-                                      title: "Delete",
-                                      onPressed: () {
-                                        addLoungeController.serviceList.remove(
-                                            controller.serviceList[index]);
-                                      },
+                                    ],
+                                  ).marginSymmetric(horizontal: width * 0.05),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: SizedBox(
+                                      width: 100,
+                                      child: DefultButton(
+                                        buttonColor: ThemesStyles.background,
+                                        borderColor: ThemesStyles.secondary,
+                                        textColor: Colors.red,
+                                        title: "Delete",
+                                        onPressed: () {
+                                          editLoungeController.addedList
+                                              .remove(addeedItem);
+                                          // addLoungeController.serviceList
+                                          //     .remove(controller
+                                          //         .serviceList[index]);
+                                        },
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ).marginSymmetric(
-                              horizontal: width * 0.02,
-                              vertical: height * 0.01);
+                                ],
+                              ),
+                            ).marginSymmetric(
+                                horizontal: width * 0.02,
+                                vertical: height * 0.01),
+                          );
                         },
                       ),
                     ),
+
                     Center(
                       child: DefultButton(
                         buttonColor: ThemesStyles.primary,
                         borderColor: Colors.transparent,
                         textColor: Colors.white,
-                        title: "Add Hall",
+                        title: "Submit",
                         onPressed: () async {
+                          List<Map<String, dynamic>> existed =
+                              addLoungeController.createExistedList(
+                                  addLoungeController.serviceList,
+                                  addLoungeController.dropdownItemsAllData);
+                          print(editLoungeController.editedList);
+                          List<Map<String, dynamic>> added_active_times = [];
+                          for (int i = 0;
+                              i <
+                                  addLoungeController
+                                      .workHourControllers.length;
+                              i++) {
+                            added_active_times.add(
+                              {
+                                "start_time":
+                                    "${addLoungeController.workHourControllers[i]["start"].text}",
+                                "end_time":
+                                    "${addLoungeController.workHourControllers[i]["end"].text}"
+                              },
+                            );
+                          }
+                          List<Map<String, dynamic>> edited_active_times = [];
+                          for (int i = 0;
+                              i <
+                                  editLoungeController
+                                      .workHourControllers.length;
+                              i++) {
+                            edited_active_times.add(
+                              {
+                                "id": editLoungeController
+                                    .workHourControllers[i]["id"],
+                                "start_time":
+                                    "${editLoungeController.workHourControllers[i]["start_time"]}",
+                                "end_time":
+                                    "${editLoungeController.workHourControllers[i]["end_time"]}"
+                              },
+                            );
+                            print(
+                                'wooorrrrrk_active_times: ${editLoungeController.workHourControllers[i]["start"]}\\n');
+                          }
+
+                          print('edited_active_times: ${edited_active_times}');
+                          editLoungeController
+                              .postEditedLoungeDetailsItems(body: {
+                            "id": widget.id,
+                            "services": {
+                              "existed": existed,
+                              "added": editLoungeController.addedList,
+                              "edited": editLoungeController.editedList
+                            },
+                            "hall": {
+                              "name": {
+                                "ar": hallNameARController.text,
+                                "en": hallNameENController.text
+                              },
+                              "capacity": "${capcityController.text}",
+                              "address": addressController.text,
+                              "dinner":
+                                  _dinnerController.selectedValue.value == 0
+                                      ? false
+                                      : true,
+                              "dinner_price":
+                                  _dinnerController.selectedValue.value == 0
+                                      ? "${0}"
+                                      : "${dinnerPriceController.text}",
+                              "mixed": _mixedController.selectedValue.value == 0
+                                  ? false
+                                  : true,
+                              "mixed_price":
+                                  _mixedController.selectedValue.value == 0
+                                      ? "${0}"
+                                      : "${mixedPriceController.text}",
+                              "active_times": {
+                                "added": added_active_times,
+                                "edited": edited_active_times,
+                              }
+                            }
+                          });
                           if (_allFormKey.currentState!.validate()) {}
                         },
                       ),
@@ -1306,8 +1876,8 @@ class EditLoungesPage extends GetView<AddLoungesController> {
     LoungeDetailsDataModel? loungeDetailsItems,
   }) {
     return EditLoungesPage(
-      id: id ?? this.id,
-      loungeDetailsItems: loungeDetailsItems ?? this.loungeDetailsItems,
+      id: id ?? this.widget.id,
+      loungeDetailsItems: loungeDetailsItems ?? this.widget.loungeDetailsItems,
     );
   }
 }

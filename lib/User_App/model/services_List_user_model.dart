@@ -1,89 +1,107 @@
 import 'dart:convert';
 
-ServicesListUserModel servicesListUserModelFromJson(String str) => ServicesListUserModel.fromJson(json.decode(str));
+ServicesListUserModel servicesListUserModelFromJson(String str) =>
+    ServicesListUserModel.fromJson(json.decode(str));
 
-String servicesListUserModelToJson(ServicesListUserModel data) => json.encode(data.toJson());
+String servicesListUserModelToJson(ServicesListUserModel data) =>
+    json.encode(data.toJson());
 
 class ServicesListUserModel {
-    int code;
-    String message;
-    List<ServicesListUserDataModel> data;
+  int code;
+  String message;
+  List<ServicesListUserDataModel> data;
 
-    ServicesListUserModel({
-        required this.code,
-        required this.message,
-        required this.data,
-    });
+  ServicesListUserModel({
+    required this.code,
+    required this.message,
+    required this.data,
+  });
 
-    factory ServicesListUserModel.fromJson(Map<String, dynamic> json) => ServicesListUserModel(
+  factory ServicesListUserModel.fromJson(Map<String, dynamic> json) =>
+      ServicesListUserModel(
         code: json["code"],
         message: json["message"],
-        data: List<ServicesListUserDataModel>.from(json["data"].map((x) => ServicesListUserDataModel.fromJson(x))),
-    );
+        data: List<ServicesListUserDataModel>.from(
+            json["data"].map((x) => ServicesListUserDataModel.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "code": code,
         "message": message,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    };
+      };
 }
 
 class ServicesListUserDataModel {
-    int id;
-    List<String> photos;
-    int rate;
-    List<Service> services;
+  int id;
+  List<String> photos;
+  int rate;
+  List<Service> services;
+  bool isFavorite;
+  String startTime;
+  String endTime;
 
-    ServicesListUserDataModel({
-        required this.id,
-        required this.photos,
-        required this.rate,
-        required this.services,
-    });
+  ServicesListUserDataModel({
+    required this.id,
+    required this.photos,
+    required this.rate,
+    required this.services,
+    required this.isFavorite,
+    required this.startTime,
+    required this.endTime,
+  });
 
-    factory ServicesListUserDataModel.fromJson(Map<String, dynamic> json) => ServicesListUserDataModel(
+  factory ServicesListUserDataModel.fromJson(Map<String, dynamic> json) =>
+      ServicesListUserDataModel(
         id: json["id"],
         photos: List<String>.from(json["photos"].map((x) => x)),
         rate: json["rate"],
-        services: List<Service>.from(json["services"].map((x) => Service.fromJson(x))),
-    );
+        services: List<Service>.from(
+            json["services"].map((x) => Service.fromJson(x))),
+        isFavorite: json["is_favorite"],
+        startTime: json["start_time"],
+        endTime: json["end_time"],
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "photos": List<dynamic>.from(photos.map((x) => x)),
         "rate": rate,
         "services": List<dynamic>.from(services.map((x) => x.toJson())),
-    };
+        "is_favorite": isFavorite,
+        "start_time": startTime,
+        "end_time": endTime,
+      };
 }
 
 class Service {
-    int id;
-    String name;
-    String kind;
-    String price;
-    dynamic discountedPrice;
+  int id;
+  String name;
+  String kind;
+  String price;
+  dynamic discountedPrice;
 
-    Service({
-        required this.id,
-        required this.name,
-        required this.kind,
-        required this.price,
-        required this.discountedPrice,
-    });
+  Service({
+    required this.id,
+    required this.name,
+    required this.kind,
+    required this.price,
+    this.discountedPrice,
+  });
 
-    factory Service.fromJson(Map<String, dynamic> json) => Service(
+  factory Service.fromJson(Map<String, dynamic> json) => Service(
         id: json["id"],
         name: json["name"],
         kind: json["kind"],
         price: json["price"],
         discountedPrice: json["discounted_price"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "kind": kind,
         "price": price,
         "discounted_price": discountedPrice,
-    };
+      };
 }

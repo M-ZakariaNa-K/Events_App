@@ -42,10 +42,10 @@ class ProfileButtonWidget extends StatelessWidget {
               ),
             ),
           ),
-          const Spacer(),
-          Icon(isPressed
-              ? Icons.keyboard_arrow_down_outlined
-              : Icons.arrow_forward_ios)
+          // const Spacer(),
+          // Icon(isPressed
+          //     ? Icons.keyboard_arrow_down_outlined
+          //     : Icons.arrow_forward_ios)
         ],
       ),
     );

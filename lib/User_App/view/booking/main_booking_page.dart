@@ -1,6 +1,9 @@
 import 'package:events_app/User_App/controllers/booking/ListServicesForSecondSlideReservationController.dart';
 import 'package:events_app/User_App/controllers/booking/radio_controller.dart';
+import 'package:events_app/User_App/controllers/booking/reservation_filter_controller.dart';
 import 'package:events_app/User_App/model/ListServicesForSecondSlideReservationModel.dart';
+import 'package:events_app/User_App/model/reservation_filter_model.dart';
+import 'package:events_app/User_App/view/booking/Reservation_after_filter_page.dart';
 import 'package:events_app/User_App/view/booking/onBoardingPages/fifth_onBoarding_booking.dart';
 import 'package:events_app/User_App/view/booking/onBoardingPages/fourth_onBoarding_booking.dart';
 import 'package:events_app/User_App/view/booking/onBoardingPages/sixth_onBoarding_booking.dart';
@@ -68,8 +71,10 @@ class _MainBookingPageState extends State<MainBookingPage> {
       'EventCatigory': selectedEventCatigory,
       'min_price': _startPriceController.text,
       'max_price': _endPriceController.text,
-      "start_time": "$starthourShared:$startminuteShared:00",
-      "end_time": "$endhourShared:$endminuteShared:00",
+      "start_time":
+          "${starthourShared < 10 ? '0$starthourShared' : starthourShared.toString()}:${startminuteShared < 10 ? '0$startminuteShared' : startminuteShared.toString()}:00",
+      "end_time":
+          "${endhourShared < 10 ? '0$endhourShared' : endhourShared.toString()}:${endminuteShared < 10 ? '0$endminuteShared' : endminuteShared.toString()}:00",
     };
 // Check if the current page is the third slide (index 2)
     if (_controller.page == 2) {
@@ -84,19 +89,66 @@ class _MainBookingPageState extends State<MainBookingPage> {
     // You can now use the selectedData as needed, e.g., send to backend, save locally, etc.
   }
 
+  //         var listReservationFilterItems = <ReservaionFilterDataModel>[].obs;
+  // var listReservationFilterLoading = true.obs;
+  final reservationFilterController = Get.put(ReservationFilterController());
+  //Here to make the format of start and wnd time for the API
+  // String startHourUrl = starthourShared.toString().length < 10
+  //     ? '0$starthourShared'
+  //     : starthourShared.toString();
+  // String startMinuteUrl = startminuteShared.toString().length < 10
+  //     ? '0$startminuteShared'
+  //     : startminuteShared.toString();
+
+  // String endHourUrl = endhourShared.toString().length < 10
+  //     ? '0$endhourShared'
+  //     : endhourShared.toString();
+  // String endMinuteUrl = endminuteShared.toString().length < 10
+  //     ? '0$endminuteShared'
+  //     : endminuteShared.toString();
+
+  Future<List<ReservaionFilterDataModel>> getFilterData() async {
+    try {
+      reservationFilterController.listReservationFilterLoading.value = true;
+      Map<String, dynamic> data1 = await DioHelper.get(
+        url:
+            // '$baseUrl/assets/get-filters?role=HallOwner&service_id=1&mixed_service=0&dinner_service=1&region=df&audiences_number=100&start_time=10:00:00&end_time=12:00:00&min_price=200&max_price=300'
+            "$baseUrl/assets/get-filters?role=${selectedData["role"] == 0 ? "Organizer" : "HallOwner"}&service_id=$sharedServiceId&mixed_service=${selectedData["MixedServices"]}&dinner_service=${selectedData["DinnerServices"]}&region=${selectedData["Region"]}&audiences_number=${selectedData["audiencesNumber"]}&start_time=${selectedData["start_time"]}&end_time=${selectedData["end_time"]}&min_price=${selectedData["min_price"]}&max_price=${selectedData["max_price"]}",
+      );
+      final a = ReservaionFilterModel.fromJson(data1);
+      for (int i = 0; i < a.data.length; i++) {
+        reservationFilterController.listReservationFilterItems.add(a.data[i]);
+      }
+      if (data1["code"] == 200) {
+        Get.to(() => const ReservationAfterFilterPage());
+      }
+      return reservationFilterController.listReservationFilterItems;
+    } catch (e) {
+      print('Error fetching recentlyAdded items: $e');
+      return reservationFilterController.listReservationFilterItems;
+    } finally {
+      reservationFilterController.listReservationFilterLoading.value = false;
+    }
+  }
+
   void nextPage(BuildContext context) async {
     if (_controller.page == 5) {
       // If on the sixth slide, save data
       saveData(context);
-      // Response response = await DioHelper.get(
-      //   url:
-      //       "$baseUrl/assets/get-filters?role=${selectedData["role"]==0?"Organizer":"HallOwner"}&service_id=$sharedServiceId&mixed_service=${selectedData["MixedServices"]}&dinner_service=${selectedData["DinnerServices"]}&region=${selectedData["Region"]}&audiences_number=${selectedData["audiencesNumber"]}&start_time=${selectedData["start_time"]}&end_time=${selectedData["end"]}&min_price=${selectedData["min_price"]}&max_price=${selectedData["max_price"]}",
-      // );
-      starthourShared = 0;
-      startminuteShared = 0;
-      endhourShared = 0;
-      endminuteShared = 0;
-      // Get.to(DrawerPage());
+      print(
+          'start_time=${selectedData["start_time"]}:& end_time=${selectedData["end_time"]}ddddd');
+      print(
+          'start_time=${starthourShared.toString()}:${startminuteShared.toString()}:00&end_time=${startminuteShared.toString()}:${startminuteShared.toString()}');
+      print(
+          "$baseUrl/assets/get-filters?role=${selectedData["role"] == 0 ? "Organizer" : "HallOwner"}&service_id=$sharedServiceId&mixed_service=${selectedData["MixedServices"]}&dinner_service=${selectedData["DinnerServices"]}&region=${selectedData["Region"]}&audiences_number=${selectedData["audiencesNumber"]}&start_time=${selectedData["start_time"]}&end_time=${selectedData["end_time"]}&min_price=${selectedData["min_price"]}&max_price=${selectedData["max_price"]}");
+      await getFilterData();
+      // if (reservationFilterController.listReservationFilterItems.isNotEmpty) {
+      // }
+
+      // starthourShared = 0;
+      // startminuteShared = 0;
+      // endhourShared = 0;
+      // endminuteShared = 0;
     } else {
       //Here i will sent a request of data of the second slide
       if (_controller.page == 0) {

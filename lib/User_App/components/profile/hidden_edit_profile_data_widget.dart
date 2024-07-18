@@ -11,6 +11,7 @@ class HiddenEditProfileDataWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Here u will take the data from Backend
     return GetBuilder<RegisterController>(builder: (controller) {
       return Form(
         key: controller.formKey,

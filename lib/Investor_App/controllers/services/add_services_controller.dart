@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:events_app/Investor_App/controllers/services/services_controller.dart';
 import 'package:events_app/Investor_App/models/add_assets_photos_model.dart';
 import 'package:events_app/Investor_App/models/services_list_model.dart';
 import 'package:events_app/User_App/view/home/drawer-page.dart';
@@ -18,7 +19,9 @@ class AddServiceController extends GetxController {
   var dropdownItemsAllData = <Map<String, dynamic>>[].obs;
   var dropdownValue = ''.obs;
   var allDataToAPI = <String, dynamic>{}.obs;
+  var allDataToAPISecondTime = <String, dynamic>{}.obs;
   var firstRequisResponsData = 0.obs;
+  var isTextFildEditing = true.obs;
 
   //========for the gridView=================
   var serviceList = <Map<String, dynamic>>[].obs;
@@ -66,7 +69,7 @@ class AddServiceController extends GetxController {
     super.onReady();
   }
 
-  void fetchDropdownItems() async {
+  Future<void> fetchDropdownItems() async {
     try {
       Map<String, dynamic> data1 =
           await DioHelper.get(url: "$baseUrl/service/list?identifier=all");
@@ -103,6 +106,24 @@ class AddServiceController extends GetxController {
       print(allDataToAPI);
       Map<String, dynamic> data1 = await DioHelper.post(
           url: "$baseUrl/assets/add-info", body: allDataToAPI);
+      if (data1["code"] == 200) {
+        final servicesShowController = Get.put(ServicesHomePageController());
+        servicesShowController.servicesItems.clear();
+        servicesShowController.getServicesItems();
+        Get.off(() => const DrawerPage());
+      }
+    } catch (e) {
+      print('Error posting data: $e');
+    }
+  }
+
+  //============================upload THE WHOLE REQUEST to the api second time for organizer============================
+  Future<void> postServicesDataSecondTime() async {
+    try {
+      print("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
+      print(allDataToAPI);
+      Map<String, dynamic> data1 = await DioHelper.post(
+          url: "$baseUrl/assets/add-services", body: allDataToAPISecondTime);
       if (data1["code"] == 200) {
         Get.off(() => const DrawerPage());
       }

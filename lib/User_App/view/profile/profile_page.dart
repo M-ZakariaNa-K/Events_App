@@ -6,19 +6,20 @@ import 'package:events_app/User_App/components/profile/hidder_reset_password_dat
 import 'package:events_app/User_App/components/profile/profile_button_widget.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
-
+  const ProfilePage({super.key, required this.isComeFromSettings});
+  final bool isComeFromSettings;
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool _showHiddenChangePasswordData = false;
-  bool _showHiddenEditProfileData = false;
-  bool _showHiddenBudgetData = false;
+  bool _showHiddenChangePasswordData = true;
+  bool _showHiddenEditProfileData = true;
+  bool _showHiddenBudgetData = true;
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
   TextEditingController oldPasswordController = TextEditingController();
@@ -68,6 +69,26 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: widget.isComeFromSettings
+          ? AppBar(
+              title: const Text("Profile"),
+              titleTextStyle: const TextStyle(
+                color: Color(0xff464646),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              backgroundColor: Colors.transparent,
+              automaticallyImplyLeading: false,
+              elevation: 0.0,
+              leading: IconButton(
+                color: ThemesStyles.textColor,
+                onPressed: () {
+                  Get.back();
+                },
+                icon: const Icon(Icons.arrow_back_ios_new_sharp),
+              ),
+            )
+          : null,
       backgroundColor: Theme.of(context).brightness == Brightness.dark
           ? ThemesStyles.backgroundDark
           : ThemesStyles.background,
@@ -76,25 +97,24 @@ class _ProfilePageState extends State<ProfilePage> {
       body: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
-
-              // image: Theme.of(context).brightness == Brightness.dark
-              //     ? null
-              //     : const DecorationImage(
-              //         image: AssetImage(
-              //             'assets/images/background.jpg'), // Replace with your image path
-              //         fit: BoxFit
-              //             .fill, // Adjust the fit as needed (cover, fill, etc.)
-              //       ),
-              ),
+            image: Theme.of(context).brightness == Brightness.dark
+                ? null
+                : const DecorationImage(
+                    image: AssetImage(
+                        'assets/images/background.jpg'), // Replace with your image path
+                    fit: BoxFit
+                        .fill, // Adjust the fit as needed (cover, fill, etc.)
+                  ),
+          ),
           child: Container(
             margin: EdgeInsets.only(top: MediaQuery.sizeOf(context).height / 7),
             width: double.infinity,
             decoration: BoxDecoration(
               boxShadow: const [
                 BoxShadow(
-                  color: ThemesStyles.backgroundDark,
-                  spreadRadius: 1,
-                  blurRadius: 10,
+                  color: Color.fromARGB(255, 187, 187, 187),
+                  spreadRadius: .30,
+                  blurRadius: 30,
                   offset: Offset(0, 0),
                 ),
               ],
@@ -185,10 +205,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        _showHiddenChangePasswordData =
-                            !_showHiddenChangePasswordData;
-                      });
+                      // setState(() {
+                      //   _showHiddenChangePasswordData =
+                      //       !_showHiddenChangePasswordData;
+                      // });
                       // Get.to(const ResetPasswordPage());
                     },
                     child: const ProfileButtonWidget(
@@ -206,10 +226,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   //================================2- Edit Profile Card===============================
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        _showHiddenEditProfileData =
-                            !_showHiddenEditProfileData;
-                      });
+                      // setState(() {
+                      //   _showHiddenEditProfileData =
+                      //       !_showHiddenEditProfileData;
+                      // });
                     },
                     child: const ProfileButtonWidget(
                       title: "Edit Profile",
@@ -231,9 +251,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   //================================3===============================
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        _showHiddenBudgetData = !_showHiddenBudgetData;
-                      });
+                      // setState(() {
+                      //   _showHiddenBudgetData = !_showHiddenBudgetData;
+                      // });
                     },
                     child: const ProfileButtonWidget(
                       title: "See Budget",

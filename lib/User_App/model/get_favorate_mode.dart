@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final getFavorateModel = getFavorateModelFromJson(jsonString);
+
 import 'dart:convert';
 
 GetFavorateModel getFavorateModelFromJson(String str) =>
@@ -46,6 +50,9 @@ class GetFavorateDataModel {
   int? mixedPrice;
   List<ActiveTime>? activeTimes;
   String? name;
+  String? startTime;
+  String? endTime;
+  String? organizerName;
 
   GetFavorateDataModel({
     required this.id,
@@ -53,14 +60,17 @@ class GetFavorateDataModel {
     required this.photos,
     required this.rate,
     required this.services,
-    required this.capacity,
-    required this.dinner,
-    required this.dinnerPrice,
-    required this.mixed,
-    required this.address,
-    required this.mixedPrice,
-    required this.activeTimes,
-    required this.name,
+    this.capacity,
+    this.dinner,
+    this.dinnerPrice,
+    this.mixed,
+    this.address,
+    this.mixedPrice,
+    this.activeTimes,
+    this.name,
+    this.startTime,
+    this.endTime,
+    this.organizerName,
   });
 
   factory GetFavorateDataModel.fromJson(Map<String, dynamic> json) =>
@@ -77,11 +87,14 @@ class GetFavorateDataModel {
         mixed: json["mixed"],
         address: json["address"],
         mixedPrice: json["mixed_price"],
-         activeTimes: json["active_times"] != null
-            ? List<ActiveTime>.from(
-                json["active_times"].map((x) => ActiveTime.fromJson(x)))
-            : [],
+        activeTimes: json["active_times"] == null
+            ? []
+            : List<ActiveTime>.from(
+                json["active_times"]!.map((x) => ActiveTime.fromJson(x))),
         name: json["name"],
+        startTime: json["start_time"],
+        endTime: json["end_time"],
+        organizerName: json["organizer_name"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -96,8 +109,13 @@ class GetFavorateDataModel {
         "mixed": mixed,
         "address": address,
         "mixed_price": mixedPrice,
-        "active_times": activeTimes?.map((x) => x.toJson()).toList() ?? [],
+        "active_times": activeTimes == null
+            ? []
+            : List<dynamic>.from(activeTimes!.map((x) => x.toJson())),
         "name": name,
+        "start_time": startTime,
+        "end_time": endTime,
+        "organizer_name": organizerName,
       };
 }
 

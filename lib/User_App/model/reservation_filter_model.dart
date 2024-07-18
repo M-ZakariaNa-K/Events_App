@@ -1,43 +1,38 @@
-// To parse this JSON data, do
-//
-//     final loungeDetailsModel = loungeDetailsModelFromJson(jsonString);
-
 import 'dart:convert';
 
-LoungeDetailsModel loungeDetailsModelFromJson(String str) => LoungeDetailsModel.fromJson(json.decode(str));
+ReservaionFilterModel reservaionFilterModelFromJson(String str) => ReservaionFilterModel.fromJson(json.decode(str));
 
-String loungeDetailsModelToJson(LoungeDetailsModel data) => json.encode(data.toJson());
+String reservaionFilterModelToJson(ReservaionFilterModel data) => json.encode(data.toJson());
 
-class LoungeDetailsModel {
+class ReservaionFilterModel {
     int code;
     String message;
-    LoungeDetailsDataModel data;
+    List<ReservaionFilterDataModel> data;
 
-    LoungeDetailsModel({
+    ReservaionFilterModel({
         required this.code,
         required this.message,
         required this.data,
     });
 
-    factory LoungeDetailsModel.fromJson(Map<String, dynamic> json) => LoungeDetailsModel(
+    factory ReservaionFilterModel.fromJson(Map<String, dynamic> json) => ReservaionFilterModel(
         code: json["code"],
         message: json["message"],
-        data: LoungeDetailsDataModel.fromJson(json["data"]),
+        data: List<ReservaionFilterDataModel>.from(json["data"].map((x) => ReservaionFilterDataModel.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
         "code": code,
         "message": message,
-        "data": data.toJson(),
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 
-class LoungeDetailsDataModel {
+class ReservaionFilterDataModel {
     int id;
     List<String> photos;
     int rate;
     List<Service> services;
-    bool isFavorite;
     int capacity;
     int dinner;
     int dinnerPrice;
@@ -45,15 +40,13 @@ class LoungeDetailsDataModel {
     String address;
     int mixedPrice;
     List<ActiveTime> activeTimes;
-    String arName;
-    String enName;
+    String name;
 
-    LoungeDetailsDataModel({
+    ReservaionFilterDataModel({
         required this.id,
         required this.photos,
         required this.rate,
         required this.services,
-        required this.isFavorite,
         required this.capacity,
         required this.dinner,
         required this.dinnerPrice,
@@ -61,16 +54,14 @@ class LoungeDetailsDataModel {
         required this.address,
         required this.mixedPrice,
         required this.activeTimes,
-        required this.arName,
-        required this.enName,
+        required this.name,
     });
 
-    factory LoungeDetailsDataModel.fromJson(Map<String, dynamic> json) => LoungeDetailsDataModel(
+    factory ReservaionFilterDataModel.fromJson(Map<String, dynamic> json) => ReservaionFilterDataModel(
         id: json["id"],
         photos: List<String>.from(json["photos"].map((x) => x)),
         rate: json["rate"],
         services: List<Service>.from(json["services"].map((x) => Service.fromJson(x))),
-        isFavorite: json["is_favorite"],
         capacity: json["capacity"],
         dinner: json["dinner"],
         dinnerPrice: json["dinner_price"],
@@ -78,8 +69,7 @@ class LoungeDetailsDataModel {
         address: json["address"],
         mixedPrice: json["mixed_price"],
         activeTimes: List<ActiveTime>.from(json["active_times"].map((x) => ActiveTime.fromJson(x))),
-        arName: json["ar_name"],
-        enName: json["en_name"],
+        name: json["name"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -87,7 +77,6 @@ class LoungeDetailsDataModel {
         "photos": List<dynamic>.from(photos.map((x) => x)),
         "rate": rate,
         "services": List<dynamic>.from(services.map((x) => x.toJson())),
-        "is_favorite": isFavorite,
         "capacity": capacity,
         "dinner": dinner,
         "dinner_price": dinnerPrice,
@@ -95,8 +84,7 @@ class LoungeDetailsDataModel {
         "address": address,
         "mixed_price": mixedPrice,
         "active_times": List<dynamic>.from(activeTimes.map((x) => x.toJson())),
-        "ar_name": arName,
-        "en_name": enName,
+        "name": name,
     };
 }
 

@@ -52,8 +52,11 @@ class _SearchPageState extends State<SearchPage> {
             ),
             //=================Taps================
             const Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 10.0),
-              child: SearchTapsWidget(isSearch: true,),
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: SearchTapsWidget(
+                isSearch: true,
+                isComeFromOrganizerPage: false,
+              ),
             ),
             //=================Number of found================
             //sEARCH result

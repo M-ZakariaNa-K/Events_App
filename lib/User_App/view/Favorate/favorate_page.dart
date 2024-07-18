@@ -1,8 +1,6 @@
 import 'package:events_app/User_App/controllers/Favorates/Favorate_controller.dart';
 import 'package:events_app/common/components/general/main_loading_widget.dart';
 import 'package:events_app/common/core/constants/theme.dart';
-import 'package:events_app/common/core/shared/shared.dart';
-import 'package:events_app/common/helper/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,8 +46,7 @@ class FavoratePage extends GetView<FavorateController> {
         child: ListView.builder(
           itemCount: favoriteController.favoriteItems.length,
           itemBuilder: (context, i) {
-            var item =
-                favoriteController.favoriteItems[i]; // Get the item at index
+            var item = favoriteController.favoriteItems[i];
 
             return Container(
               padding:
@@ -85,15 +82,36 @@ class FavoratePage extends GetView<FavorateController> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            item.name ?? "zzz",
-                            style: TextStyle(
-                              fontSize: ThemesStyles.mainFontSize,
-                              fontWeight: FontWeight.bold,
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  item.organizerName ?? item.name ?? "zzz",
+                                  style: TextStyle(
+                                    fontSize: ThemesStyles.mainFontSize,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: Text(
+                                item.organizerName != null
+                                    ? " Organizer"
+                                    : " Lounge",
+                                style: TextStyle(
+                                    fontSize: ThemesStyles.littelFontSize,
+                                    color: const Color.fromARGB(
+                                        255, 199, 199, 199)),
+                              ),
+                            ),
+                          ],
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10),
@@ -129,7 +147,8 @@ class FavoratePage extends GetView<FavorateController> {
                               child: SizedBox(
                                 width: 140,
                                 child: Text(
-                                  item.address ?? "zzz",
+                                  item.address ??
+                                      "${item.startTime} - ${item.endTime}",
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     color: Color.fromARGB(255, 170, 170, 170),
@@ -138,24 +157,15 @@ class FavoratePage extends GetView<FavorateController> {
                               ),
                             ),
                             const SizedBox(width: 30),
-                            // const Icon(
-                            //   Icons.favorite,
-                            //   size: 18,
-                            //   color: ThemesStyles.primary,
-                            // ),
                             const SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
-                                print(favoriteController.favoriteItems[i].id);
-                                DioHelper.delete(
-                                  url:
-                                      "$baseUrl/assets/delete-favorite?id=${favoriteController.favoriteItems[i].id}",
-                                );
+                                favoriteController.deleteFavoriteItem(item.id);
                               },
                               child: const Icon(
-                                Icons.delete,
+                                Icons.favorite,
                                 size: 18,
-                                color: Colors.red,
+                                color: ThemesStyles.primary,
                               ),
                             ),
                           ],

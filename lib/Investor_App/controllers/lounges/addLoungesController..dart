@@ -29,11 +29,11 @@ class AddLoungesController extends GetxController {
 
   //========start for the WorkHours=============
   var workHourControllers = <Map<String, dynamic>>[
-    {
-      'start': TextEditingController(),
-      'end': TextEditingController(),
-      'isEditing': true.obs
-    }
+    // {
+    //   'start': TextEditingController(),
+    //   'end': TextEditingController(),
+    //   'isEditing': true.obs
+    // }
   ].obs;
 
   void addWorkHourController() {

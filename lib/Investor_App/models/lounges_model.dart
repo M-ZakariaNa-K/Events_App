@@ -43,6 +43,7 @@ class LoungesDataModel {
   List<LoungesActiveTime> activeTimes;
   String name;
   String address;
+  bool isFavorite;
 
   LoungesDataModel({
     required this.id,
@@ -57,6 +58,7 @@ class LoungesDataModel {
     required this.activeTimes,
     required this.name,
     required this.address,
+    required this.isFavorite,
   });
 
   factory LoungesDataModel.fromJson(Map<String, dynamic> json) =>
@@ -74,7 +76,10 @@ class LoungesDataModel {
           activeTimes: List<LoungesActiveTime>.from(
               json["active_times"].map((x) => LoungesActiveTime.fromJson(x))),
           name: json["name"],
-          address: json["address"]);
+          address: json["address"],
+          isFavorite: json["is_favorite"],
+          
+          );
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -89,6 +94,7 @@ class LoungesDataModel {
         "active_times": List<dynamic>.from(activeTimes.map((x) => x.toJson())),
         "name": name,
         "address": address,
+        "is_favorite": isFavorite,
       };
 }
 
