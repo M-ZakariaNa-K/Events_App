@@ -2,9 +2,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:events_app/Investor_App/controllers/lounges/editLoungesController.dart';
 import 'package:events_app/Investor_App/controllers/lounges/lounges_controller.dart';
 import 'package:events_app/Investor_App/view/lounges/editLoungesPage.dart';
+import 'package:events_app/User_App/controllers/booking/book_Now_controller.dart';
+import 'package:events_app/User_App/controllers/booking/date-picker.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
+import 'package:events_app/User_App/view/booking/book_now_page.dart';
+import 'package:events_app/User_App/view/booking/book_now_public_events.dart';
+import 'package:events_app/common/components/general/Costume_TextField_widget.dart';
 import 'package:events_app/common/components/general/main_loading_widget.dart';
 import 'package:events_app/common/core/shared/shared.dart';
+import 'package:events_app/common/helper/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
@@ -16,6 +22,177 @@ class LoungesDetailsPage extends StatelessWidget {
   });
   final int id;
   var size, height, width;
+  Future<dynamic> showAddedDiscountDialog(BuildContext context) {
+    final loungeDetailsController = Get.put(LoungesController());
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: const Color.fromARGB(255, 227, 227, 227),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Choose service you want to add discount on:"),
+                  SizedBox(
+                    height: 50,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: loungeDetailsController
+                            .loungeDetailsItems[0].services.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              loungeDetailsController
+                                      .isSelectedDiscountedService.value =
+                                  !loungeDetailsController
+                                      .isSelectedDiscountedService.value;
+
+                              loungeDetailsController
+                                      .selectedDiscountedServiceId.value =
+                                  loungeDetailsController
+                                      .loungeDetailsItems[0].services[index].id;
+                            },
+                            child: Obx(
+                              () => AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                margin: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    color: loungeDetailsController
+                                            .isSelectedDiscountedService.value
+                                        ? ThemesStyles.secondary
+                                        : const Color.fromARGB(
+                                            255, 174, 174, 174),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: loungeDetailsController
+                                            .isSelectedDiscountedService.value
+                                        ? Border.all(
+                                            width: 1,
+                                            color: Colors.red,
+                                          )
+                                        : null),
+                                child: Text(
+                                  loungeDetailsController.loungeDetailsItems[0]
+                                      .services[index].name,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: loungeDetailsController
+                                            .isSelectedDiscountedService.value
+                                        ? ThemesStyles.seconndTextColor
+                                        : ThemesStyles.textColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                  const Divider(
+                    thickness: 2,
+                    color: Color.fromARGB(255, 217, 217, 217),
+                    endIndent: 60,
+                    indent: 60,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text("Entere the Percentage:"),
+                  CustomeTextFormField(
+                    hintText: "Percentage",
+                    inputType: TextInputType.number,
+                    title: "",
+                    controller: loungeDetailsController
+                        .addedDiscountPercentageController,
+                    validator: (value) {},
+                    prefixIcon: null,
+                  ),
+                  const SizedBox(height: 20),
+                  Text("Start date:"),
+                  CustomeTextFormField(
+                    hintText: "yyyy-mm-dd",
+                    inputType: TextInputType.datetime,
+                    title: "",
+                    controller: loungeDetailsController
+                        .addedDiscountStartDateController,
+                    validator: (value) {},
+                    prefixIcon: null,
+                  ),
+                  const SizedBox(height: 20),
+                  Text("End date:"),
+                  CustomeTextFormField(
+                    hintText: "yyyy-mm-dd",
+                    inputType: TextInputType.datetime,
+                    title: "",
+                    controller:
+                        loungeDetailsController.addedDiscountEndDateController,
+                    validator: (value) {},
+                    prefixIcon: null,
+                  ),
+                  // CalendarDialog(isStart: true, isOrganizer: false),
+                  // CalendarDialog(isStart: true, isOrganizer: false),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      const SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {
+                          try {
+                            DioHelper.post(
+                                url: "$baseUrl/discounts/add",
+                                body: {
+                                  "event_id": loungeDetailsController
+                                      .selectedDiscountedServiceId.value,
+                                  "percentage": loungeDetailsController
+                                      .addedDiscountPercentageController.text,
+                                  "start_date": loungeDetailsController
+                                      .addedDiscountStartDateController.text,
+                                  "end_date": loungeDetailsController
+                                      .addedDiscountEndDateController.text
+                                });
+                          } catch (e) {
+                            Get.snackbar("Error", "Somthing went wrong...");
+                          }
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: ThemesStyles.primary,
+                            ),
+                            child: const Text(
+                              'Submit',
+                              style: TextStyle(
+                                color: ThemesStyles.seconndTextColor,
+                              ),
+                            )),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final loungeDetailsController = Get.put(LoungesController());
@@ -436,6 +613,44 @@ class LoungesDetailsPage extends StatelessWidget {
                               ),
                             ),
                           ),
+                          SizedBox(
+                            width: 200,
+                            child: DefultButton(
+                              buttonColor: ThemesStyles.secondary,
+                              borderColor: Colors.transparent,
+                              textColor: Colors.white,
+                              title: "Add discount",
+                              onPressed: () async {
+                                showAddedDiscountDialog(context);
+                              },
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  height: 20,
+                                  thickness: 2,
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 20),
+                                child: Text(
+                                  "or edit with",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  height: 20,
+                                  thickness: 2,
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                            ],
+                          ),
                           GetBuilder<EditLoungesController>(
                               init: EditLoungesController(),
                               builder: (controller) {
@@ -445,8 +660,13 @@ class LoungesDetailsPage extends StatelessWidget {
                                   textColor: Colors.white,
                                   title: "Edit",
                                   onPressed: () async {
+                                    if (controller
+                                        .loungeDetailsItems.isNotEmpty) {
+                                      // controller.loungeDetailsItems.clear();
+                                    }
                                     var loungeDetailsItems = await controller
                                         .getLoungeDetailsItems(id: id);
+
                                     Get.to(() => EditLoungesPage(
                                           id: id,
                                           loungeDetailsItems:
@@ -858,18 +1078,57 @@ class LoungesDetailsPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          //here the contoller come from reservation controller
-                          GetBuilder<EditLoungesController>(
-                              init: EditLoungesController(),
-                              builder: (controller) {
-                                return DefultButton(
-                                  buttonColor: ThemesStyles.secondary,
-                                  borderColor: Colors.transparent,
-                                  textColor: Colors.white,
-                                  title: "BOOK NOW",
-                                  onPressed: () async {},
-                                );
-                              })
+                          DefultButton(
+                            buttonColor: ThemesStyles.secondary,
+                            borderColor: Colors.transparent,
+                            textColor: Colors.white,
+                            title: "BOOK NOW",
+                            onPressed: () async {
+                              Get.to(
+                                () => const BookNowPage(isOrganizer: false),
+                              );
+                            },
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  height: 20,
+                                  thickness: 2,
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 20),
+                                child: Text(
+                                  "or",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  height: 20,
+                                  thickness: 2,
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          DefultButton(
+                            buttonColor: ThemesStyles.secondary,
+                            borderColor: Colors.transparent,
+                            textColor: Colors.white,
+                            title: "Make a public event with us 😊",
+                            onPressed: () async {
+                              Get.to(
+                                () => PublicEventsBookNowPage(),
+                              );
+                            },
+                          )
                         ],
                       )
                           .marginSymmetric(

@@ -433,8 +433,8 @@ class AddServicesPage extends GetView<AddServiceController> {
                                 addServiceController.serviceList.add({
                                   "name":
                                       addServiceController.dropdownValue.value,
-                                  // "proporation":
-                                  //     servicesProporationController.text,
+                                  "discounted_price":
+                                      servicesProporationController.text,
                                   "price": servicesPriceController.text,
                                 });
                                 servicesProporationController.clear();
@@ -543,7 +543,7 @@ class AddServicesPage extends GetView<AddServiceController> {
                             ),
                             Text(
                               addServiceController.serviceList[index]
-                                      ["proporation"] ??
+                                      ["discounted_price"] ??
                                   "",
                               style: TextStyle(
                                 color: ThemesStyles.textColor,
@@ -612,9 +612,11 @@ class AddServicesPage extends GetView<AddServiceController> {
                         // _allFormKey.currentState!.validate()
                         addServiceController.serviceList.isNotEmpty &&
                             isTheFirstVisit) {
-                              final servicesShowController = Get.put(ServicesHomePageController());
-                              servicesShowController.isFirstTimeForOrganizer.value = false;
-                              
+                      final servicesShowController =
+                          Get.put(ServicesHomePageController());
+                      servicesShowController.isFirstTimeForOrganizer.value =
+                          false;
+
                       await addServiceController.submitData();
 
                       //===============================================

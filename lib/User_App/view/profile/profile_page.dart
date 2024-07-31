@@ -60,10 +60,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void selectImage() async {
     Uint8List? img = await pickImage(ImageSource.gallery);
+    if(mounted){
+
     setState(() {
       _image = img;
       // _saveImage(_image!);
     });
+    }
   }
 
   @override
@@ -112,10 +115,10 @@ class _ProfilePageState extends State<ProfilePage> {
             decoration: BoxDecoration(
               boxShadow: const [
                 BoxShadow(
-                  color: Color.fromARGB(255, 187, 187, 187),
+                  color: Color.fromARGB(255, 201, 201, 201),
                   spreadRadius: .30,
-                  blurRadius: 30,
-                  offset: Offset(0, 0),
+                  blurRadius: 10,
+                  offset: Offset(4, 0),
                 ),
               ],
               borderRadius: const BorderRadius.only(
@@ -243,8 +246,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     curve: Curves.ease, // Adjust animation curve
                     child: Visibility(
                       visible: _showHiddenEditProfileData,
-                      child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
                           child: HiddenEditProfileDataWidget()),
                     ),
                   ),

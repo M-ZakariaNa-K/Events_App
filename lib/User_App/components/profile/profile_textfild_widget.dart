@@ -22,14 +22,14 @@ class ProfileTextFildWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: const Color(0xffFAFAFA),
-        border: Border.all(
-            width: 1, color: const Color.fromARGB(255, 206, 206, 206)),
-        borderRadius: BorderRadius.circular(
-          ThemesStyles.borderradiusprimary,
-        ),
-      ),
+          color: Theme.of(context).brightness == Brightness.dark
+              ? const Color.fromARGB(255, 48, 48, 48)
+              : const Color(0xffFAFAFA),
+          border: Border.all(
+              width: 1, color: const Color.fromARGB(255, 206, 206, 206)),
+          borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
           Padding(
@@ -39,7 +39,12 @@ class ProfileTextFildWidget extends StatelessWidget {
                 SizedBox(
                   width: 20,
                   height: 20,
-                  child: Image.asset("assets/images/reset-password (3).png"),
+                  child: Image.asset(
+                    "assets/images/reset-password (3).png",
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? const Color(0xffFAFAFA)
+                        : const Color.fromARGB(255, 48, 48, 48),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -48,7 +53,7 @@ class ProfileTextFildWidget extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: ThemesStyles.textColor,
+                      // color: ThemesStyles.textColor,
                     ),
                   ),
                 ),

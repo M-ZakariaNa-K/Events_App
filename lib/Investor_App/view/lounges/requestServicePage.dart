@@ -167,6 +167,7 @@ class RequestServicePage extends StatelessWidget {
 
                                 Get.snackbar(
                                     "Great🎉", "Your request was accepted");
+                                    Navigator.pop(context);
                                 // Clear the text controllers
                                 // arNameController.clear();
                                 // enNameController.clear();

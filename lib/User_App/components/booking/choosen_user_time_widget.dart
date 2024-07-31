@@ -1,14 +1,16 @@
+import 'package:events_app/User_App/controllers/booking/book_Now_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 class ChoosenUserReservationTime extends StatelessWidget {
   ChoosenUserReservationTime({super.key});
-  TextEditingController startTimeController = TextEditingController();
-  TextEditingController endTimeController = TextEditingController();
+
   var size, height, width;
 
   @override
   Widget build(BuildContext context) {
+    final bookNowController = Get.put(BookNowController());
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
@@ -19,7 +21,7 @@ class ChoosenUserReservationTime extends StatelessWidget {
             width: width / 2.3,
             child: TextField(
               keyboardType: TextInputType.datetime,
-              controller: startTimeController,
+              controller: bookNowController.startTimeController,
               onSubmitted: (value) {},
               decoration: InputDecoration(
                 hintText: 'Start',
@@ -52,7 +54,7 @@ class ChoosenUserReservationTime extends StatelessWidget {
                       },
                     );
                     if (pickedTime != null) {
-                      startTimeController.text = formatTimeOfDay(pickedTime);
+                      bookNowController.startTimeController.text = formatTimeOfDay(pickedTime);
                     }
                   },
                 ),
@@ -62,7 +64,7 @@ class ChoosenUserReservationTime extends StatelessWidget {
             width: width / 2.3,
             child: TextField(
               keyboardType: TextInputType.datetime,
-              controller: endTimeController,
+              controller: bookNowController.endTimeController,
               onSubmitted: (value) {},
               decoration: InputDecoration(
                 hintText: 'End',
@@ -95,7 +97,7 @@ class ChoosenUserReservationTime extends StatelessWidget {
                       },
                     );
                     if (pickedTime != null) {
-                      endTimeController.text = formatTimeOfDay(pickedTime);
+                      bookNowController.endTimeController.text = formatTimeOfDay(pickedTime);
                     }
                   },
                 ),

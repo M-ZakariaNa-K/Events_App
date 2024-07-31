@@ -2,12 +2,22 @@ import 'package:events_app/Investor_App/models/lounge_details_model.dart';
 import 'package:events_app/Investor_App/models/lounges_model.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/helper/api.dart';
+import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 
 class LoungesController extends GetxController {
   var loungesItems = <LoungesDataModel>[].obs;
   var loungeDetailsItems = <LoungeDetailsDataModel>[].obs;
   var loangesLoading = true.obs;
+  var selectedDiscountedServiceId = 0.obs;
+  var isSelectedDiscountedService = false.obs;
+  TextEditingController addedDiscountPercentageController =
+      TextEditingController();
+  TextEditingController addedDiscountStartDateController = TextEditingController();
+  TextEditingController addedDiscountEndDateController = TextEditingController();
+  void selectService(int id) {
+    selectedDiscountedServiceId.value = id;
+  }
 
   Future<void> getloungesItems(
       // { required int id}

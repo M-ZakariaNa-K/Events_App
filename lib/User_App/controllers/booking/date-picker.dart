@@ -1,16 +1,21 @@
 // ignore_for_file: camel_case_types
 
+import 'package:events_app/User_App/controllers/booking/book_Now_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarDialog extends StatefulWidget {
-  const CalendarDialog({Key? key, required this.isStart}) : super(key: key);
+  const CalendarDialog(
+      {Key? key, required this.isStart, required this.isOrganizer})
+      : super(key: key);
 
   @override
   State<CalendarDialog> createState() => _CalendarDialogState();
   final bool isStart;
+  final bool isOrganizer;
 }
 
 class _CalendarDialogState extends State<CalendarDialog> {
@@ -19,6 +24,25 @@ class _CalendarDialogState extends State<CalendarDialog> {
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
       today = day;
+      widget.isStart
+          ? showStartDateMap.addAll({
+              "date": today.toString().split(' ')[0],
+            })
+          : showEndDateMap.addAll({
+              "date": today.toString().split(' ')[0],
+            });
+      final bookNowController = Get.find<BookNowController>();
+      if (!widget.isOrganizer) {
+        bookNowController.timesAvilableList.clear();
+        bookNowController.getTimesAvailbleList(
+            assetId: bookNowController.enteredHallId.value,
+            date: showStartDateMap["date"]);
+      } else {
+        bookNowController.timesReservedOrganizerList.clear();
+        bookNowController.getTimesReservedOrgainzerList(
+            assetId: bookNowController.enteredOrganizerId.value,
+            date: showStartDateMap["date"]);
+      }
     });
   }
 
@@ -27,9 +51,11 @@ class _CalendarDialogState extends State<CalendarDialog> {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 232, 232, 232),
-          borderRadius: BorderRadius.all(
+        decoration: BoxDecoration(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? const Color.fromARGB(255, 55, 55, 55)
+              : const Color.fromARGB(255, 232, 232, 232),
+          borderRadius: const BorderRadius.all(
             Radius.circular(5),
           ),
         ),
@@ -45,36 +71,34 @@ class _CalendarDialogState extends State<CalendarDialog> {
               headerStyle: const HeaderStyle(
                 formatButtonVisible: false,
                 titleCentered: true,
-                titleTextStyle:
-                    TextStyle(color: ThemesStyles.textColor, fontSize: 16),
+                titleTextStyle: TextStyle(fontSize: 16),
                 leftChevronIcon: Icon(
                   Icons.arrow_back_ios,
-                  color: ThemesStyles.textColor,
+                  // color: ThemesStyles.textColor,
                   size: 14,
                 ),
                 rightChevronIcon: Icon(
                   Icons.arrow_forward_ios,
-                  color: ThemesStyles.textColor,
                   size: 14,
                 ),
               ),
               availableGestures: AvailableGestures.all,
               selectedDayPredicate: (day) => isSameDay(day, today),
               focusedDay: today,
-              firstDay: DateTime.utc(2023, 1, 1),
+              firstDay: DateTime.utc(2024, 1, 1),
               lastDay: DateTime.utc(2030, 12, 31),
               //-----------end Header decoration----------------
 
               //-----------decoration----------------
               calendarStyle: CalendarStyle(
                 // Customize the color of the calendar
-                defaultTextStyle:
-                    const TextStyle(color: ThemesStyles.textColor),
-                selectedTextStyle:
-                    const TextStyle(color: ThemesStyles.textColor),
+                // defaultTextStyle:
+                //     const TextStyle(color: ThemesStyles.textColor),
+                // selectedTextStyle:
+                //     const TextStyle(color: ThemesStyles.textColor),
                 outsideTextStyle: const TextStyle(color: Colors.grey),
-                weekendTextStyle:
-                    const TextStyle(color: ThemesStyles.textColor),
+                // weekendTextStyle:
+                //     const TextStyle(color: ThemesStyles.textColor),
                 // Customize the size of the calendar
                 outsideDaysVisible: true,
                 cellMargin: const EdgeInsets.all(8),
@@ -101,7 +125,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
 
               daysOfWeekStyle: const DaysOfWeekStyle(
                 weekdayStyle: TextStyle(
-                  color: ThemesStyles.textColor,
+                  // color: ThemesStyles.textColor,
                   fontWeight: FontWeight.bold,
                 ),
                 weekendStyle: TextStyle(
@@ -110,70 +134,6 @@ class _CalendarDialogState extends State<CalendarDialog> {
                 ),
               ),
               onDaySelected: _onDaySelected,
-            ),
-            //===================Two Buttons========================
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: () {
-                        // Handle the first button action
-                        Navigator.pop(context, 'Cancel Button pressed');
-                      },
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(
-                          color: ThemesStyles.primary,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ThemesStyles.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                      fixedSize:
-                          Size(MediaQuery.of(context).size.width * 0.35, 45),
-                    ),
-                    onPressed: () {
-                      // Handle the second button action
-                      widget.isStart
-                          ? showStartDateMap.addAll({
-                              "date": today.toString().split(' ')[0],
-                            })
-                          : showEndDateMap.addAll({
-                              "date": today.toString().split(' ')[0],
-                            });
-                      Navigator.pop(context);
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (BuildContext context) {
-                      //     return const TimePickerDialog1();
-                      //   },
-                      // );
-                    },
-                    child: const Text(
-                      'Choose Date',
-                      style: TextStyle(
-                        color: ThemesStyles.seconndTextColor,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ),
           ],
         ),

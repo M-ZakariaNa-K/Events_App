@@ -34,6 +34,13 @@ class AddLoungesPage extends GetView<AddLoungesController> {
   TextEditingController servicesProporationController = TextEditingController();
   final GlobalKey<FormState> _serviceFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _allFormKey = GlobalKey<FormState>();
+  String formatTimeOfDay(TimeOfDay time) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    final formattedTime =
+        "${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}:00";
+    return formattedTime;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -464,7 +471,7 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                                           'isEditing']
                                                       .value = true;
                                             },
-                                            decoration: const InputDecoration(
+                                            decoration: InputDecoration(
                                               hintText: 'Start',
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
@@ -482,6 +489,33 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                                     5.0, // Adjust vertical padding
                                                 horizontal:
                                                     10.0, // Adjust horizontal padding
+                                              ),
+                                              suffixIcon: IconButton(
+                                                icon: Icon(Icons.access_time),
+                                                onPressed: () async {
+                                                  TimeOfDay? pickedTime =
+                                                      await showTimePicker(
+                                                    context: context,
+                                                    initialTime:
+                                                        TimeOfDay.now(),
+                                                    builder: (context, child) {
+                                                      return MediaQuery(
+                                                        data: MediaQuery.of(
+                                                                context)
+                                                            .copyWith(
+                                                                alwaysUse24HourFormat:
+                                                                    true),
+                                                        child: child!,
+                                                      );
+                                                    },
+                                                  );
+                                                  if (pickedTime != null) {
+                                                    workHourController['start']
+                                                            .text =
+                                                        formatTimeOfDay(
+                                                            pickedTime);
+                                                  }
+                                                },
                                               ),
                                             ),
                                           )
@@ -513,7 +547,7 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                                           'isEditing']
                                                       .value = true;
                                             },
-                                            decoration: const InputDecoration(
+                                            decoration: InputDecoration(
                                               hintText: 'End',
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
@@ -531,6 +565,33 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                                     5.0, // Adjust vertical padding
                                                 horizontal:
                                                     10.0, // Adjust horizontal padding
+                                              ),
+                                              suffixIcon: IconButton(
+                                                icon: Icon(Icons.access_time),
+                                                onPressed: () async {
+                                                  TimeOfDay? pickedTime =
+                                                      await showTimePicker(
+                                                    context: context,
+                                                    initialTime:
+                                                        TimeOfDay.now(),
+                                                    builder: (context, child) {
+                                                      return MediaQuery(
+                                                        data: MediaQuery.of(
+                                                                context)
+                                                            .copyWith(
+                                                                alwaysUse24HourFormat:
+                                                                    true),
+                                                        child: child!,
+                                                      );
+                                                    },
+                                                  );
+                                                  if (pickedTime != null) {
+                                                    workHourController['end']
+                                                            .text =
+                                                        formatTimeOfDay(
+                                                            pickedTime);
+                                                  }
+                                                },
                                               ),
                                             ),
                                           )
@@ -636,84 +697,81 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                 ),
                                 Container(
                                   width: width / 2.5,
-                                  child: Obx(
-                                    () => Container(
-                                      height: 50,
-                                      child: TextFormField(
-                                        controller:
-                                            servicesProporationController,
-                                        enableSuggestions: false,
-                                        keyboardType: TextInputType.number,
-                                        obscureText: false,
-                                        textInputAction: TextInputAction.next,
-                                        cursorColor: ThemesStyles.primary,
-                                        // enabled: addLoungeController
-                                        //         .dropdownValue.value ==
-                                        //     "Birhtday", // Adjust the condition as per your logic
-                                        // validator: (String? value) {
-                                        //   if (addLoungeController
-                                        //               .dropdownValue.value ==
-                                        //           "Birhtday" &&
-                                        //       (value == null ||
-                                        //           value.isEmpty)) {
-                                        //     return "This field is required";
-                                        //   }
-                                        //   return null;
-                                        // },
-                                        autofocus: false,
-                                        decoration: InputDecoration(
-                                            hintText: "Proportion",
-                                            hintStyle: TextStyle(
-                                                color: ThemesStyles.textColor
-                                                    .withAlpha(80),
-                                                fontSize:
-                                                    ThemesStyles.mainFontSize -
-                                                        2),
-                                            floatingLabelStyle: TextStyle(
-                                              color: ThemesStyles.primary,
+                                  child: Container(
+                                    height: 50,
+                                    child: TextFormField(
+                                      controller: servicesProporationController,
+                                      enableSuggestions: false,
+                                      keyboardType: TextInputType.number,
+                                      obscureText: false,
+                                      textInputAction: TextInputAction.next,
+                                      cursorColor: ThemesStyles.primary,
+                                      // enabled: addLoungeController
+                                      //         .dropdownValue.value ==
+                                      //     "Birhtday", // Adjust the condition as per your logic
+                                      // validator: (String? value) {
+                                      //   if (addLoungeController
+                                      //               .dropdownValue.value ==
+                                      //           "Birhtday" &&
+                                      //       (value == null ||
+                                      //           value.isEmpty)) {
+                                      //     return "This field is required";
+                                      //   }
+                                      //   return null;
+                                      // },
+                                      autofocus: false,
+                                      decoration: InputDecoration(
+                                          hintText: "Proportion",
+                                          hintStyle: TextStyle(
+                                              color: ThemesStyles.textColor
+                                                  .withAlpha(80),
+                                              fontSize:
+                                                  ThemesStyles.mainFontSize -
+                                                      2),
+                                          floatingLabelStyle: TextStyle(
+                                            color: ThemesStyles.primary,
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            borderSide: BorderSide(
+                                              color: ThemesStyles.primary
+                                                  .withAlpha(80),
                                             ),
-                                            enabledBorder: OutlineInputBorder(
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                               borderSide: BorderSide(
-                                                color: ThemesStyles.primary
-                                                    .withAlpha(80),
-                                              ),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                borderSide: BorderSide(
-                                                  color: ThemesStyles.primary,
-                                                )),
-                                            errorBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                borderSide: const BorderSide(
-                                                  color: Colors.red,
-                                                )),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                borderSide: BorderSide(
-                                                  color: ThemesStyles.primary,
-                                                ))),
-                                      ),
+                                                color: ThemesStyles.primary,
+                                              )),
+                                          errorBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              borderSide: const BorderSide(
+                                                color: Colors.red,
+                                              )),
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              borderSide: BorderSide(
+                                                color: ThemesStyles.primary,
+                                              ))),
                                     ),
-                                    // DefaultFormFeild(
-                                    //   autoFoucs: false,
-                                    //   hintText: "Proportion",
-                                    //   validator: (String? value) {
-                                    //     if (value == '') {
-                                    //       return "this field is required";
-                                    //     }
-                                    //     return null;
-                                    //   },
-                                    //   textEditingController:
-                                    //       servicesProporationController,
-                                    //   obscureText: false,
-                                    // ),
                                   ),
+                                  // DefaultFormFeild(
+                                  //   autoFoucs: false,
+                                  //   hintText: "Proportion",
+                                  //   validator: (String? value) {
+                                  //     if (value == '') {
+                                  //       return "this field is required";
+                                  //     }
+                                  //     return null;
+                                  //   },
+                                  //   textEditingController:
+                                  //       servicesProporationController,
+                                  //   obscureText: false,
+                                  // ),
                                 ),
                               ],
                             ),
@@ -733,9 +791,9 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                         addLoungeController.serviceList.add({
                                           "name": addLoungeController
                                               .dropdownValue.value,
-                                          // "proporation":
-                                          //     servicesProporationController
-                                          //         .text,
+                                          "proporation":
+                                              servicesProporationController
+                                                  .text,
                                           "price": servicesPriceController.text,
                                         });
                                         servicesProporationController.clear();

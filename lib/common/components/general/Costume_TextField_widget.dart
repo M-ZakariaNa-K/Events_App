@@ -95,8 +95,7 @@ class _CustomeTextFormFieldState extends State<CustomeTextFormField> {
 
             // Customize the border color and radius
             enabledBorder: OutlineInputBorder(
-              borderSide:
-                  const BorderSide(color: Colors.transparent, width: 2.0),
+              borderSide: BorderSide(color: Colors.grey.shade300, width: 2.0),
               borderRadius:
                   BorderRadius.circular(ThemesStyles.borderradiusprimary + 5),
             ),

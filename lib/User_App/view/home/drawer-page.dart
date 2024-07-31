@@ -2,16 +2,21 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:events_app/Investor_App/controllers/lounges/lounges_controller.dart';
 import 'package:events_app/Investor_App/controllers/services/services_controller.dart';
 import 'package:events_app/Investor_App/view/home/investor_homePage..dart';
-import 'package:events_app/Investor_App/view/reservations/reservations.dart';
+import 'package:events_app/Investor_App/view/lounges/loanges_page_resercations.dart';
+import 'package:events_app/Investor_App/view/reservations/reservations_Investor_Page.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/appbar_building.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer.dart';
 import 'package:events_app/User_App/controllers/Favorates/Favorate_controller.dart';
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
+import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
+import 'package:events_app/User_App/controllers/profile/profile_controller.dart';
+import 'package:events_app/User_App/controllers/reservation/reservation_controller.dart';
 import 'package:events_app/User_App/view/Favorate/favorate_page.dart';
 import 'package:events_app/User_App/view/p-event/HelpCenter.dart';
 import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/User_App/view/p-event/settings_page.dart';
 import 'package:events_app/User_App/view/profile/profile_page.dart';
+import 'package:events_app/User_App/view/reservations/reservations_user.dart';
 import 'package:events_app/User_App/view/search/search_page.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/User_App/view/booking/main_booking_page.dart';
@@ -19,6 +24,7 @@ import 'package:events_app/User_App/view/home/homePage.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class DrawerPage extends StatefulWidget {
   const DrawerPage({super.key});
@@ -34,7 +40,9 @@ class _DrawerPageState extends State<DrawerPage> {
 
   static final List<Widget> _userBottomBarOptions = <Widget>[
     const HomePage(),
-    ReservationsPage(),
+    ReservationsUserPage(
+      isCommingFromInvestorSide: false,
+    ),
 
     //here u will go to ADD page and also in the + button u gonna go to Add page
     MainBookingPage(),
@@ -45,7 +53,7 @@ class _DrawerPageState extends State<DrawerPage> {
   ];
   static final List<Widget> _investorBottomBarOptions = <Widget>[
     InvestorHomePage(),
-    ReservationsPage(),
+    LoungesReservationsInvestorPage(),
     //here u will go to ADD page and also in the + button u gonna go to Add page
     MainBookingPage(),
     PublicEventPage(
@@ -65,6 +73,27 @@ class _DrawerPageState extends State<DrawerPage> {
         final loungeController = Get.put(LoungesController());
         loungeController.loungesItems.clear();
         loungeController.getloungesItems();
+      }
+      if (index == 1 && isUser) {
+        final reservationController = Get.put(ReservationController());
+        reservationController.reservationsUserList.clear();
+        reservationController.isPrivateSelected.value = true;
+        reservationController.isUpcomingSelected.value = true;
+        reservationController.getReservationItems(
+          service_kind: "private",
+          date: ">=",
+          asset_id: null,
+        );
+      }
+      if (index != 1) {
+        final reservationController = Get.put(ReservationController());
+        reservationController.reservationsUserList.clear();
+        reservationController.reservationsInvestorList.clear();
+      }
+      if (index == 1 && !isUser) {
+        final loungesController = Get.put(LoungesController());
+        loungesController.loungesItems.clear();
+        loungesController.getloungesItems();
       }
       if (index == 3) {
         // Here u will show the public events
@@ -90,7 +119,9 @@ class _DrawerPageState extends State<DrawerPage> {
   final List<Widget> _userDrawerPages = [
     const HomePage(),
     //Profile
-    const ProfilePage(isComeFromSettings: false,),
+    const ProfilePage(
+      isComeFromSettings: false,
+    ),
     //Budget
     const HomePage(),
     //History
@@ -104,7 +135,9 @@ class _DrawerPageState extends State<DrawerPage> {
   final List<Widget> _investorDrawerPages = [
     InvestorHomePage(),
     //Profile
-    const ProfilePage(isComeFromSettings: false,),
+    const ProfilePage(
+      isComeFromSettings: false,
+    ),
     //Budget
     InvestorHomePage(),
     //History
@@ -186,7 +219,19 @@ class _DrawerPageState extends State<DrawerPage> {
     );
   }
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
+    //profile
+    if (index == 1) {
+      try {
+        final profileController = Get.put(ProfileController());
+        profileController.profileItems.clear();
+        await profileController.getProfileItems();
+        profileController.phoneNumberController.text =
+            profileController.profileItems[0].phoneNumber;
+      } catch (e) {
+        Get.snackbar("Error", "Something get wrong with calling data");
+      }
+    }
     setState(() {
       isButtomNavPressed = false;
       controller.changeDrawerTabIndex(index);

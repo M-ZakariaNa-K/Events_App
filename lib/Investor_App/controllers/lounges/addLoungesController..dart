@@ -149,7 +149,33 @@ class AddLoungesController extends GetxController {
       // Get.snackbar("Error", "Error submitting data");
     }
   }
+  //============================================================================
+ Future<void> submitImagesForPublicEventBooking({required int id}) async {
+    try {
+      List<dio.MultipartFile> imageFiles = [];
+      for (String imagePath in selectedImagePaths) {
+        File imageFile = File(imagePath);
+        String fileName = imageFile.path.split('/').last;
 
+        imageFiles.add(
+            await dio.MultipartFile.fromFile(imagePath, filename: fileName));
+      }
+      dio.FormData formData = dio.FormData.fromMap({
+        "photos": imageFiles,
+        "id":id,
+      });
+
+      Map<String, dynamic> response1 = await DioHelper.post(
+        url: "$baseUrl/reservations/add-photo",
+        body: formData,
+      );
+
+    
+    } catch (e) {
+      print('Error submitting data: $e');
+      // Get.snackbar("Error", "Error submitting data");
+    }
+  }
   // Function to find the IDs and create the "existed" list
   List<Map<String, dynamic>> createExistedList(
       List<Map<String, dynamic>> list1, List<Map<String, dynamic>> list2) {

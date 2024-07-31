@@ -1,5 +1,9 @@
+import 'package:events_app/User_App/controllers/profile/profile_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/core/shared/shared.dart';
+import 'package:events_app/common/helper/api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HiddenBudgetDataWidget extends StatefulWidget {
   HiddenBudgetDataWidget({super.key});
@@ -25,9 +29,9 @@ class _HiddenBudgetDataWidgetState extends State<HiddenBudgetDataWidget> {
   }
 
   late String _enteredFirstTextFildText = '';
-  // Initialize with empty string
   @override
   Widget build(BuildContext context) {
+    final profileController = Get.put(ProfileController());
     return Column(
       children: <Widget>[
         const Text(
@@ -44,15 +48,23 @@ class _HiddenBudgetDataWidgetState extends State<HiddenBudgetDataWidget> {
                 onSubmitted: (value) {
                   setState(() {
                     _isFirstTextFildEditing = false;
-                    _enteredFirstTextFildText = value;
+                    _enteredFirstTextFildText = "$value SYP";
+                    try {
+                      DioHelper.post(url: "$baseUrl/auth/add-cart", body: {
+                        "money": _firstTextEditingController.text,
+                      });
+                    } catch (e) {
+                      Get.snackbar(
+                          "Error", "Somthing get wrong please try again");
+                    }
                   });
                 },
                 style: const TextStyle(
-                  color: ThemesStyles
-                      .textColor, // Set text color when entering input
+                  color: ThemesStyles.textColor,
                 ),
-                decoration: const InputDecoration(
-                  hintText: 'هون الرصيد باخدو من الباك',
+                decoration: InputDecoration(
+                  hintText:
+                      '${profileController.profileItems[0].money ?? 0} SYP',
                   hintStyle: TextStyle(
                     color: Colors.grey,
                   ),
@@ -89,12 +101,11 @@ class _HiddenBudgetDataWidgetState extends State<HiddenBudgetDataWidget> {
                           color: ThemesStyles.textColor,
                         ),
                       )
-                    : const Text(
-                        '2400\$',
+                    : Text(
+                        '${profileController.profileItems[0].money ?? 0} SYP',
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: ThemesStyles.textColor,
                         ),
                       ),
               ),

@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:events_app/User_App/view/booking/book_now_public_events.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -402,6 +403,7 @@ class _PublicEventPageState extends State<PublicEventPage> {
           ],
         ),
       ),
+
     );
   }
 }

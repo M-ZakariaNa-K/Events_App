@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:events_app/Investor_App/controllers/lounges/addLoungesController..dart';
 import 'package:events_app/Investor_App/models/lounge_details_model.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/helper/api.dart';
@@ -8,7 +9,7 @@ import 'package:get/get.dart';
 class EditLoungesController extends GetxController {
   var loungeDetailsItems = <LoungeDetailsDataModel>[].obs;
   var workHourControllers = <Map<String, dynamic>>[].obs;
-  var selectedImagePaths = <String>[].obs; 
+  var selectedImagePaths = <String>[].obs;
   var allApiData = <String, dynamic>{}.obs;
   var editedList = <Map<String, dynamic>>[].obs;
   var addedList = <Map<String, dynamic>>[].obs;
@@ -46,15 +47,19 @@ class EditLoungesController extends GetxController {
   }
 
   Future<void> postEditedLoungeDetailsItems(
-      {required Map<String, dynamic> body}) async {
+      {required Map<String, dynamic> body,
+      required BuildContext context}) async {
     try {
       Map<String, dynamic> data1 =
           await DioHelper.post(url: "$baseUrl/assets/update-hall", body: body);
       if (data1["code"] == 200) {
         Get.snackbar('Success', 'Edited successful',
             snackPosition: SnackPosition.TOP);
+        Navigator.of(context).pop();
+        //To clear the exicted list and added list
+        final addLoungeController = Get.put(AddLoungesController());
         addedList.clear();
-        editedList.clear();
+        addLoungeController.serviceList.clear();
       }
     } catch (e) {
       print('Error fetching loungeDetailsItems items: $e');

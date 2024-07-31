@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 class OffersController extends GetxController {
   var offersItems =
-      <ShowOffersDataModel>[].obs; // Use RxList to observe changes
+      <ShowOffersDataModel>[].obs; 
   var offersLoading = true.obs;
   void getOffersItems() async {
     try {
@@ -14,7 +14,7 @@ class OffersController extends GetxController {
           await DioHelper.get(url: "$baseUrl/discounts/list");
       final showOffersListModel = ShowOffersModel.fromJson(data1);
       offersItems
-          .assignAll(showOffersListModel.data); // Use assignAll for RxList
+          .assignAll(showOffersListModel.data); 
     } catch (e) {
       print('Error fetching Offers items: $e');
     } finally {

@@ -52,60 +52,7 @@ class _OrderNowCardWidgetState extends State<OrderNowCardWidget>
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child:
-                          // Stack(
-                          //   children: [
-                          //     Opacity(
-                          //       opacity: 0.7,
-                          //       child: Image.asset(
-                          //         'assets/images/publicEvents.png',
-                          //         fit: BoxFit.cover,
-                          //         width: double.infinity,
-                          //         height: 200,
-                          //       ),
-                          //     ),
-                          //     const Positioned(
-                          //       bottom: 10,
-                          //       left: 10,
-                          //       child: Opacity(
-                          //         opacity: 1,
-                          //         //  _animation!.value,
-                          //         child: SizedBox(
-                          //           width: 200,
-                          //           child: Text(
-                          //             'What are you wating for! Book Now',
-                          //             style: TextStyle(
-                          //               color: Colors.white,
-                          //               fontSize: 20,
-                          //               fontWeight: FontWeight.bold,
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     Positioned(
-                          //       bottom: 10,
-                          //       right: 10,
-                          //       child: Opacity(
-                          //         opacity: 1
-                          //         // - _animation!.value,
-                          //         ,
-                          //         child: MaterialButton(
-                          //           onPressed: () {},
-                          //           color: ThemeColors.primary,
-                          //           shape: RoundedRectangleBorder(
-                          //             borderRadius: BorderRadius.circular(20),
-                          //           ),
-                          //           child: const Text(
-                          //             'Book Now',
-                          //             style: TextStyle(
-                          //               color: Colors.white,
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
+                      
                           Stack(
                         children: [
                           GestureDetector(

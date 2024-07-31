@@ -1,4 +1,3 @@
-import 'package:events_app/Investor_App/view/home/investor_homePage..dart';
 import 'package:events_app/User_App/components/home/book_now_card.dart';
 import 'package:events_app/User_App/components/home/new_on_app_card.dart';
 import 'package:events_app/User_App/components/home/offers_card.dart';
@@ -7,11 +6,9 @@ import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart
 import 'package:events_app/User_App/controllers/home/recently_added_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/services_user_controller.dart';
-import 'package:events_app/User_App/model/resently_added_model.dart';
 import 'package:events_app/User_App/view/loanges&organizers/OrganizersPage.dart';
 import 'package:events_app/User_App/view/loanges&organizers/loanges_page.dart';
 import 'package:events_app/User_App/view/p-event/offer.dart';
-import 'package:events_app/User_App/view/p-event/public-event.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';

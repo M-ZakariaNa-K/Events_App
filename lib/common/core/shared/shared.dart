@@ -2,7 +2,7 @@ import 'package:events_app/User_App/model/resently_added_model.dart';
 import 'package:get_storage/get_storage.dart';
 
 // String token = '6|chFSeGAoVQgrSfQL0XE43LCOwXxc2AAYjW2TSkHf2b67f793';
-String token = '8|P0UrUtwdB0PID1PCjCR5gqQRwCigO4nIxQxduWvK2603a8c6';
+String token = '16|RKPMIrGSIyYZwfLIEOnvRAIw8BePL2XWUdwavmpP82da8c0b';
 const bool isUser = true;
 const bool isHallOwner = false;
 Map<String, dynamic> showStartDateMap = {

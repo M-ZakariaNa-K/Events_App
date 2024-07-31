@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart';
 
 class ThemesStyles {
   //Light Mode
@@ -26,7 +27,11 @@ class ThemesStyles {
   static FontWeight fontWeightBold = FontWeight.bold;
   static double mainFontSize = 18;
   static double littelFontSize = 14;
+  //transation
+  static Transition mainTransation = Transition.rightToLeft;
+  // static Transition mainTransation = Transition.fadeIn;
 }
+
 /*
 to make colors for dark and light modes
 Theme.of(context).brightness == Brightness.dark

@@ -278,7 +278,9 @@ class OrganizerDetailsPage extends StatelessWidget {
                             textColor: Colors.white,
                             title: "BOOK NOW",
                             onPressed: () async {
-                              Get.to(() => const BookNowPage());
+                              Get.to(() => const BookNowPage(
+                                    isOrganizer: true,
+                                  ));
                             },
                           );
                         })

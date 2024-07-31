@@ -78,8 +78,9 @@ class DioHelper {
       if (response.statusCode == 200) {
         return response.data;
       } else {
+        GET.Get.snackbar("Opps....", "${response.data["message"]}");
         throw Exception(
-            'There is a problem with status code ${response.statusCode}');
+            'There is a problem with status code ${response.statusCode} with body ${response.data}');
       }
     } catch (e) {
       if (e is DioException) {

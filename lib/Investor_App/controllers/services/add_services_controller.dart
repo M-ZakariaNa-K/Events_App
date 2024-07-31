@@ -182,6 +182,7 @@ class AddServiceController extends GetxController {
           // 'proporation': item1["proporation"],
           'id': "${matchingItem['id']}",
           'price': "${item1['price']}",
+          'discounted_price':"${item1["discounted_price"]}",
         });
       }
     }

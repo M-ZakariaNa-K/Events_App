@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:events_app/Investor_App/view/lounges/LoungesDetailsPage.dart';
 import 'package:events_app/User_App/controllers/home/recently_added_controller.dart';
 import 'package:events_app/User_App/model/resently_added_model.dart';
 import 'package:flutter/material.dart';
@@ -29,90 +30,95 @@ class NewOnAppCard extends StatelessWidget {
         // physics: const NeverScrollableScrollPhysics(),
         itemCount: recentlyAddedItems!.length,
         itemBuilder: (context, index) {
-          return Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(ThemesStyles.borderradiusprimary),
+          return GestureDetector(
+            onTap: (){
+              
+            },
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(ThemesStyles.borderradiusprimary),
+                      ),
+                      color: isOrganizer
+                          ? Theme.of(context).brightness == Brightness.dark
+                              ? const Color.fromARGB(255, 106, 155, 183)
+                              : ThemesStyles.blueColor
+                          : Theme.of(context).brightness == Brightness.dark
+                              ? const Color.fromARGB(255, 78, 149, 115)
+                              : ThemesStyles.greenColor,
                     ),
-                    color: isOrganizer
-                        ? Theme.of(context).brightness == Brightness.dark
-                            ? Color.fromARGB(255, 106, 155, 183)
-                            : ThemesStyles.blueColor
-                        : Theme.of(context).brightness == Brightness.dark
-                            ? const Color.fromARGB(255, 78, 149, 115)
-                            : ThemesStyles.greenColor,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                    ThemesStyles.borderradiusprimary),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Container(
+                              padding: const EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(
+                                      ThemesStyles.borderradiusprimary),
+                                ),
+                                border: Border.all(color: Colors.white, width: 1),
                               ),
-                              border: Border.all(color: Colors.white, width: 1),
-                            ),
-                            width: 80,
-                            height: 80,
-                            child: Image.asset(
-                              image,
-                              fit: BoxFit.cover,
+                              width: 80,
+                              height: 80,
+                              child: Image.asset(
+                                image,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        //THE content
-                        Text(
-                          recentlyAddedItems![index].name,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: ThemesStyles.fontWeightBold,
-                            fontSize: ThemesStyles.mainFontSize,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 180,
-                          child: Text(
-                            "Damascus-Mohajerenzzzzzzzzzzzzzzzzz",
+                          //THE content
+                          Text(
+                            recentlyAddedItems![index].name,
                             overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: ThemesStyles.fontWeightBold,
+                              fontSize: ThemesStyles.mainFontSize,
+                            ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            width: 180,
+                            child: Text(
+                              "Damascus-Mohajerenzzzzzzzzzzzzzzzzz",
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                top: -5,
-                left: 5,
-                child: Padding(
-                  padding: EdgeInsets.all(ThemesStyles.paddingprimary),
-                  child: Transform.rotate(
-                    angle: -0.5,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                          100), // Half of container width/height for perfect circle
-                      child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: Image.asset(
-                          "assets/images/new.png",
-                          fit: BoxFit.cover,
+                Positioned(
+                  top: -5,
+                  left: 5,
+                  child: Padding(
+                    padding: EdgeInsets.all(ThemesStyles.paddingprimary),
+                    child: Transform.rotate(
+                      angle: -0.5,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            100), // Half of container width/height for perfect circle
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset(
+                            "assets/images/new.png",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

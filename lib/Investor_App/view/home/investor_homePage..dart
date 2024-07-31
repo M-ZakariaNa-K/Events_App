@@ -1,11 +1,9 @@
-import 'package:events_app/Investor_App/controllers/lounges/lounge_details_controller.dart';
 import 'package:events_app/Investor_App/controllers/lounges/lounges_controller.dart';
 import 'package:events_app/Investor_App/controllers/services/edit_services_controller.dart';
 import 'package:events_app/Investor_App/controllers/services/services_controller.dart';
 import 'package:events_app/Investor_App/view/lounges/LoungesDetailsPage.dart';
 import 'package:events_app/Investor_App/view/lounges/addLoungesPage..dart';
 import 'package:events_app/Investor_App/view/organizer/addServicesPage.dart';
-import 'package:events_app/Investor_App/view/organizer/serviceDetailsPage.dart';
 import 'package:events_app/User_App/components/home/person_kind_card.dart';
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
@@ -35,6 +33,7 @@ class InvestorHomePage extends StatelessWidget {
   Future<void> _handleRefresh() async {
     final loungeController = Get.put(LoungesController());
     await Future.delayed(const Duration(seconds: 2));
+    loungeController.loungesItems.clear();
     return await loungeController.getloungesItems();
   }
 
@@ -539,13 +538,18 @@ class HallCards extends GetView<LoungesController> {
               child: Row(
                 children: [
                   SizedBox(
-                    width: width / 5,
-                    child: Image.network(
-                      "$photoBaseUrl${loungeController.loungesItems[index].photos[0]}",
-                      errorBuilder: (BuildContext context, Object exception,
-                          StackTrace? stackTrace) {
-                        return Image.asset("assets/images/hall.png");
-                      },
+                    width: 100,
+                    height: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        "$photoBaseUrl${loungeController.loungesItems[index].photos[0]}",
+                        fit: BoxFit.fill,
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                          return Image.asset("assets/images/hall.png");
+                        },
+                      ),
                     ),
                   ).marginSymmetric(horizontal: width * 0.03),
                   Column(
