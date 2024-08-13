@@ -40,10 +40,10 @@ class LoungeDetailsDataModel {
     bool isFavorite;
     int capacity;
     int dinner;
-    int dinnerPrice;
+    String dinnerPrice;
     int mixed;
     String address;
-    int mixedPrice;
+    String mixedPrice;
     List<ActiveTime> activeTimes;
     String arName;
     String enName;
@@ -130,6 +130,7 @@ class Service {
     String kind;
     String price;
     dynamic discountedPrice;
+    dynamic proportion;
 
     Service({
         required this.id,
@@ -137,6 +138,7 @@ class Service {
         required this.kind,
         required this.price,
         required this.discountedPrice,
+        required this.proportion,
     });
 
     factory Service.fromJson(Map<String, dynamic> json) => Service(
@@ -145,6 +147,7 @@ class Service {
         kind: json["kind"],
         price: json["price"],
         discountedPrice: json["discounted_price"],
+        proportion: json["proportion"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -153,5 +156,6 @@ class Service {
         "kind": kind,
         "price": price,
         "discounted_price": discountedPrice,
+        "proportion": proportion,
     };
 }

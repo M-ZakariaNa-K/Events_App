@@ -39,7 +39,7 @@ class BookNowController extends GetxController {
   var addedCategorriesMap = <String, Map<String, String>>{}.obs;
   var selectedCategoryCardIndex = -1.obs;
   var existedCategoriesList = <GetPublicEventsCategoryBookNowDataModel>[].obs;
-
+  var selectedServiceType = ''.obs;
   //========for the Public event booking image=================
   var publicEventBookedIdToUploadTheImage = 0.obs;
 
@@ -173,47 +173,51 @@ class BookNowController extends GetxController {
             "payment_type":
                 paymentController.selectedValue.value == 0 ? "cash" : "electro"
           },
-          "public_info": {
-            "category": {
-              "added": addedCategorriesMap,
-              //0 for if i add an added category
-              //-1 for validation which mean i didnt choose any category
-              "existed": selectedChoosenCategoryId.value == -1 ||
-                      selectedChoosenCategoryId.value == 0
-                  ? {}
-                  : {"id": selectedChoosenCategoryId.value}
-            },
-            "info": {
-              "description": descraptionController.text,
-              "name": nameController.text,
-              "address": addresaController.text,
-              "ticket_price": ticketPriceController.text
-            }
-          }
+          "public_info": selectedServiceType.value == "public"
+              ? {
+                  "category": {
+                    "added": addedCategorriesMap,
+                    //0 for if i add an added category
+                    //-1 for validation which mean i didnt choose any category
+                    "existed": selectedChoosenCategoryId.value == -1 ||
+                            selectedChoosenCategoryId.value == 0
+                        ? {}
+                        : {"id": selectedChoosenCategoryId.value}
+                  },
+                  "info": {
+                    "description": descraptionController.text,
+                    "name": nameController.text,
+                    "address": addresaController.text,
+                    "ticket_price": ticketPriceController.text
+                  }
+                }
+              : {}
         });
-    // try {
-    if (response["code"] == 200) {
-      publicEventBookedIdToUploadTheImage.value = response["data"]["id"];
-      // Get.snackbar("Great🎉", "Your book in cook...");
-      //to return it to initial value
-      selectedChoosenCategoryId.value = -1;
-      existedCategoriesList.clear();
-      ticketPriceController.clear();
-      addedCategorriesMap.value = {};
-      nameController.clear();
-      descraptionController.clear();
-      addresaController.clear();
-      audincesNumber.clear();
-      addedArabicnameController.clear();
-      addedEnglishnameController.clear();
-      final addLoungeController = AddLoungesController();
-      addLoungeController.selectedImagePaths.value = [];
-      addLoungeController.selectedImageSize.value = '';
-      addLoungeController.selectedImagePath.value = '';
+    try {
+      print(response);
+      if (response["code"] == 200) {
+        publicEventBookedIdToUploadTheImage.value = response["data"];
+        // Get.snackbar("Great🎉", "Your book in cook...");
+        //to return it to initial value
+        selectedChoosenCategoryId.value = -1;
+        existedCategoriesList.clear();
+        ticketPriceController.clear();
+        addedCategorriesMap.value = {};
+        nameController.clear();
+        descraptionController.clear();
+        addresaController.clear();
+        audincesNumber.clear();
+        addedArabicnameController.clear();
+        addedEnglishnameController.clear();
+        final addLoungeController = AddLoungesController();
+        addLoungeController.selectedImagePaths.value = [];
+        addLoungeController.selectedImageSize.value = '';
+        addLoungeController.selectedImagePath.value = '';
+        
+      }
+    } catch (e) {
+      Get.snackbar("Erorr", "one of the fild is wrong");
     }
-    // } catch (e) {
-    //   Get.snackbar("Erorr", "there is an error while booking");
-    // }
   }
 
   //=================Public EVENTS=============================

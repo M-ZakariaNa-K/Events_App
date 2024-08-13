@@ -3,6 +3,8 @@ import 'package:events_app/common/helper/api.dart';
 import 'package:get/get.dart';
 
 class EditServicesController extends GetxController{
+    var addedList = <Map<String, dynamic>>[].obs;
+
     Future<void> postEditedServiceDetailsItems(
       {required Map<String, dynamic> body}) async {
     try {

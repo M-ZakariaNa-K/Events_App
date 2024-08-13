@@ -6,6 +6,7 @@ import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart
 import 'package:events_app/User_App/controllers/home/recently_added_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/services_user_controller.dart';
+import 'package:events_app/User_App/controllers/publicEvent/public_eevent_controller.dart';
 import 'package:events_app/User_App/view/loanges&organizers/OrganizersPage.dart';
 import 'package:events_app/User_App/view/loanges&organizers/loanges_page.dart';
 import 'package:events_app/User_App/view/p-event/offer.dart';
@@ -117,6 +118,17 @@ class _HomePageState extends State<HomePage> {
                 GestureDetector(
                   onTap: () {
                     Get.find<DrawerPageController>().changeTabIndex(3);
+                    final publicEventsController =
+                        Get.put(PublicEventController());
+
+                    publicEventsController.existedCategoriesList.clear();
+                    publicEventsController.publicEventsItems.clear();
+                    publicEventsController.publicEventsItemsDependOnDate
+                        .clear();
+
+                    publicEventsController.getCategoriesList();
+                    publicEventsController.getPublicEventsItems(category_id: 0);
+                    publicEventsController.getPublicEventsItems(category_id: 1);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),

@@ -22,6 +22,7 @@ class AddLoungesController extends GetxController {
   var kind = ''.obs;
   var allDataToAPI = <String, dynamic>{}.obs;
   var firstRequisResponsData = 0.obs;
+  var addedList = <Map<String, dynamic>>[].obs;
 
   //========for the gridView=================
   var serviceList = <Map<String, dynamic>>[].obs;
@@ -54,6 +55,8 @@ class AddLoungesController extends GetxController {
       selectedImageSize.value =
           "${((File(selectedImagePath.value)).lengthSync() / 1024 / 1024).toStringAsFixed(2)}Mb";
       selectedImagePaths.add(pickedFile.path);
+      print('selectedImagePaths: ${selectedImagePaths}');
+      sharedSelectedPublicEventImagePaths = selectedImagePaths;
     } else {
       Get.snackbar("Error", 'message', snackPosition: SnackPosition.BOTTOM);
     }
@@ -104,6 +107,17 @@ class AddLoungesController extends GetxController {
     }
   }
 
+  void updateKindBasedOnSelection(String selectedService) {
+    var selectedItem = dropdownItemsAllData.firstWhere(
+      (item) => item['name'] == selectedService,
+      orElse: () => {},
+    );
+
+    if (selectedItem != null) {
+      kind.value = selectedItem['kind'] ?? '';
+    }
+  }
+
   //============================upload THE WHOLE REQUEST to the api============================
   Future<void> postLoungeData() async {
     try {
@@ -149,33 +163,38 @@ class AddLoungesController extends GetxController {
       // Get.snackbar("Error", "Error submitting data");
     }
   }
+
   //============================================================================
- Future<void> submitImagesForPublicEventBooking({required int id}) async {
+  Future<void> submitImagesForPublicEventBooking({required int id}) async {
     try {
+//NOTE(from ZAKARIA): I use a SARED VARAIBLE becuse when i make the first request the book controller termenated 
+//and rebuild it's self => so the selectedImagesaPaths become empty when i book
+// so i saved is value in shared var
       List<dio.MultipartFile> imageFiles = [];
-      for (String imagePath in selectedImagePaths) {
+      for (String imagePath in sharedSelectedPublicEventImagePaths) {
         File imageFile = File(imagePath);
         String fileName = imageFile.path.split('/').last;
+        print('imageFile: ${imageFile}');
 
         imageFiles.add(
             await dio.MultipartFile.fromFile(imagePath, filename: fileName));
       }
+      print('imageFiles: ${imageFiles}');
       dio.FormData formData = dio.FormData.fromMap({
-        "photos": imageFiles,
-        "id":id,
+        "photo": imageFiles,
+        "id": id,
       });
 
       Map<String, dynamic> response1 = await DioHelper.post(
         url: "$baseUrl/reservations/add-photo",
         body: formData,
       );
-
-    
     } catch (e) {
       print('Error submitting data: $e');
       // Get.snackbar("Error", "Error submitting data");
     }
   }
+
   // Function to find the IDs and create the "existed" list
   List<Map<String, dynamic>> createExistedList(
       List<Map<String, dynamic>> list1, List<Map<String, dynamic>> list2) {

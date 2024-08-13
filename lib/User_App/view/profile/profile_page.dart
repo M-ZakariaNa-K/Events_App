@@ -4,7 +4,9 @@ import 'package:events_app/User_App/components/profile/hidden_budget_data_widget
 import 'package:events_app/User_App/components/profile/hidden_edit_profile_data_widget.dart';
 import 'package:events_app/User_App/components/profile/hidder_reset_password_data_widget.dart';
 import 'package:events_app/User_App/components/profile/profile_button_widget.dart';
+import 'package:events_app/User_App/controllers/profile/profile_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,8 +25,6 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
   TextEditingController oldPasswordController = TextEditingController();
-  Uint8List? _image;
-  // String? _imagePath;
 
   @override
   void initState() {
@@ -32,45 +32,9 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
-  // Future<void> _loadImage() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? imagePath = prefs.getString('profile_image');
-  //   if (imagePath != null) {
-  //     setState(() {
-  //       _imagePath = imagePath;
-  //       _image = File(imagePath).readAsBytesSync();
-  //     });
-  //   }
-  // }
-
-  // Future<void> _saveImage(Uint8List imageBytes) async {
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   final imagePath = '${directory.path}/profile_image.png';
-  //   final imageFile = File(imagePath);
-  //   await imageFile.writeAsBytes(imageBytes);
-
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString('profile_image', imagePath);
-
-  //   setState(() {
-  //     _imagePath = imagePath;
-  //     _image = imageBytes;
-  //   });
-  // }
-
-  void selectImage() async {
-    Uint8List? img = await pickImage(ImageSource.gallery);
-    if(mounted){
-
-    setState(() {
-      _image = img;
-      // _saveImage(_image!);
-    });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final profileController = Get.put(ProfileController());
     return Scaffold(
       appBar: widget.isComeFromSettings
           ? AppBar(
@@ -135,62 +99,144 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Stack(
-                    children: [
-                      _image != null
-                          ? CircleAvatar(
-                              radius: 64,
-                              backgroundImage: MemoryImage(_image!),
-                            )
-                          : const CircleAvatar(
-                              radius: 64,
-                              backgroundImage: AssetImage(
-                                "assets/images/Profile.png",
-                              ),
-                            ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          width: 35,
-                          height: 35,
-                          decoration: BoxDecoration(
-                              color: ThemesStyles.seconndTextColor,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: ThemesStyles.secondary,
-                                  spreadRadius: 1,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 0),
+                  Obx(
+                    () => Stack(
+                      children: [
+                        profileController.profileItems[0].photo != null ||
+                                profileController.profileItems[0].photo != ""
+                            ? CircleAvatar(
+                                radius: 64,
+                                backgroundImage: NetworkImage(
+                                    "$photoBaseUrl${profileController.profileItems[0].photo}"),
+                              )
+                            : const CircleAvatar(
+                                radius: 64,
+                                backgroundImage: AssetImage(
+                                  "assets/images/Profile.png",
                                 ),
-                              ]),
-                          child: IconButton(
-                            // onPressed: () async {
-                            //   Map<Permission, PermissionStatus> statuses =
-                            //       await [
-                            //     Permission.storage,
-                            //     Permission.camera,
-                            //   ].request();
+                              ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            width: 35,
+                            height: 35,
+                            decoration: BoxDecoration(
+                                color: ThemesStyles.seconndTextColor,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: ThemesStyles.secondary,
+                                    spreadRadius: 1,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ]),
+                            child: IconButton(
+                              onPressed: () async {
+                                await profileController
+                                    .getImage(ImageSource.gallery);
+                                // After selecting the image, you can call submitImage to upload it
+                                await profileController.submitImage();
+                              },
+                              //===================================
 
-                            //   if (statuses[Permission.storage]!.isGranted &&
-                            //       statuses[Permission.camera]!.isGranted) {
-                            //     showImagePicker(context);
-                            //   } else {
-                            //     print('no permission provided');
-                            //   }
-                            // },
-                            onPressed: selectImage,
-
-                            icon: const Icon(
-                              Icons.camera_alt_outlined,
-                              size: 20,
-                              color: ThemesStyles.primary,
+                              icon: const Icon(
+                                Icons.camera_alt_outlined,
+                                size: 20,
+                                color: ThemesStyles.primary,
+                              ),
                             ),
                           ),
                         ),
-                      )
-                    ],
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          child: Container(
+                            width: 35,
+                            height: 35,
+                            decoration: BoxDecoration(
+                                color: ThemesStyles.seconndTextColor,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: ThemesStyles.secondary,
+                                    spreadRadius: 1,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ]),
+                            child: IconButton(
+                              onPressed: () async {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(20.0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const SizedBox(height: 20),
+                                            const Icon(
+                                              Icons.error_outline,
+                                              color: ThemesStyles.primary,
+                                              size: 50,
+                                            ),
+                                            const SizedBox(height: 20),
+                                            Text(
+                                              "Are you sure about deletation?",
+                                              style: TextStyle(
+                                                fontSize:
+                                                    ThemesStyles.mainFontSize,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 20),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                const SizedBox(width: 10),
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    profileController.removeImage(
+                                                        profileController
+                                                            .selectedImagePaths[0]);
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('Submit'),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              //===================================
+
+                              icon: const Icon(
+                                Icons.delete,
+                                size: 20,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                   const Text(
                     "Zakaria Na",

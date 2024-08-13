@@ -1,13 +1,15 @@
+import 'package:events_app/User_App/controllers/search/search_cntroller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SearchBarWidget extends StatelessWidget {
   SearchBarWidget({super.key});
 
-  final TextEditingController _searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    final searchController = Get.put(SearchUserController());
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Container(
@@ -20,7 +22,26 @@ class SearchBarWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextField(
-          controller: _searchController,
+          onChanged: (value) async {
+            if (sharedSelectedSearchIdentifier == 0) {
+              searchController.searchItems.clear();
+              
+              await searchController.getSearchItems(
+                  identifier: "name", value: value);
+            } else if (sharedSelectedSearchIdentifier == 1) {
+              searchController.searchItems.clear();
+              await searchController.getSearchItems(
+                  identifier: "address", value: value);
+            } else {
+              searchController.searchItems.clear();
+              await searchController.getSearchItems(
+                  identifier: "capacity", value: value);
+            }
+            if (value == "") {
+              searchController.searchItems.clear();
+            }
+          },
+          controller: searchController.searchControllerTextFild,
           decoration: InputDecoration(
               hintText: 'Search for what you want...',
               hintStyle: const TextStyle(

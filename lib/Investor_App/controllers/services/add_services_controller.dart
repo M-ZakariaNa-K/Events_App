@@ -22,6 +22,10 @@ class AddServiceController extends GetxController {
   var allDataToAPISecondTime = <String, dynamic>{}.obs;
   var firstRequisResponsData = 0.obs;
   var isTextFildEditing = true.obs;
+    var addedList = <Map<String, dynamic>>[].obs;
+
+    var kind = ''.obs;
+
 
   //========for the gridView=================
   var serviceList = <Map<String, dynamic>>[].obs;
@@ -53,7 +57,16 @@ class AddServiceController extends GetxController {
           snackPosition: SnackPosition.BOTTOM);
     }
   }
+ void updateKindBasedOnSelection(String selectedService) {
+    var selectedItem = dropdownItemsAllData.firstWhere(
+      (item) => item['name'] == selectedService,
+      orElse: () => {},
+    );
 
+    if (selectedItem != null) {
+      kind.value = selectedItem['kind'] ?? '';
+    }
+  }
   void removeImage(String imagePath) {
     selectedImagePaths.remove(imagePath);
   }

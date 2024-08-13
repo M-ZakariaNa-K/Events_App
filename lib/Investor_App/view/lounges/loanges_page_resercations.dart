@@ -35,33 +35,31 @@ class LoungesReservationsInvestorPage extends StatelessWidget {
               if (loungesController.loungesItems.isEmpty) {
                 return Column(
                   children: [
-                    const InvestorReservationsAsUserWidget(),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.sizeOf(context).height * 0.2),
-                      child: Center(
-                        child: Opacity(
-                          opacity: 0.4,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Image(
-                                image: AssetImage(
-                                    'assets/images/searchNotFoundImage.png'),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 0.0),
-                                child: Text(
-                                  'There are no lounges to show',
-                                  style: TextStyle(
-                                    fontSize: ThemesStyles.mainFontSize,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                    const InvestorReservationsAsUserWidget(
+                      isTicketsCard: false,
+                    ),
+                    Center(
+                      child: Opacity(
+                        opacity: 0.4,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Image(
+                              image: AssetImage(
+                                  'assets/images/searchNotFoundImage.png'),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 0.0),
+                              child: Text(
+                                'There are no lounges to show',
+                                style: TextStyle(
+                                  fontSize: ThemesStyles.mainFontSize,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -71,7 +69,9 @@ class LoungesReservationsInvestorPage extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const InvestorReservationsAsUserWidget(),
+                    const InvestorReservationsAsUserWidget(
+                      isTicketsCard: false,
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 0.0, horizontal: 10),

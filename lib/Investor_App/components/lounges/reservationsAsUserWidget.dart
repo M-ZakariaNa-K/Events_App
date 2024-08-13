@@ -10,7 +10,9 @@ import 'package:get/get.dart';
 class InvestorReservationsAsUserWidget extends StatelessWidget {
   const InvestorReservationsAsUserWidget({
     super.key,
+    required this.isTicketsCard,
   });
+  final bool isTicketsCard;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -38,9 +40,16 @@ class InvestorReservationsAsUserWidget extends StatelessWidget {
                           child: Stack(
                             children: [
                               Opacity(
-                                opacity: 0.5,
+                                opacity: isTicketsCard
+                                    ? Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? .5
+                                        : 1
+                                    : 0.5,
                                 child: Image.asset(
-                                  'assets/images/OffersCardBackgroundGraident.jpeg',
+                                  isTicketsCard
+                                      ? 'assets/images/background.jpg'
+                                      : 'assets/images/OffersCardBackgroundGraident.jpeg',
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                   height: 200,
@@ -65,7 +74,7 @@ class InvestorReservationsAsUserWidget extends StatelessWidget {
                                     child: SizedBox(
                                       width: 150,
                                       height: 150,
-                                      child: isUser
+                                      child: isTicketsCard
                                           ? const Icon(
                                               Icons.card_membership_sharp,
                                               size: 100,
@@ -95,7 +104,7 @@ class InvestorReservationsAsUserWidget extends StatelessWidget {
                                   child: SizedBox(
                                     width: 170,
                                     child: Text(
-                                      isUser
+                                      isTicketsCard
                                           ? "Tickits: If you want to see your public event tickets cleck on:"
                                           : 'Investor as user: If you want to see your reservations as user cleck on:',
                                       style: TextStyle(
@@ -118,7 +127,7 @@ class InvestorReservationsAsUserWidget extends StatelessWidget {
                                   // - _animation!.value,
                                   ,
                                   child: MaterialButton(
-                                    onPressed: !isUser
+                                    onPressed: !isTicketsCard
                                         ? () {
                                             final reservationController =
                                                 Get.put(
@@ -153,11 +162,11 @@ class InvestorReservationsAsUserWidget extends StatelessWidget {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    child: const Text(
-                                      isUser
+                                    child: Text(
+                                      isTicketsCard
                                           ? "see tickets"
                                           : 'see reservations',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white,
                                       ),
                                     ),

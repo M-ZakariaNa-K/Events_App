@@ -1,5 +1,6 @@
 import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/services_user_controller.dart';
+import 'package:events_app/User_App/controllers/search/search_cntroller.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/helper/api.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _SearchTapsWidgetState extends State<SearchTapsWidget> {
   bool showPriceTaps = false;
 
   final List<String> items = ["✅ All", "💶 Rate", "🧮 Price"];
-  final List<String> searchItems = ["✅ All", "💶 Place", "🧮 Audinces"];
+  final List<String> searchItems = ["✅ Name", "💶 Address", "🧮 Capacity"];
 
   @override
   void initState() {
@@ -59,13 +60,20 @@ class _SearchTapsWidgetState extends State<SearchTapsWidget> {
                   bool isSelected = selectedCardIndex == currentIndex;
                   return GestureDetector(
                     onTap: () async {
+                      final searchController = Get.put(SearchUserController());
                       setState(() {
                         selectedCardIndex = currentIndex;
+                        sharedSelectedSearchIdentifier = selectedCardIndex!;
+                        print(
+                            'sharedSelectedSearchIdentifier: ${sharedSelectedSearchIdentifier}');
                       });
 
                       if (selectedCardIndex == 0) {
                         if (isUser) {
                           // Here make the request of search For USER
+                          // searchController.searchItems.clear();
+                          // await searchController.getSearchItems(
+                          //     identifier: "name", value: "");
                         } else {
                           if (isHallOwner) {
                             // Here make the request of search For HallOwner
@@ -143,7 +151,7 @@ class _SearchTapsWidgetState extends State<SearchTapsWidget> {
                         });
                         if (widget.isSearch) {
                           // Here make the request of search
-                        } else {
+
                           if (widget.isComeFromOrganizerPage) {
                             // Handle organizer-specific logic
                             final organizerController =

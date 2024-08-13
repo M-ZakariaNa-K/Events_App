@@ -297,61 +297,65 @@ class AddServicesPage extends GetView<AddServiceController> {
                 width: width,
                 height: height / 4,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: ThemesStyles.secondary)),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: ThemesStyles.secondary),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                            width: width,
-                            height: 50,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration:
-                                BoxDecoration(
-                                    border: Border.all(
-                                        color: ThemesStyles.secondary),
-                                    borderRadius: BorderRadius.circular(20)),
-                            child: Obx(
-                              () => DropdownButton<String>(
-                                value: addServiceController
-                                        .dropdownValue.value.isNotEmpty
-                                    ? addServiceController.dropdownValue.value
-                                    : null,
-                                icon: const Icon(
-                                  Icons.arrow_downward,
-                                  color: ThemesStyles.secondary,
-                                ).marginOnly(left: width * 0.62),
-                                iconSize: 24,
-                                elevation: 16,
-                                style: const TextStyle(
-                                    color: ThemesStyles.secondary),
-                                onChanged: (value) {
-                                  addServiceController.dropdownValue.value =
-                                      value!;
-                                },
-                                items: addServiceController.dropdownItems
-                                    .map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ))
-                        .marginSymmetric(
-                            horizontal: width * 0.02, vertical: height * 0.01),
+                    Obx(() {
+                      return Container(
+                        width: width,
+                        height: 50,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: ThemesStyles.secondary),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: DropdownButton<String>(
+                          value: addServiceController
+                                  .dropdownValue.value.isNotEmpty
+                              ? addServiceController.dropdownValue.value
+                              : null,
+                          icon: const Icon(
+                            Icons.arrow_downward,
+                            color: ThemesStyles.secondary,
+                          ),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(color: ThemesStyles.primary),
+                          onChanged: (value) {
+                            if (value != null) {
+                              addServiceController.dropdownValue.value = value;
+                              addServiceController
+                                  .updateKindBasedOnSelection(value);
+                            }
+                          },
+                          items: addServiceController.dropdownItems
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ).marginSymmetric(
+                        horizontal: width * 0.02,
+                        vertical: height * 0.01,
+                      );
+                    }),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
                           width: width / 2.5,
                           child: DefaultFormFeild(
+                            textInputType: TextInputType.number,
                             autoFoucs: false,
                             hintText: "Price",
                             validator: (String? value) {
-                              if (value == '') {
-                                return "this field is required";
+                              if (value == null || value.isEmpty) {
+                                return "This field is required";
                               }
                               return null;
                             },
@@ -359,10 +363,9 @@ class AddServicesPage extends GetView<AddServiceController> {
                             obscureText: false,
                           ),
                         ),
-                        Container(
-                          width: width / 2.5,
-                          child: Container(
-                            height: 50,
+                        Obx(() {
+                          return Container(
+                            width: width / 2.5,
                             child: TextFormField(
                               controller: servicesProporationController,
                               enableSuggestions: false,
@@ -370,25 +373,16 @@ class AddServicesPage extends GetView<AddServiceController> {
                               obscureText: false,
                               textInputAction: TextInputAction.next,
                               cursorColor: ThemesStyles.primary,
-                              // enabled: addServiceController
-                              //         .dropdownValue.value ==
-                              //     "Birhtday", // Adjust the condition as per your logic
-                              // validator: (String? value) {
-                              //   if (addServiceController
-                              //               .dropdownValue.value ==
-                              //           "Birhtday" &&
-                              //       (value == null || value.isEmpty)) {
-                              //     return "This field is required";
-                              //   }
-                              //   return null;
-                              // },
+                              enabled:
+                                  addServiceController.kind.value == 'public',
                               autofocus: false,
                               decoration: InputDecoration(
                                 hintText: "Proportion",
                                 hintStyle: TextStyle(
-                                    color: ThemesStyles.textColor.withAlpha(80),
-                                    fontSize: ThemesStyles.mainFontSize - 2),
-                                floatingLabelStyle: const TextStyle(
+                                  color: ThemesStyles.textColor.withAlpha(80),
+                                  fontSize: ThemesStyles.mainFontSize - 2,
+                                ),
+                                floatingLabelStyle: TextStyle(
                                   color: ThemesStyles.primary,
                                 ),
                                 enabledBorder: OutlineInputBorder(
@@ -398,24 +392,27 @@ class AddServicesPage extends GetView<AddServiceController> {
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(
-                                      color: ThemesStyles.primary,
-                                    )),
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: ThemesStyles.primary,
+                                  ),
+                                ),
                                 errorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(
-                                      color: Colors.red,
-                                    )),
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                ),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(
-                                      color: ThemesStyles.primary,
-                                    )),
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: ThemesStyles.primary,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
+                          );
+                        }),
                       ],
                     ),
                     Row(
@@ -441,7 +438,6 @@ class AddServicesPage extends GetView<AddServiceController> {
                                 servicesPriceController.clear();
                                 addServiceController.dropdownValue.value = '';
                               }
-
                               print(addServiceController.serviceList);
                             },
                           ),
@@ -454,16 +450,17 @@ class AddServicesPage extends GetView<AddServiceController> {
                               child: Text(
                                 "Request a service",
                                 style: TextStyle(
-                                    color: ThemesStyles.primary,
-                                    fontSize: ThemesStyles.littelFontSize,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: ThemesStyles.primary),
+                                  color: ThemesStyles.primary,
+                                  fontSize: ThemesStyles.littelFontSize,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: ThemesStyles.primary,
+                                ),
                               ),
                               onTap: () {
                                 Get.to(() => RequestServicePage(
                                       isEditPage: false,
-                                      isOrganizer: true,
+                                      isOrganizer: false,
                                     ));
                               },
                             ),
@@ -473,9 +470,9 @@ class AddServicesPage extends GetView<AddServiceController> {
                     ).marginOnly(top: height * 0.01)
                   ],
                 ).marginOnly(top: height * 0.01),
-              ).marginSymmetric(
-                  horizontal: width * 0.03, vertical: height * 0.03),
+              ).marginSymmetric(horizontal: width * 0.02, vertical: 10),
             ),
+            Text("Exicted Services:"),
             Obx(
               () => GridView.builder(
                 shrinkWrap: true,
@@ -599,6 +596,135 @@ class AddServicesPage extends GetView<AddServiceController> {
                 },
               ).marginSymmetric(horizontal: width * 0.03),
             ),
+            Text("Added Services:"),
+            Obx(
+              () => GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: addServiceController.addedList.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Number of columns
+                  crossAxisSpacing: 2.0, // Space between columns
+                  mainAxisSpacing: 10.0, // Space between rows
+                  childAspectRatio: 3 /
+                      3, // Adjust this value to change the aspect ratio of the grid items
+                ),
+                itemBuilder: (context, index) {
+                  final addeedItem = addServiceController.addedList[index];
+
+                  print(
+                      ' addeedItem["name"]["en"]: ${addServiceController.addedList[index]["name"]["en"]}');
+                  return GestureDetector(
+                    child: Container(
+                      width: width / 2,
+                      height: height / 5,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade400,
+                            blurRadius: 15,
+                            offset: Offset(5, 5),
+                          )
+                        ],
+                        border:
+                            Border.all(color: ThemesStyles.secondary, width: 2),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Services :",
+                                style: TextStyle(
+                                  color: ThemesStyles.textColor,
+                                  fontSize: ThemesStyles.littelFontSize,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                addeedItem["name"]["en"],
+                                style: TextStyle(
+                                  color: ThemesStyles.textColor,
+                                  fontSize: ThemesStyles.littelFontSize,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          ).marginSymmetric(horizontal: width * 0.01),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Proportion : ",
+                                style: TextStyle(
+                                  color: ThemesStyles.textColor,
+                                  fontSize: ThemesStyles.littelFontSize,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                addeedItem["proporation"] ?? "0",
+                                style: TextStyle(
+                                  color: ThemesStyles.textColor,
+                                  fontSize: ThemesStyles.littelFontSize,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Price : ",
+                                style: TextStyle(
+                                  color: ThemesStyles.textColor,
+                                  fontSize: ThemesStyles.littelFontSize,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                addeedItem["price"] ?? "",
+                                style: TextStyle(
+                                  color: ThemesStyles.textColor,
+                                  fontSize: ThemesStyles.littelFontSize,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          ).marginSymmetric(horizontal: width * 0.05),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: SizedBox(
+                              width: 100,
+                              child: DefultButton(
+                                buttonColor: ThemesStyles.background,
+                                borderColor: ThemesStyles.secondary,
+                                textColor: Colors.red,
+                                title: "Delete",
+                                onPressed: () {
+                                  addServiceController.addedList
+                                      .remove(addeedItem);
+                                  // addLoungeController.serviceList
+                                  //     .remove(controller
+                                  //         .serviceList[index]);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ).marginSymmetric(
+                        horizontal: width * 0.02, vertical: height * 0.01),
+                  );
+                },
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0, top: 10),
               child: Center(
@@ -628,13 +754,7 @@ class AddServicesPage extends GetView<AddServiceController> {
                               addServiceController.dropdownItemsAllData);
                       addServiceController.allDataToAPI["services"] = {
                         "existed": existed,
-                        "added": [
-                          // {
-                          //   "name": {"ar": "عرس", "en": "Wedding"},
-                          //   "kind": "private",
-                          //   "price": "100"
-                          // }
-                        ],
+                        "added": addServiceController.addedList,
                       };
                       addServiceController
                               .allDataToAPI["organizer_start_time"] =

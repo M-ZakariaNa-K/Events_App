@@ -3,6 +3,7 @@ import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/helper/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as GET;
+import 'package:get/get_core/src/get_main.dart';
 
 var _dio = Dio();
 
@@ -171,7 +172,6 @@ class DioHelper {
       }
     } catch (e) {
       print(e);
-      throw Exception('Failed to delete order');
     }
   }
 
@@ -210,7 +210,7 @@ class DioHelper {
   static Future<Response> putData(
       {required String baseURL,
       Map<String, dynamic>? query,
-      required Map<String, dynamic> data,
+      Map<String, dynamic>? data,
       String lang = "en",
       String? token}) async {
     _dio.options.headers = {
@@ -218,7 +218,33 @@ class DioHelper {
       // 'lang': lang,
       'Authorization': token ?? ''
     };
-    return _dio.put(baseURL, queryParameters: query, data: data);
+    return _dio.put(baseURL);
+  }
+
+  static submitRating(String reservationId, String rating) async {
+    final Dio dio = Dio();
+
+    final String url = "$baseUrl/assets/rate?id=$reservationId&rate=$rating";
+
+    try {
+      final response = await dio.put(
+        url,
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        Get.snackbar("Congrats", "Rating submitted successfully.");
+      } else {
+        print("Failed to submit rating: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error submitting rating: $e");
+    }
   }
 
   // Future<Response> deletData(

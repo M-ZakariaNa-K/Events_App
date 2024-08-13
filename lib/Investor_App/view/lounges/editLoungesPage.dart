@@ -89,7 +89,8 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
     hallNameENController.text = widget.loungeDetailsItems.enName;
     capcityController.text = widget.loungeDetailsItems.capacity.toString();
     addressController.text = widget.loungeDetailsItems.address;
-    _mixedController.selectedValue.value = widget.loungeDetailsItems.mixedPrice;
+    _mixedController.selectedValue.value =
+        int.parse(widget.loungeDetailsItems.mixedPrice);
     _dinnerController.selectedValue.value = widget.loungeDetailsItems.dinner;
     dinnerPriceController.text =
         widget.loungeDetailsItems.dinnerPrice.toString();
@@ -518,7 +519,7 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Container(
-                                        width: width / 2.3,
+                                        width: width / 2.5,
                                         child: Obx(() {
                                           return workHourController['isEditing']
                                                   .value
@@ -606,40 +607,9 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                                 );
                                         }),
                                       ),
-                                      // Container(
-                                      //   width: width / 2.3,
-                                      //   child: TextField(
-                                      //     controller:
-                                      //         workHourController['start'],
-                                      //     onSubmitted: (value) {
-                                      //       workHourController['isEditing']
-                                      //               .value =
-                                      //           workHourController['start']
-                                      //               .text
-                                      //               .isNotEmpty;
-                                      //     },
-                                      //     decoration: const InputDecoration(
-                                      //       hintText: 'Start',
-                                      //       enabledBorder: OutlineInputBorder(
-                                      //         borderSide: BorderSide(
-                                      //           color: Color(0xff979797),
-                                      //         ),
-                                      //       ),
-                                      //       focusedBorder: OutlineInputBorder(
-                                      //         borderSide: BorderSide(
-                                      //           color: Colors.red,
-                                      //         ),
-                                      //       ),
-                                      //       contentPadding:
-                                      //           EdgeInsets.symmetric(
-                                      //         vertical: 5.0,
-                                      //         horizontal: 10.0,
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
+
                                       Container(
-                                        width: width / 2.3,
+                                        width: width / 2.5,
                                         child: Obx(() {
                                           return workHourController['isEditing']
                                                   .value
@@ -724,6 +694,29 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                                   ),
                                                 );
                                         }),
+                                      ),
+                                      //=============================
+                                      //to delete the work hour
+                                      IconButton(
+                                        onPressed: () async {
+                                          try {
+                                            print("zaza");
+                                            print(editLoungeController
+                                                .loungeDetailsItems[0]
+                                                .activeTimes[i]
+                                                .id);
+                                            await DioHelper.delete(
+                                                url:
+                                                    "$baseUrl/assets/delete-time?id=${editLoungeController.loungeDetailsItems[0].activeTimes[i].id}");
+                                          } catch (e) {
+                                            Get.snackbar("OPPS...",
+                                                "Faild to delete this activate time");
+                                          }
+                                        },
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -1194,75 +1187,103 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
 
                           return Stack(
                             children: [
-                              Obx(
-                                () => Container(
-                                  width: width / 2,
-                                  height: height / 5,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.shade400,
-                                        blurRadius: 15,
-                                        offset: Offset(5, 5),
-                                      )
-                                    ],
-                                    border: Border.all(
-                                        color: ThemesStyles.secondary,
-                                        width: 2),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Services :",
-                                            style: TextStyle(
-                                              color: ThemesStyles.textColor,
-                                              fontSize:
-                                                  ThemesStyles.littelFontSize,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                              // Obx(
+                              // () =>
+                              Container(
+                                width: width / 2,
+                                height: height / 5,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.shade400,
+                                      blurRadius: 15,
+                                      offset: Offset(5, 5),
+                                    )
+                                  ],
+                                  border: Border.all(
+                                      color: ThemesStyles.secondary, width: 2),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Services :",
+                                          style: TextStyle(
+                                            color: ThemesStyles.textColor,
+                                            fontSize:
+                                                ThemesStyles.littelFontSize,
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            service.name,
-                                            style: TextStyle(
-                                              color: ThemesStyles.textColor,
-                                              fontSize:
-                                                  ThemesStyles.littelFontSize,
-                                              fontWeight: FontWeight.normal,
-                                            ),
+                                        ),
+                                        Text(
+                                          service.name,
+                                          style: TextStyle(
+                                            color: ThemesStyles.textColor,
+                                            fontSize:
+                                                ThemesStyles.littelFontSize,
+                                            fontWeight: FontWeight.normal,
                                           ),
-                                        ],
-                                      ).marginSymmetric(
-                                          horizontal: width * 0.01),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Proportion : ",
-                                            style: TextStyle(
-                                              color: ThemesStyles.textColor,
-                                              fontSize:
-                                                  ThemesStyles.littelFontSize,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                        ),
+                                      ],
+                                    ).marginSymmetric(horizontal: width * 0.01),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Proportion : ",
+                                          style: TextStyle(
+                                            color: ThemesStyles.textColor,
+                                            fontSize:
+                                                ThemesStyles.littelFontSize,
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
+                                        ),
+                                        Text(
+                                          "zzzzzzz",
+                                          // editLoungeController
+                                          //         .editedList.isNotEmpty
+                                          //     ? editLoungeController
+                                          //             .editedList[index]
+                                          //         ["discounted-price"]
+                                          //     : service.discountedPrice ??
+                                          //         "0",
+                                          style: TextStyle(
+                                            color: ThemesStyles.textColor,
+                                            fontSize:
+                                                ThemesStyles.littelFontSize,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Price : ",
+                                          style: TextStyle(
+                                            color: ThemesStyles.textColor,
+                                            fontSize:
+                                                ThemesStyles.littelFontSize,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Obx(
+                                          () => Text(
                                             editLoungeController
                                                     .editedList.isNotEmpty
                                                 ? editLoungeController
-                                                        .editedList[index]
-                                                    ["discounted-price"]
-                                                : service.discountedPrice ??
-                                                    "0",
+                                                    .editedList[index]["price"]
+                                                : service.price ?? "",
                                             style: TextStyle(
                                               color: ThemesStyles.textColor,
                                               fontSize:
@@ -1270,149 +1291,114 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                               fontWeight: FontWeight.normal,
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Price : ",
-                                            style: TextStyle(
-                                              color: ThemesStyles.textColor,
-                                              fontSize:
-                                                  ThemesStyles.littelFontSize,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Obx(
-                                            () => Text(
-                                              editLoungeController
-                                                      .editedList.isNotEmpty
-                                                  ? editLoungeController
-                                                          .editedList[index]
-                                                      ["price"]
-                                                  : service.price ?? "",
-                                              style: TextStyle(
-                                                color: ThemesStyles.textColor,
-                                                fontSize:
-                                                    ThemesStyles.littelFontSize,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ).marginSymmetric(
-                                          horizontal: width * 0.05),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 10.0),
-                                        child: SizedBox(
-                                          width: 100,
-                                          child: DefultButton(
-                                            buttonColor:
-                                                ThemesStyles.background,
-                                            borderColor: ThemesStyles.secondary,
-                                            textColor: Colors.red,
-                                            title: "Delete",
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Dialog(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20.0),
+                                        ),
+                                      ],
+                                    ).marginSymmetric(horizontal: width * 0.05),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: SizedBox(
+                                        width: 100,
+                                        child: DefultButton(
+                                          buttonColor: ThemesStyles.background,
+                                          borderColor: ThemesStyles.secondary,
+                                          textColor: Colors.red,
+                                          title: "Delete",
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Dialog(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0),
+                                                  ),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            20.0),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Center(
+                                                          child: Text(
+                                                              "Are you sure you want to delete this service"),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 20),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: Text(
+                                                                  'Cancel'),
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 10),
+                                                            ElevatedButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                bool deleted =
+                                                                    false;
+
+                                                                try {
+                                                                  await DioHelper
+                                                                      .delete(
+                                                                          url:
+                                                                              "$baseUrl/assets/delete-service?id=${editLoungeController.loungeDetailsItems[0].services[index].id}");
+                                                                  deleted =
+                                                                      true;
+                                                                } catch (e) {
+                                                                  print(
+                                                                      'Error deleting service: $e');
+                                                                }
+
+                                                                if (deleted) {
+                                                                  print(editLoungeController
+                                                                      .loungeDetailsItems[
+                                                                          0]
+                                                                      .services);
+                                                                  editLoungeController
+                                                                      .loungeDetailsItems[
+                                                                          0]
+                                                                      .services
+                                                                      .removeAt(
+                                                                          index);
+                                                                }
+
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: Text(
+                                                                  'Submit'),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
                                                     ),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              20.0),
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          Center(
-                                                            child: Text(
-                                                                "Are you sure you want to delete this service"),
-                                                          ),
-                                                          const SizedBox(
-                                                              height: 20),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                                child: Text(
-                                                                    'Cancel'),
-                                                              ),
-                                                              const SizedBox(
-                                                                  width: 10),
-                                                              ElevatedButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  bool deleted =
-                                                                      false;
-
-                                                                  try {
-                                                                    await DioHelper
-                                                                        .delete(
-                                                                            url:
-                                                                                "$baseUrl/assets/delete-service?id=${editLoungeController.loungeDetailsItems[0].services[index].id}");
-                                                                    deleted =
-                                                                        true;
-                                                                  } catch (e) {
-                                                                    print(
-                                                                        'Error deleting service: $e');
-                                                                  }
-
-                                                                  if (deleted) {
-                                                                    print(editLoungeController
-                                                                        .loungeDetailsItems[
-                                                                            0]
-                                                                        .services);
-                                                                    editLoungeController
-                                                                        .loungeDetailsItems[
-                                                                            0]
-                                                                        .services
-                                                                        .removeAt(
-                                                                            index);
-                                                                  }
-
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                                child: Text(
-                                                                    'Submit'),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ).marginSymmetric(
-                                    horizontal: width * 0.02,
-                                    vertical: height * 0.01),
-                              ),
+                                    ),
+                                  ],
+                                ),
+                              ).marginSymmetric(
+                                  horizontal: width * 0.02,
+                                  vertical: height * 0.01),
+                              // ),
                               Positioned(
                                 bottom: 1,
                                 right: 1,
@@ -1431,13 +1417,13 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                       TextEditingController priceController =
                                           TextEditingController();
 
-                                      proporationController.text =
-                                          editLoungeController
-                                                  .editedList.isNotEmpty
-                                              ? editLoungeController
-                                                      .editedList[index]
-                                                  ["discounted-price"]
-                                              : service.discountedPrice ?? "";
+                                      proporationController.text = "";
+                                      // editLoungeController
+                                      //         .editedList.isNotEmpty
+                                      //     ? editLoungeController
+                                      //             .editedList[index]
+                                      //         ["discounted-price"]
+                                      //     : service.discountedPrice ?? "";
                                       priceController.text =
                                           editLoungeController
                                                   .editedList.isNotEmpty

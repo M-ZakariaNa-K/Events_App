@@ -1,6 +1,7 @@
 import 'package:events_app/Investor_App/controllers/lounges/addLoungesController..dart';
 import 'package:events_app/Investor_App/controllers/lounges/editLoungesController.dart';
 import 'package:events_app/Investor_App/controllers/services/add_services_controller.dart';
+import 'package:events_app/Investor_App/controllers/services/edit_services_controller.dart';
 import 'package:events_app/Investor_App/controllers/services/services_controller.dart';
 import 'package:events_app/Investor_App/view/lounges/addLoungesPage..dart';
 import 'package:events_app/Investor_App/view/lounges/editLoungesPage.dart';
@@ -193,12 +194,56 @@ class RequestServicePage extends StatelessWidget {
                               }
                               if (isEditPage && isOrganizer) {
                                 //For organizer editeng
+                                     final ediitServiceController =
+                                    Get.put(EditServicesController());
+                                ediitServiceController.addedList.add({
+                                  "name": {
+                                    "ar": arNameController.text,
+                                    "en": enNameController.text
+                                  },
+                                  "kind": _eventKindController
+                                              .selectedValue.value ==
+                                          0
+                                      ? "public"
+                                      : "private",
+                                  "price": priceController.text
+                                });
+                              
                               }
                               if (!isEditPage && isOrganizer) {
                                 //For organizer adding
+                                 final addServiceController =
+                                    Get.put(AddServiceController());
+                                addServiceController.addedList.add({
+                                  "name": {
+                                    "ar": arNameController.text,
+                                    "en": enNameController.text
+                                  },
+                                  "kind": _eventKindController
+                                              .selectedValue.value ==
+                                          0
+                                      ? "public"
+                                      : "private",
+                                  "price": priceController.text
+                                });
                               }
                               if (!isEditPage && !isOrganizer) {
-                                //For organizer adding
+                                //For lounge adding
+                                     final addLoungeController =
+                                    Get.put(AddLoungesController());
+                                addLoungeController.addedList.add({
+                                  "name": {
+                                    "ar": arNameController.text,
+                                    "en": enNameController.text
+                                  },
+                                  "kind": _eventKindController
+                                              .selectedValue.value ==
+                                          0
+                                      ? "public"
+                                      : "private",
+                                  "price": priceController.text
+                                });
+                              
                               }
 //========================================Add Page=================================================
 //=================================================================================================

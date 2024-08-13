@@ -524,14 +524,16 @@ class HallCards extends GetView<LoungesController> {
               width: width,
               height: height / 6,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? const Color(0xff2B2B2B)
+                    : const Color.fromARGB(255, 243, 243, 243),
                 border: Border.all(color: ThemesStyles.secondary, width: 2),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.shade300,
                     offset: const Offset(5, 5),
-                    blurRadius: 10,
+                    blurRadius: .1,
                   ),
                 ],
               ),
@@ -578,7 +580,6 @@ class HallCards extends GetView<LoungesController> {
                             loungeController.loungesItems[index].address
                                 .toString(),
                             style: TextStyle(
-                              color: ThemesStyles.textColor,
                               fontSize: ThemesStyles.littelFontSize,
                               fontWeight: FontWeight.normal,
                             ),
@@ -595,7 +596,6 @@ class HallCards extends GetView<LoungesController> {
                             loungeController.loungesItems[index].capacity
                                 .toString(),
                             style: TextStyle(
-                              color: ThemesStyles.textColor,
                               fontSize: ThemesStyles.littelFontSize - 2,
                               fontWeight: FontWeight.normal,
                             ),

@@ -1,28 +1,26 @@
 import 'dart:convert';
 
-LoungesListUserModel loungesListUserModelFromJson(String str) =>
-    LoungesListUserModel.fromJson(json.decode(str));
+SearchModel searchModelFromJson(String str) =>
+    SearchModel.fromJson(json.decode(str));
 
-String loungesListUserModelToJson(LoungesListUserModel data) =>
-    json.encode(data.toJson());
+String searchModelToJson(SearchModel data) => json.encode(data.toJson());
 
-class LoungesListUserModel {
+class SearchModel {
   int code;
   String message;
-  List<LoungesListUserDataModel> data;
+  List<SearchDataModel> data;
 
-  LoungesListUserModel({
+  SearchModel({
     required this.code,
     required this.message,
     required this.data,
   });
 
-  factory LoungesListUserModel.fromJson(Map<String, dynamic> json) =>
-      LoungesListUserModel(
+  factory SearchModel.fromJson(Map<String, dynamic> json) => SearchModel(
         code: json["code"],
         message: json["message"],
-        data: List<LoungesListUserDataModel>.from(
-            json["data"].map((x) => LoungesListUserDataModel.fromJson(x))),
+        data: List<SearchDataModel>.from(
+            json["data"].map((x) => SearchDataModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -32,54 +30,62 @@ class LoungesListUserModel {
       };
 }
 
-class LoungesListUserDataModel {
+class SearchDataModel {
   int id;
   List<String> photos;
   int rate;
   List<Service> services;
-  int capacity;
-  int dinner;
-  String dinnerPrice;
-  int mixed;
-  String address;
-  String mixedPrice;
-  List<ActiveTime> activeTimes;
-  String name;
   bool isFavorite;
+  int? capacity;
+  int? dinner;
+  String? dinnerPrice;
+  int? mixed;
+  String? address;
+  String? mixedPrice;
+  List<ActiveTime>? activeTimes;
+  String? name;
+  String? startTime;
+  String? endTime;
 
-  LoungesListUserDataModel({
+  SearchDataModel({
     required this.id,
     required this.photos,
     required this.rate,
     required this.services,
-    required this.capacity,
-    required this.dinner,
-    required this.dinnerPrice,
-    required this.mixed,
-    required this.address,
-    required this.mixedPrice,
-    required this.activeTimes,
-    required this.name,
     required this.isFavorite,
+    this.capacity,
+    this.dinner,
+    this.dinnerPrice,
+    this.mixed,
+    this.address,
+    this.mixedPrice,
+    this.activeTimes,
+    this.name,
+    this.startTime,
+    this.endTime,
   });
 
-  factory LoungesListUserDataModel.fromJson(Map<String, dynamic> json) =>
-      LoungesListUserDataModel(
+  factory SearchDataModel.fromJson(Map<String, dynamic> json) =>
+      SearchDataModel(
         id: json["id"],
         photos: List<String>.from(json["photos"].map((x) => x)),
         rate: json["rate"],
         services: List<Service>.from(
             json["services"].map((x) => Service.fromJson(x))),
+        isFavorite: json["is_favorite"],
         capacity: json["capacity"],
         dinner: json["dinner"],
         dinnerPrice: json["dinner_price"],
         mixed: json["mixed"],
         address: json["address"],
         mixedPrice: json["mixed_price"],
-        activeTimes: List<ActiveTime>.from(
-            json["active_times"].map((x) => ActiveTime.fromJson(x))),
+        activeTimes: json["active_times"] == null
+            ? []
+            : List<ActiveTime>.from(
+                json["active_times"]!.map((x) => ActiveTime.fromJson(x))),
         name: json["name"],
-        isFavorite: json["is_favorite"],
+        startTime: json["start_time"],
+        endTime: json["end_time"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -87,15 +93,19 @@ class LoungesListUserDataModel {
         "photos": List<dynamic>.from(photos.map((x) => x)),
         "rate": rate,
         "services": List<dynamic>.from(services.map((x) => x.toJson())),
+        "is_favorite": isFavorite,
         "capacity": capacity,
         "dinner": dinner,
         "dinner_price": dinnerPrice,
         "mixed": mixed,
         "address": address,
         "mixed_price": mixedPrice,
-        "active_times": List<dynamic>.from(activeTimes.map((x) => x.toJson())),
+        "active_times": activeTimes == null
+            ? []
+            : List<dynamic>.from(activeTimes!.map((x) => x.toJson())),
         "name": name,
-        "is_favorite": isFavorite,
+        "start_time": startTime,
+        "end_time": endTime,
       };
 }
 
@@ -129,6 +139,7 @@ class Service {
   String kind;
   String price;
   dynamic discountedPrice;
+  int? proportion;
 
   Service({
     required this.id,
@@ -136,6 +147,7 @@ class Service {
     required this.kind,
     required this.price,
     required this.discountedPrice,
+    required this.proportion,
   });
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
@@ -144,6 +156,7 @@ class Service {
         kind: json["kind"],
         price: json["price"],
         discountedPrice: json["discounted_price"],
+        proportion: json["proportion"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -152,5 +165,6 @@ class Service {
         "kind": kind,
         "price": price,
         "discounted_price": discountedPrice,
+        "proportion": proportion,
       };
 }

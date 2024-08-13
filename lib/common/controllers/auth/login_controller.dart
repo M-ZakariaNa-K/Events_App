@@ -25,7 +25,9 @@ class LoginController extends GetxController {
           token = userModel!.data!.token!;
           box.write('token', token);
           print(token);
+
           Get.offAll(const DrawerPage());
+            
           showToast(
             msg: "Logged In Successfuly",
             backgroundColor: Colors.green,

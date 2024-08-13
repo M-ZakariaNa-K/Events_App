@@ -629,22 +629,24 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                         width: width,
                         height: height / 4,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: ThemesStyles.secondary)),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: ThemesStyles.secondary),
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              width: width,
-                              height: 50,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              decoration: BoxDecoration(
+                            Obx(() {
+                              return Container(
+                                width: width,
+                                height: 50,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
                                   border:
                                       Border.all(color: ThemesStyles.secondary),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Obx(
-                                () => DropdownButton<String>(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: DropdownButton<String>(
                                   value: addLoungeController
                                           .dropdownValue.value.isNotEmpty
                                       ? addLoungeController.dropdownValue.value
@@ -658,8 +660,14 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                   style: const TextStyle(
                                       color: ThemesStyles.primary),
                                   onChanged: (value) {
-                                    addLoungeController.dropdownValue.value =
-                                        value!;
+                                    if (value != null) {
+                                      print(addLoungeController
+                                          .dropdownItemsAllData);
+                                      addLoungeController.dropdownValue.value =
+                                          value;
+                                      addLoungeController
+                                          .updateKindBasedOnSelection(value);
+                                    }
                                   },
                                   items: addLoungeController.dropdownItems
                                       .map<DropdownMenuItem<String>>(
@@ -670,11 +678,11 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                     );
                                   }).toList(),
                                 ),
-                              ),
-                            ).marginSymmetric(
-                              horizontal: width * 0.02,
-                              vertical: height * 0.01,
-                            ),
+                              ).marginSymmetric(
+                                horizontal: width * 0.02,
+                                vertical: height * 0.01,
+                              );
+                            }),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -685,8 +693,8 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                     autoFoucs: false,
                                     hintText: "Price",
                                     validator: (String? value) {
-                                      if (value == '') {
-                                        return "this field is required";
+                                      if (value == null || value.isEmpty) {
+                                        return "This field is required";
                                       }
                                       return null;
                                     },
@@ -695,10 +703,9 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                     obscureText: false,
                                   ),
                                 ),
-                                Container(
-                                  width: width / 2.5,
-                                  child: Container(
-                                    height: 50,
+                                Obx(() {
+                                  return Container(
+                                    width: width / 2.5,
                                     child: TextFormField(
                                       controller: servicesProporationController,
                                       enableSuggestions: false,
@@ -706,73 +713,53 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                       obscureText: false,
                                       textInputAction: TextInputAction.next,
                                       cursorColor: ThemesStyles.primary,
-                                      // enabled: addLoungeController
-                                      //         .dropdownValue.value ==
-                                      //     "Birhtday", // Adjust the condition as per your logic
-                                      // validator: (String? value) {
-                                      //   if (addLoungeController
-                                      //               .dropdownValue.value ==
-                                      //           "Birhtday" &&
-                                      //       (value == null ||
-                                      //           value.isEmpty)) {
-                                      //     return "This field is required";
-                                      //   }
-                                      //   return null;
-                                      // },
+                                      enabled: addLoungeController.kind.value ==
+                                          'public',
                                       autofocus: false,
                                       decoration: InputDecoration(
-                                          hintText: "Proportion",
-                                          hintStyle: TextStyle(
-                                              color: ThemesStyles.textColor
-                                                  .withAlpha(80),
-                                              fontSize:
-                                                  ThemesStyles.mainFontSize -
-                                                      2),
-                                          floatingLabelStyle: TextStyle(
+                                        hintText: "Proportion",
+                                        hintStyle: TextStyle(
+                                          color: ThemesStyles.textColor
+                                              .withAlpha(80),
+                                          fontSize:
+                                              ThemesStyles.mainFontSize - 2,
+                                        ),
+                                        floatingLabelStyle: const TextStyle(
+                                          color: ThemesStyles.primary,
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: BorderSide(
+                                            color: ThemesStyles.primary
+                                                .withAlpha(80),
+                                          ),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: BorderSide(
                                             color: ThemesStyles.primary,
                                           ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            borderSide: BorderSide(
-                                              color: ThemesStyles.primary
-                                                  .withAlpha(80),
-                                            ),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: const BorderSide(
+                                            color: Colors.red,
                                           ),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              borderSide: BorderSide(
-                                                color: ThemesStyles.primary,
-                                              )),
-                                          errorBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              borderSide: const BorderSide(
-                                                color: Colors.red,
-                                              )),
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              borderSide: BorderSide(
-                                                color: ThemesStyles.primary,
-                                              ))),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: BorderSide(
+                                            color: ThemesStyles.primary,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  // DefaultFormFeild(
-                                  //   autoFoucs: false,
-                                  //   hintText: "Proportion",
-                                  //   validator: (String? value) {
-                                  //     if (value == '') {
-                                  //       return "this field is required";
-                                  //     }
-                                  //     return null;
-                                  //   },
-                                  //   textEditingController:
-                                  //       servicesProporationController,
-                                  //   obscureText: false,
-                                  // ),
-                                ),
+                                  );
+                                }),
                               ],
                             ),
                             Row(
@@ -798,11 +785,9 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                         });
                                         servicesProporationController.clear();
                                         servicesPriceController.clear();
-
                                         addLoungeController
                                             .dropdownValue.value = '';
                                       }
-
                                       print(addLoungeController.serviceList);
                                     },
                                   ),
@@ -815,14 +800,12 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                       child: Text(
                                         "Request a service",
                                         style: TextStyle(
-                                            color: ThemesStyles.primary,
-                                            fontSize:
-                                                ThemesStyles.littelFontSize,
-                                            fontWeight: FontWeight.bold,
-                                            decoration:
-                                                TextDecoration.underline,
-                                            decorationColor:
-                                                ThemesStyles.primary),
+                                          color: ThemesStyles.primary,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline,
+                                          decorationColor: ThemesStyles.primary,
+                                        ),
                                       ),
                                       onTap: () {
                                         Get.to(() => RequestServicePage(
@@ -839,6 +822,7 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                         ).marginOnly(top: height * 0.01),
                       ).marginSymmetric(horizontal: width * 0.02, vertical: 10),
                     ),
+
                     Obx(
                       () => GridView.builder(
                         shrinkWrap: true,
@@ -965,6 +949,138 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                         },
                       ),
                     ),
+                    Text("Added Services:"),
+                    Obx(
+                      () => GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: addLoungeController.addedList.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // Number of columns
+                          crossAxisSpacing: 2.0, // Space between columns
+                          mainAxisSpacing: 10.0, // Space between rows
+                          childAspectRatio: 3 /
+                              3, // Adjust this value to change the aspect ratio of the grid items
+                        ),
+                        itemBuilder: (context, index) {
+                          final addeedItem =
+                              addLoungeController.addedList[index];
+
+                          print(
+                              ' addeedItem["name"]["en"]: ${addLoungeController.addedList[index]["name"]["en"]}');
+                          return GestureDetector(
+                            child: Container(
+                              width: width / 2,
+                              height: height / 5,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 15,
+                                    offset: Offset(5, 5),
+                                  )
+                                ],
+                                border: Border.all(
+                                    color: ThemesStyles.secondary, width: 2),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Services :",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        addeedItem["name"]["en"],
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  ).marginSymmetric(horizontal: width * 0.01),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Proportion : ",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        addeedItem["proporation"] ?? "0",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Price : ",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        addeedItem["price"] ?? "",
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  ).marginSymmetric(horizontal: width * 0.05),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: SizedBox(
+                                      width: 100,
+                                      child: DefultButton(
+                                        buttonColor: ThemesStyles.background,
+                                        borderColor: ThemesStyles.secondary,
+                                        textColor: Colors.red,
+                                        title: "Delete",
+                                        onPressed: () {
+                                          addLoungeController.addedList
+                                              .remove(addeedItem);
+                                          // addLoungeController.serviceList
+                                          //     .remove(controller
+                                          //         .serviceList[index]);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ).marginSymmetric(
+                                horizontal: width * 0.02,
+                                vertical: height * 0.01),
+                          );
+                        },
+                      ),
+                    ),
                     Center(
                       child: DefultButton(
                         buttonColor: ThemesStyles.primary,
@@ -999,13 +1115,7 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                             }
                             addLoungeController.allDataToAPI["services"] = {
                               "existed": existed,
-                              "added": [
-                                // {
-                                //   "name": {"ar": "عرس", "en": "Wedding"},
-                                //   "kind": "private",
-                                //   "price": "100"
-                                // }
-                              ],
+                              "added": addLoungeController.addedList,
                             };
                             addLoungeController.allDataToAPI["hall"] = {
                               "name": {

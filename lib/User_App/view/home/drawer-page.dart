@@ -10,6 +10,7 @@ import 'package:events_app/User_App/controllers/Favorates/Favorate_controller.da
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
 import 'package:events_app/User_App/controllers/profile/profile_controller.dart';
+import 'package:events_app/User_App/controllers/publicEvent/public_eevent_controller.dart';
 import 'package:events_app/User_App/controllers/reservation/reservation_controller.dart';
 import 'package:events_app/User_App/view/Favorate/favorate_page.dart';
 import 'package:events_app/User_App/view/p-event/HelpCenter.dart';
@@ -34,6 +35,78 @@ class DrawerPage extends StatefulWidget {
 }
 
 class _DrawerPageState extends State<DrawerPage> {
+//reminder function to rating
+  void showRatingReminderDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              gradient: LinearGradient(
+                colors: [Colors.pinkAccent, Colors.purpleAccent],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Reminder",
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  "Don't forget to rate the halls and organizers in outdated reservations.",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white70,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20.0),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white, // background
+                    onPrimary: Colors.pinkAccent, // foreground
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
+                  child: Text(
+                    'Got it!',
+                    style: TextStyle(color: Colors.pinkAccent),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void initState() {
+    super.initState();
+    // Show the dialog when the page is initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showRatingReminderDialog(context);
+    });
+  }
+
   final DrawerPageController controller = Get.put(DrawerPageController());
 
   bool isButtomNavPressed = false;
@@ -63,6 +136,13 @@ class _DrawerPageState extends State<DrawerPage> {
   ];
 
   void _onItemTappedBottom(int index) {
+    //to clear the categories list when user leave the public events page
+    final publicEventsController = Get.put(PublicEventController());
+
+    publicEventsController.existedCategoriesList.clear();
+    publicEventsController.publicEventsItems.clear();
+    publicEventsController.publicEventsItemsDependOnDate.clear();
+
     setState(() {
       if (index == 0 && !isUser && !isHallOwner) {
         final servicesController = Get.put(ServicesHomePageController());
@@ -97,6 +177,10 @@ class _DrawerPageState extends State<DrawerPage> {
       }
       if (index == 3) {
         // Here u will show the public events
+
+        publicEventsController.getCategoriesList();
+        publicEventsController.getPublicEventsItems(category_id: 0);
+        publicEventsController.getPublicEventsItems(category_id: 1);
       }
       if (index == 4) {
         final favoriteController = Get.put(FavorateController());
@@ -220,6 +304,10 @@ class _DrawerPageState extends State<DrawerPage> {
   }
 
   void _onItemTapped(int index) async {
+    //to clear the categories list when user leave the public events page
+    final publicEventsController = Get.put(PublicEventController());
+
+    publicEventsController.existedCategoriesList.clear();
     //profile
     if (index == 1) {
       try {
@@ -232,6 +320,7 @@ class _DrawerPageState extends State<DrawerPage> {
         Get.snackbar("Error", "Something get wrong with calling data");
       }
     }
+
     setState(() {
       isButtomNavPressed = false;
       controller.changeDrawerTabIndex(index);
