@@ -147,6 +147,8 @@ class InvestorReservationsAsUserWidget extends StatelessWidget {
                                             Get.to(() => ReservationsUserPage(
                                                   isCommingFromInvestorSide:
                                                       true,
+                                                  isTheReservationDetailComeFromInvestorHalls:
+                                                      false,
                                                 ));
                                           }
                                         : () async {

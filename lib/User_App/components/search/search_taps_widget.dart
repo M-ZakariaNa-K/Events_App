@@ -69,33 +69,33 @@ class _SearchTapsWidgetState extends State<SearchTapsWidget> {
                       });
 
                       if (selectedCardIndex == 0) {
-                        if (isUser) {
+                        if (isUser!) {
                           // Here make the request of search For USER
                           // searchController.searchItems.clear();
                           // await searchController.getSearchItems(
                           //     identifier: "name", value: "");
                         } else {
-                          if (isHallOwner) {
+                          if (isHallOwner!) {
                             // Here make the request of search For HallOwner
                           } else {
                             // Here make the request of search For Organizer
                           }
                         }
                       } else if (selectedCardIndex == 1) {
-                        if (isUser) {
+                        if (isUser!) {
                           // Here make the request of search For USER
                         } else {
-                          if (isHallOwner) {
+                          if (isHallOwner!) {
                             // Here make the request of search For HallOwner
                           } else {
                             // Here make the request of search For Organizer
                           }
                         }
                       } else if (selectedCardIndex == 2) {
-                        if (isUser) {
+                        if (isUser!) {
                           // Here make the request of search For USER
                         } else {
-                          if (isHallOwner) {
+                          if (isHallOwner!) {
                             // Here make the request of search For HallOwner
                           } else {
                             // Here make the request of search For Organizer
@@ -261,6 +261,7 @@ class _SearchTapsWidgetState extends State<SearchTapsWidget> {
                 ),
               ),
               Container(
+                width: MediaQuery.sizeOf(context).width,
                 padding: const EdgeInsets.all(5),
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 decoration: BoxDecoration(

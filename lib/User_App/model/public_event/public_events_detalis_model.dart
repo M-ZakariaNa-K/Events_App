@@ -44,7 +44,7 @@ class PublicEventsDetailsDataModel {
     dynamic notes;
     String category;
     String description;
-    String photo;
+    String? photo;
     String name;
     String address;
     String ticketPrice;

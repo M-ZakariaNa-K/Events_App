@@ -1,6 +1,7 @@
 import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/common/components/auth/Costume_login_TextField_widget.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
+import 'package:events_app/common/controllers/auth/login_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/helper/api.dart';
@@ -139,7 +140,14 @@ class CreateNewPasswordPage extends StatelessWidget {
                             msg: "Password created successfully",
                             backgroundColor: Colors.green,
                           );
+                          //to make the IsUser and ISHallowner has a data
+                          final loginController = Get.put(LoginController());
 
+                          await loginController.loginState(
+                            userName: createPasswordEmail,
+                            password:
+                                controller.createConfirmPasswordController.text,
+                          );
                           Get.offAll(const DrawerPage());
                           controller.createPasswordController.text = "";
                           controller.createConfirmPasswordController.text = "";

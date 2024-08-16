@@ -118,9 +118,6 @@ class ServiceUserCard extends GetView<ServicesUserController> {
           child: GestureDetector(
             onTap: () async {
               final organizerController = Get.put(ServicesUserController());
-              print("imm iddd ${organizerController.servicesItems[index].id}");
-              print(
-                  "imm nammmmmme ${organizerController.servicesItems[index].endTime}");
               await organizerController.getOrganizersDetailsItems(
                 id: organizerController.servicesItems[index].id,
               );

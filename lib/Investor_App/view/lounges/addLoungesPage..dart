@@ -31,7 +31,7 @@ class AddLoungesPage extends GetView<AddLoungesController> {
   TextEditingController endWorkHourController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController servicesPriceController = TextEditingController();
-  TextEditingController servicesProporationController = TextEditingController();
+  TextEditingController servicesproportionController = TextEditingController();
   final GlobalKey<FormState> _serviceFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _allFormKey = GlobalKey<FormState>();
   String formatTimeOfDay(TimeOfDay time) {
@@ -692,12 +692,16 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                     textInputType: TextInputType.number,
                                     autoFoucs: false,
                                     hintText: "Price",
-                                    validator: (String? value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "This field is required";
-                                      }
-                                      return null;
-                                    },
+                                    validator: addLoungeController.kind.value ==
+                                            'public'
+                                        ? (String? value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "This field is required";
+                                            }
+                                            return null;
+                                          }
+                                        : null,
                                     textEditingController:
                                         servicesPriceController,
                                     obscureText: false,
@@ -707,7 +711,13 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                   return Container(
                                     width: width / 2.5,
                                     child: TextFormField(
-                                      controller: servicesProporationController,
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "This field is required";
+                                        }
+                                        return null;
+                                      },
+                                      controller: servicesproportionController,
                                       enableSuggestions: false,
                                       keyboardType: TextInputType.number,
                                       obscureText: false,
@@ -778,12 +788,11 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                         addLoungeController.serviceList.add({
                                           "name": addLoungeController
                                               .dropdownValue.value,
-                                          "proporation":
-                                              servicesProporationController
-                                                  .text,
+                                          "proportion":
+                                              servicesproportionController.text,
                                           "price": servicesPriceController.text,
                                         });
-                                        servicesProporationController.clear();
+                                        servicesproportionController.clear();
                                         servicesPriceController.clear();
                                         addLoungeController
                                             .dropdownValue.value = '';
@@ -892,7 +901,7 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                     ),
                                     Text(
                                       addLoungeController.serviceList[index]
-                                              ["proporation"] ??
+                                              ["proportion"] ??
                                           "",
                                       style: TextStyle(
                                         color: ThemesStyles.textColor,
@@ -1023,7 +1032,7 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                         ),
                                       ),
                                       Text(
-                                        addeedItem["proporation"] ?? "0",
+                                        addeedItem["proportion"] ?? "0",
                                         style: TextStyle(
                                           color: ThemesStyles.textColor,
                                           fontSize: ThemesStyles.littelFontSize,

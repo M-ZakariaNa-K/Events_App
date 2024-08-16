@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:events_app/Investor_App/controllers/lounges/addLoungesController..dart';
+import 'package:events_app/User_App/components/booking/book_event_category_widget.dart';
 import 'package:events_app/User_App/components/booking/choosen_user_time_widget.dart';
 import 'package:events_app/User_App/components/booking/organizers_reserved_times_list_widget.dart';
 import 'package:events_app/User_App/controllers/booking/book_Now_controller.dart';
@@ -5,11 +9,15 @@ import 'package:events_app/User_App/controllers/booking/date-picker.dart';
 import 'package:events_app/User_App/controllers/booking/radio_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/services_user_controller.dart';
+import 'package:events_app/User_App/view/booking/main_booking_page.dart';
 import 'package:events_app/common/components/general/Costume_TextField_widget.dart';
 import 'package:events_app/common/components/general/defult_button.dart';
+import 'package:events_app/common/components/general/main_loading_widget.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class BookNowPage extends StatefulWidget {
   const BookNowPage({super.key, required this.isOrganizer});
@@ -29,7 +37,7 @@ class _BookNowPageState extends State<BookNowPage> {
   void _validateAndBook() {
     final bookNowController = Get.put(BookNowController());
 
-    if (selectedTimeCardIndex == -1) {
+    if (selectedTimeCardIndex == -1 && !widget.isOrganizer) {
       _showError("Please select a reservation time.");
       return;
     } else if (selectedCardIndex == -1) {
@@ -66,12 +74,25 @@ class _BookNowPageState extends State<BookNowPage> {
     final bookNowController = Get.put(BookNowController());
     final servicesDetailsController = Get.put(ServicesUserController());
     final loungeDetailsController = Get.put(LoungesUserController());
+    final addLoungeController = Get.put(AddLoungesController());
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            bookNowController.timesAvilableList.clear();
-            bookNowController.timesReservedOrganizerList.clear();
+            bookNowController.selectedChoosenCategoryId.value = -1;
+            bookNowController.existedCategoriesList.clear();
+            bookNowController.addedCategorriesMap.value = {};
+            bookNowController.nameController.clear();
+            bookNowController.descraptionController.clear();
+            bookNowController.addresaController.clear();
+            bookNowController.audincesNumber.clear();
+            bookNowController.addedArabicnameController.clear();
+            bookNowController.addedEnglishnameController.clear();
+            bookNowController.selectedServiceType.value = '';
+            bookNowController.ticketPriceController.clear();
+            bookNowController.startTimeController.clear();
+            bookNowController.endTimeController.clear();
             Get.back();
           },
           icon: const Icon(Icons.arrow_back_ios_new),
@@ -217,133 +238,143 @@ class _BookNowPageState extends State<BookNowPage> {
                   // if (widget.isOrganizer) const OrganizerReservedTimeListWidget(),
                   // if (!widget.isOrganizer)
                   Obx(() {
-                    return Column(
-                      children: [
-                        if (!widget.isOrganizer
-                            ? bookNowController.timesAvilableList.isEmpty
-                            : bookNowController
-                                .timesReservedOrganizerList.isEmpty)
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color:
-                                      const Color.fromARGB(255, 230, 230, 230),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.warning_amber_rounded,
-                                      size: 30,
-                                    ).marginSymmetric(horizontal: 5),
-                                    Flexible(
-                                      child: Text(
-                                        widget.isOrganizer
-                                            ? "There is no reservation in this day, choose any time you want"
-                                            : "Note: Choose another date to see available times in",
-                                        style: TextStyle(
-                                          fontSize: ThemesStyles.littelFontSize,
+                    if (bookNowController.isDataLoading.value) {
+                      return const LinearProgressIndicator();
+                    } else {
+                      return Column(
+                        children: [
+                          if (!widget.isOrganizer
+                              ? bookNowController.timesAvilableList.isEmpty
+                              : bookNowController
+                                  .timesReservedOrganizerList.isEmpty)
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: const Color.fromARGB(
+                                        255, 230, 230, 230),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.warning_amber_rounded,
+                                        size: 30,
+                                      ).marginSymmetric(horizontal: 5),
+                                      Flexible(
+                                        child: Text(
+                                          widget.isOrganizer
+                                              ? "There is no reservation in this day, choose any time you want"
+                                              : "Note: Choose another date to see available times in",
+                                          style: TextStyle(
+                                            fontSize:
+                                                ThemesStyles.littelFontSize,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        if (widget.isOrganizer
-                            ? bookNowController
-                                .timesReservedOrganizerList.isNotEmpty
-                            : bookNowController.timesAvilableList.isNotEmpty)
-                          SizedBox(
-                            height: 120,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: widget.isOrganizer
-                                  ? bookNowController
-                                      .timesReservedOrganizerList.length
-                                  : bookNowController.timesAvilableList.length,
-                              itemBuilder: (context, index) {
-                                bool isSelected =
-                                    selectedTimeCardIndex == index;
-                                return GestureDetector(
-                                  onTap: () {
-                                    selectedTimeCardIndex = index;
-                                    setState(() {
-                                      bookNowController
-                                              .selectedChoosenTimeHall.value =
-                                          bookNowController
-                                              .timesAvilableList[index].id;
-                                    });
-                                  },
-                                  child: Obx(
-                                    () => Container(
-                                      margin: const EdgeInsets.all(20),
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: ThemesStyles.thirdColor,
-                                        border:
-                                            isSelected && !widget.isOrganizer
-                                                ? Border.all(
-                                                    color: ThemesStyles.primary,
-                                                    width: 1)
-                                                : null,
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "Start: ",
-                                                style: TextStyle(
-                                                  color: ThemesStyles.secondary,
-                                                  fontWeight: FontWeight.bold,
+                          if (widget.isOrganizer
+                              ? bookNowController
+                                  .timesReservedOrganizerList.isNotEmpty
+                              : bookNowController.timesAvilableList.isNotEmpty)
+                            SizedBox(
+                              height: 120,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: widget.isOrganizer
+                                    ? bookNowController
+                                        .timesReservedOrganizerList.length
+                                    : bookNowController
+                                        .timesAvilableList.length,
+                                itemBuilder: (context, index) {
+                                  bool isSelected =
+                                      selectedTimeCardIndex == index;
+                                  return GestureDetector(
+                                    onTap: () {
+                                      selectedTimeCardIndex = index;
+                                      setState(() {
+                                        bookNowController
+                                                .selectedChoosenTimeHall.value =
+                                            bookNowController
+                                                .timesAvilableList[index].id;
+                                      });
+                                    },
+                                    child: Obx(
+                                      () => Container(
+                                        margin: const EdgeInsets.all(20),
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: ThemesStyles.thirdColor,
+                                          border: isSelected &&
+                                                  !widget.isOrganizer
+                                              ? Border.all(
+                                                  color: ThemesStyles.primary,
+                                                  width: 1)
+                                              : null,
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "Start: ",
+                                                  style: TextStyle(
+                                                    color:
+                                                        ThemesStyles.secondary,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
-                                              ),
-                                              Text(
-                                                widget.isOrganizer
-                                                    ? "${bookNowController.timesReservedOrganizerList[index].startTime}"
-                                                    : "${bookNowController.timesAvilableList[index].startTime}",
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "End: ",
-                                                style: TextStyle(
-                                                  color: ThemesStyles.secondary,
-                                                  fontWeight: FontWeight.bold,
+                                                Text(
+                                                  widget.isOrganizer
+                                                      ? "${bookNowController.timesReservedOrganizerList[index].startTime}"
+                                                      : "${bookNowController.timesAvilableList[index].startTime}",
                                                 ),
-                                              ),
-                                              Text(
-                                                widget.isOrganizer
-                                                    ? "${bookNowController.timesReservedOrganizerList[index].endTime}"
-                                                    : "${bookNowController.timesAvilableList[index].endTime}",
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "End: ",
+                                                  style: TextStyle(
+                                                    color:
+                                                        ThemesStyles.secondary,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  widget.isOrganizer
+                                                      ? "${bookNowController.timesReservedOrganizerList[index].endTime}"
+                                                      : "${bookNowController.timesAvilableList[index].endTime}",
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                      ],
-                    );
+                        ],
+                      );
+                    }
                   }),
                   //==================HallOwner=====================
                   //=========================================
@@ -362,7 +393,8 @@ class _BookNowPageState extends State<BookNowPage> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: widget.isOrganizer
-                        ? servicesDetailsController
+                        ? 
+                        servicesDetailsController
                             .servicesDetailsItems[0].services.length
                         : loungeDetailsController.loungeDetailsItems[0].services
                             .length, // Adjust this based on your actual data
@@ -388,10 +420,20 @@ class _BookNowPageState extends State<BookNowPage> {
                           setState(() {
                             selectedCardIndex = currentIndex;
                             if (widget.isOrganizer) {
+                              bookNowController.selectedServiceType.value =
+                                  servicesDetailsController
+                                      .servicesDetailsItems[0]
+                                      .services[currentIndex]
+                                      .kind;
+
                               bookNowController
                                       .selectedOrganizerServiceId.value =
                                   servicesDetailsController
                                       .servicesItems[selectedCardIndex!].id;
+                              if (bookNowController.selectedServiceType.value ==
+                                  "public") {
+                                bookNowController.getCategoriesList();
+                              }
                             } else {
                               bookNowController.selectedHallServiceId.value =
                                   loungeDetailsController.loungeDetailsItems[0]
@@ -492,6 +534,253 @@ class _BookNowPageState extends State<BookNowPage> {
                       );
                     },
                   ).marginSymmetric(vertical: 10),
+                  //SHOWING THE NEDDED TEXTFILDS WHEN THE SERVICE IS PUBLIC ZAK
+                  //=================upload images=======================
+                  if (bookNowController.selectedServiceType.value == "public")
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Container(
+                            height: MediaQuery.sizeOf(context).height * 0.15,
+                            width: MediaQuery.sizeOf(context).width,
+                            child: Obx(
+                              () => ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: addLoungeController
+                                          .selectedImagePaths.length +
+                                      1, // Increase itemCount by 1
+                                  itemBuilder: (context, index) {
+                                    // Check if the current index is 0
+                                    if (index == 0) {
+                                      // Return the Container for adding a new picture
+                                      return Container(
+                                        clipBehavior: Clip.hardEdge,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              width: 2,
+                                              color: ThemesStyles.secondary),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.3,
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.15,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            addLoungeController
+                                                .getImage(ImageSource.gallery);
+                                          },
+                                          child: const Center(
+                                            child: Icon(
+                                              size: 30,
+                                              Icons.add_a_photo,
+                                              color: ThemesStyles.secondary,
+                                            ),
+                                          ),
+                                        ),
+                                      ).marginOnly(
+                                          left:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.0);
+                                    } else {
+                                      // Adjust the index to account for the first item
+                                      final imagePath = addLoungeController
+                                          .selectedImagePaths[index - 1];
+                                      print('imagePath: ${imagePath}');
+                                      return Stack(
+                                        children: [
+                                          Container(
+                                                  clipBehavior: Clip.hardEdge,
+                                                  decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                          spreadRadius: 0.5,
+                                                          blurRadius: 2,
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                          offset: const Offset(
+                                                              5, 2))
+                                                    ],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  width:
+                                                      MediaQuery.sizeOf(context)
+                                                              .width *
+                                                          0.3,
+                                                  height:
+                                                      MediaQuery.sizeOf(context)
+                                                          .height,
+                                                  child: Image.file(
+                                                      File(imagePath),
+                                                      fit: BoxFit.fill))
+                                              .marginOnly(
+                                                  left:
+                                                      MediaQuery.sizeOf(context)
+                                                              .width *
+                                                          0.03),
+                                          Positioned(
+                                            top: 0,
+                                            left: 0,
+                                            child: Container(
+                                              width: 40,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                  color: ThemesStyles.secondary,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: IconButton(
+                                                icon: const Icon(Icons.delete,
+                                                    color: Colors.red),
+                                                onPressed: () =>
+                                                    addLoungeController
+                                                        .removeImage(imagePath),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ).marginOnly(
+                                          left:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.05);
+                                    }
+                                  }),
+                            ).marginSymmetric(
+                                horizontal:
+                                    MediaQuery.sizeOf(context).width * 0.01),
+                          ),
+                        ],
+                      ),
+                    ),
+                  //=================upload images=======================
+                  Obx(() {
+                    if (bookNowController.selectedServiceType.value ==
+                        "public") {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              "Choose your name:",
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 203, 203, 203),
+                                fontSize: ThemesStyles.mainFontSize,
+                              ),
+                            ),
+                          ),
+                          CustomeTextFormField(
+                            hintText: "Name",
+                            inputType: TextInputType.text,
+                            title: "",
+                            controller: bookNowController.nameController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your name';
+                              }
+                              return null;
+                            },
+                            prefixIcon: null,
+                          ),
+                          //==================================================================
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              "Type a descraption about your event:",
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 203, 203, 203),
+                                fontSize: ThemesStyles.mainFontSize,
+                              ),
+                            ),
+                          ),
+                          CustomeTextFormField(
+                            hintText: "Descraption",
+                            inputType: TextInputType.text,
+                            title: "",
+                            controller: bookNowController.descraptionController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your descraption';
+                              }
+                              return null;
+                            },
+                            prefixIcon: null,
+                          ),
+                          //==================================================================
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              "Type your address:",
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 203, 203, 203),
+                                fontSize: ThemesStyles.mainFontSize,
+                              ),
+                            ),
+                          ),
+                          CustomeTextFormField(
+                            hintText: "Address",
+                            inputType: TextInputType.text,
+                            title: "",
+                            controller: bookNowController.addresaController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your address';
+                              }
+                              return null;
+                            },
+                            prefixIcon: null,
+                          ),
+                          //==================================================================
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              "Choose your event's ticket price:",
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 203, 203, 203),
+                                fontSize: ThemesStyles.mainFontSize,
+                              ),
+                            ),
+                          ),
+                          CustomeTextFormField(
+                            hintText: "Ticket Price",
+                            inputType: TextInputType.number,
+                            title: "",
+                            controller: bookNowController.ticketPriceController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter ticket price';
+                              }
+                              return null;
+                            },
+                            prefixIcon: null,
+                          ),
+                          //==================================================================
+                          //===================================================
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: Text(
+                              "Choose your event category:",
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 203, 203, 203),
+                                fontSize: ThemesStyles.mainFontSize,
+                              ),
+                            ),
+                          ),
+                          const BookEventCategoryWidget(),
+                          //===================================================
+                        ],
+                      );
+                    }
+                    return SizedBox
+                        .shrink(); // Return an empty widget if not public
+                  }),
                   //===================================================
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),

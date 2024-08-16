@@ -147,9 +147,9 @@ class ForgetPasswordPage extends GetView<ForgetPasswordController> {
 
                             if (controller.statusCode.value == 200) {
                               Get.to(() => OtpPage(
-                                email: emailController.text,
-                                isForgetPassword: true,
-                              ));
+                                    email: emailController.text,
+                                    isForgetPassword: true,
+                                  ));
                               controller.statusCode.value = 0;
                             } else {
                               Get.snackbar(

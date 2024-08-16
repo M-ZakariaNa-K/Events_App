@@ -167,7 +167,7 @@ class AddLoungesController extends GetxController {
   //============================================================================
   Future<void> submitImagesForPublicEventBooking({required int id}) async {
     try {
-//NOTE(from ZAKARIA): I use a SARED VARAIBLE becuse when i make the first request the book controller termenated 
+//NOTE(from ZAKARIA): I use a SARED VARAIBLE becuse when i make the first request the book controller termenated
 //and rebuild it's self => so the selectedImagesaPaths become empty when i book
 // so i saved is value in shared var
       List<dio.MultipartFile> imageFiles = [];
@@ -211,7 +211,7 @@ class AddLoungesController extends GetxController {
         //   kind.value = matchingItem["kind"];
         // }
         existedList.add({
-          // 'proporation': item1["proporation"],
+          'proportion': item1["proportion"],
           'id': "${matchingItem['id']}",
           'price': "${item1['price']}",
         });

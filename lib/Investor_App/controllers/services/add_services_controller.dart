@@ -22,10 +22,9 @@ class AddServiceController extends GetxController {
   var allDataToAPISecondTime = <String, dynamic>{}.obs;
   var firstRequisResponsData = 0.obs;
   var isTextFildEditing = true.obs;
-    var addedList = <Map<String, dynamic>>[].obs;
+  var addedList = <Map<String, dynamic>>[].obs;
 
-    var kind = ''.obs;
-
+  var kind = ''.obs;
 
   //========for the gridView=================
   var serviceList = <Map<String, dynamic>>[].obs;
@@ -57,7 +56,8 @@ class AddServiceController extends GetxController {
           snackPosition: SnackPosition.BOTTOM);
     }
   }
- void updateKindBasedOnSelection(String selectedService) {
+
+  void updateKindBasedOnSelection(String selectedService) {
     var selectedItem = dropdownItemsAllData.firstWhere(
       (item) => item['name'] == selectedService,
       orElse: () => {},
@@ -67,6 +67,7 @@ class AddServiceController extends GetxController {
       kind.value = selectedItem['kind'] ?? '';
     }
   }
+
   void removeImage(String imagePath) {
     selectedImagePaths.remove(imagePath);
   }
@@ -192,10 +193,10 @@ class AddServiceController extends GetxController {
         //   kind.value = matchingItem["kind"];
         // }
         existedList.add({
-          // 'proporation': item1["proporation"],
+          // 'proportion': item1["proportion"],
           'id': "${matchingItem['id']}",
           'price': "${item1['price']}",
-          'discounted_price':"${item1["discounted_price"]}",
+          'discounted_price': "${item1["discounted_price"]}",
         });
       }
     }

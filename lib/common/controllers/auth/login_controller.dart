@@ -10,36 +10,44 @@ class LoginController extends GetxController {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  LoginModel? userModel;
+  LoginDataModel? userModel;
 
-  void loginState({required String userName, required String password}) {
-    DioHelper.postDataWithAuth(
-      url: '$baseUrl/auth/login',
-      data: {'login': userName, 'password': password},
-    ).then((response) async {
-      final data = response.data;
-      print("zakakakak $data");
-      if (data != null) {
-        userModel = LoginModel.fromJson(data);
-        if (userModel != null && userModel!.data != null) {
-          token = userModel!.data!.token!;
+  Future<void> loginState(
+      {required String userName, required String password}) async {
+    try {
+      final response = await DioHelper.postDataWithAuth(
+        url: '$baseUrl/auth/login',
+        data: {'login': userName, 'password': password},
+      );
+      print("Response data: $response");
+      if (response != null) {
+        userModel = LoginDataModel.fromJson(response["data"]);
+        if (userModel != null && userModel! != null) {
+          print("zzzzzz $userModel");
+          token = userModel!.token!;
+          role = userModel!.role!;
+          isUser = userModel!.role == "User";
+          isHallOwner = userModel!.role == "HallOwner";
           box.write('token', token);
-          print(token);
+          roleBox.write('role', role);
+          print("Token: $token, Role: $role");
 
-          Get.offAll(const DrawerPage());
-            
           showToast(
-            msg: "Logged In Successfuly",
-            backgroundColor: Colors.green,
-          );
-        } else {}
-      } else {}
-    }).catchError((error) {});
+              msg: "Logged In Successfully", backgroundColor: Colors.green);
+          print("Navigating to DrawerPage");
+          Get.offAll(() => const DrawerPage());
+        } else {
+          print("Login failed: User model or data is null");
+        }
+      }
+    } catch (error) {
+      print("Login error: $error");
+      showToast(msg: "Login Failed", backgroundColor: Colors.red);
+    }
   }
 
   @override
   void dispose() {
-    // Dispose controllers to avoid memory leaks
     usernameController.dispose();
     passwordController.dispose();
     super.dispose();

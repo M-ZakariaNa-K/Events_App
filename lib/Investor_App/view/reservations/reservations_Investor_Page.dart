@@ -1,3 +1,4 @@
+import 'package:events_app/Investor_App/view/reservations/reservation_Page_details.dart';
 import 'package:events_app/User_App/controllers/reservation/reservation_controller.dart';
 import 'package:events_app/common/components/general/main_loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,10 @@ class ReservationsPage extends StatelessWidget {
   ReservationsPage({
     super.key,
     required this.assetId,
+    required this.isTheReservationDetailComeFromInvestorHalls
   });
+
+  final bool isTheReservationDetailComeFromInvestorHalls ;
   final int assetId;
   @override
   Widget build(BuildContext context) {
@@ -312,7 +316,21 @@ class ReservationsPage extends StatelessWidget {
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      final reservationDetailsController =
+                          Get.put(ReservationController());
+                      reservationDetailsController.reservationsDetalisUserList
+                          .clear();
+                      await reservationDetailsController
+                          .getReservationDeatilsItems(
+                              id: reservationsController
+                                  .reservationsInvestorList[index].id);
+                      print(
+                          ' reservationDetailsController.reservationsDetalisUserListzzzzzzzzzz: ${reservationDetailsController.reservationsDetalisUserList}');
+                      Get.to(() => ReservationDetailsPage(
+                            isTheReservationDetailComeFromInvestorHalls:isTheReservationDetailComeFromInvestorHalls,
+                          ));
+                    },
                     child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(

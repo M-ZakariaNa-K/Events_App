@@ -116,111 +116,6 @@ class _PublicEventsBookNowPageState extends State<PublicEventsBookNowPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //=================upload images=======================
-                  if (bookNowController.selectedServiceType.value == "public")
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Container(
-                            height: height * 0.15,
-                            width: width,
-                            child: Obx(
-                              () => ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemCount: addLoungeController
-                                          .selectedImagePaths.length +
-                                      1, // Increase itemCount by 1
-                                  itemBuilder: (context, index) {
-                                    // Check if the current index is 0
-                                    if (index == 0) {
-                                      // Return the Container for adding a new picture
-                                      return Container(
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              width: 2,
-                                              color: ThemesStyles.secondary),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        width: width * 0.3,
-                                        height: height * 0.15,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            addLoungeController
-                                                .getImage(ImageSource.gallery);
-                                          },
-                                          child: const Center(
-                                            child: Icon(
-                                              size: 30,
-                                              Icons.add_a_photo,
-                                              color: ThemesStyles.secondary,
-                                            ),
-                                          ),
-                                        ),
-                                      ).marginOnly(left: width * 0.0);
-                                    } else {
-                                      // Adjust the index to account for the first item
-                                      final imagePath = addLoungeController
-                                          .selectedImagePaths[index - 1];
-                                      print('imagePath: ${imagePath}');
-                                      return Stack(
-                                        children: [
-                                          Container(
-                                                  clipBehavior: Clip.hardEdge,
-                                                  decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          spreadRadius: 0.5,
-                                                          blurRadius: 2,
-                                                          color: Colors
-                                                              .grey.shade300,
-                                                          offset: const Offset(
-                                                              5, 2))
-                                                    ],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                  ),
-                                                  width: width * 0.3,
-                                                  height: height,
-                                                  child: Image.file(
-                                                      File(imagePath),
-                                                      fit: BoxFit.fill))
-                                              .marginOnly(left: width * 0.03),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            child: Container(
-                                              width: 40,
-                                              height: 40,
-                                              decoration: BoxDecoration(
-                                                  color: ThemesStyles.secondary,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                              child: IconButton(
-                                                icon: const Icon(Icons.delete,
-                                                    color: Colors.red),
-                                                onPressed: () =>
-                                                    addLoungeController
-                                                        .removeImage(imagePath),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ).marginOnly(left: width * 0.05);
-                                    }
-                                  }),
-                            ).marginSymmetric(horizontal: width * 0.01),
-                          ),
-                        ],
-                      ),
-                    ),
-                  //=================upload images=======================
                   //==================================================================
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -409,7 +304,7 @@ class _PublicEventsBookNowPageState extends State<PublicEventsBookNowPage> {
                     itemCount: loungeDetailsController
                         .loungeDetailsItems[0]
                         .services
-                        .length, // Adjust this based on your actual data
+                        .length, 
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // Number of columns
@@ -531,6 +426,111 @@ class _PublicEventsBookNowPageState extends State<PublicEventsBookNowPage> {
                     },
                   ).marginSymmetric(vertical: 10),
                   //=====================================================
+                  //=================upload images=======================
+                  if (bookNowController.selectedServiceType.value == "public")
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Container(
+                            height: height * 0.15,
+                            width: width,
+                            child: Obx(
+                              () => ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: addLoungeController
+                                          .selectedImagePaths.length +
+                                      1, // Increase itemCount by 1
+                                  itemBuilder: (context, index) {
+                                    // Check if the current index is 0
+                                    if (index == 0) {
+                                      // Return the Container for adding a new picture
+                                      return Container(
+                                        clipBehavior: Clip.hardEdge,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              width: 2,
+                                              color: ThemesStyles.secondary),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        width: width * 0.3,
+                                        height: height * 0.15,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            addLoungeController
+                                                .getImage(ImageSource.gallery);
+                                          },
+                                          child: const Center(
+                                            child: Icon(
+                                              size: 30,
+                                              Icons.add_a_photo,
+                                              color: ThemesStyles.secondary,
+                                            ),
+                                          ),
+                                        ),
+                                      ).marginOnly(left: width * 0.0);
+                                    } else {
+                                      // Adjust the index to account for the first item
+                                      final imagePath = addLoungeController
+                                          .selectedImagePaths[index - 1];
+                                      print('imagePath: ${imagePath}');
+                                      return Stack(
+                                        children: [
+                                          Container(
+                                                  clipBehavior: Clip.hardEdge,
+                                                  decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                          spreadRadius: 0.5,
+                                                          blurRadius: 2,
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                          offset: const Offset(
+                                                              5, 2))
+                                                    ],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  width: width * 0.3,
+                                                  height: height,
+                                                  child: Image.file(
+                                                      File(imagePath),
+                                                      fit: BoxFit.fill))
+                                              .marginOnly(left: width * 0.03),
+                                          Positioned(
+                                            top: 0,
+                                            left: 0,
+                                            child: Container(
+                                              width: 40,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                  color: ThemesStyles.secondary,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: IconButton(
+                                                icon: const Icon(Icons.delete,
+                                                    color: Colors.red),
+                                                onPressed: () =>
+                                                    addLoungeController
+                                                        .removeImage(imagePath),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ).marginOnly(left: width * 0.05);
+                                    }
+                                  }),
+                            ).marginSymmetric(horizontal: width * 0.01),
+                          ),
+                        ],
+                      ),
+                    ),
+                  //=================upload images=======================
                   //SHOWING THE NEDDED TEXTFILDS WHEN THE SERVICE IS PUBLIC ZAK
                   Obx(() {
                     if (bookNowController.selectedServiceType.value ==

@@ -125,7 +125,7 @@ void showCustomeLogOutDialog(BuildContext context) {
     cancelTextColor: Colors.black,
     confirmTextColor: Colors.white,
     buttonColor: ThemesStyles.primary,
-    onConfirm: () {
+    onConfirm: () async {
       Get.back(); // Close the dialog
       showDialog(
         context: context,
@@ -135,11 +135,17 @@ void showCustomeLogOutDialog(BuildContext context) {
         },
       );
       // ===============START function to logout==========================
-      DioHelper.get(url: "$baseUrl/auth/logout?");
+      await DioHelper.get(url: "$baseUrl/auth/logout");
       GetStorage().remove('token');
+      GetStorage().remove('role');
       // Hide loading indicator dialog
       Get.back();
       token = '';
+      role = '';
+      userEmail = '';
+      isUser = null;
+      isHallOwner = null;
+
       Get.offAll(const LoginPage());
       // ===============END function to logout==========================
       print("User wants to log out");

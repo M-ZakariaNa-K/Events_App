@@ -111,6 +111,12 @@ class EventScreen extends StatelessWidget {
                             : Image.network(
                                 '$photoBaseUrl${publicEventsController.publicEventsDetilaItems[0].photo}',
                                 fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/Logo.png',
+                                    fit: BoxFit.contain,
+                                  );
+                                },
                               );
                       },
                     ),

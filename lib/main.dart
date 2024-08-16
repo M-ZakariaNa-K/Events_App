@@ -2,6 +2,7 @@ import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/common/Util/Locale.dart';
 import 'package:events_app/common/Util/LocaleController.dart';
 import 'package:events_app/common/view/first_open/welcom_page.dart';
+import 'package:events_app/common/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
             translations: LangLocale(),
             title: 'Events App',
             // put the home page as your main working screen
-            home: const SafeArea(child: DrawerPage()),
+            home: const SafeArea(child: SplashPage()),
 
             theme: ThemeData(
               useMaterial3: true,

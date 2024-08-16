@@ -24,7 +24,7 @@ class RegesterModel {
 
 class RegesterDataModel {
   String? token;
-  bool? role;
+  String? role;
 
   RegesterDataModel({
     this.token,

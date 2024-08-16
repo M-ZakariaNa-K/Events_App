@@ -24,7 +24,7 @@ class RegisterController extends GetxController {
 
   var isLoading = false.obs; // Add loading state
 
-  RegesterModel? regesterModel;
+  RegesterDataModel? regesterModel;
 
   void register() {
     if (formKey.currentState!.validate()) {
@@ -52,16 +52,21 @@ class RegisterController extends GetxController {
         },
       );
 
-      final data = response.data;
-      if (data != null) {
-        regesterModel = RegesterModel.fromJson(data);
-        if (regesterModel != null && regesterModel!.data != null) {
-          token = regesterModel!.data!.token!;
+      // final data = response.data;
+      if (response != null) {
+        regesterModel = RegesterDataModel.fromJson(response["data"]);
+        if (regesterModel != null && regesterModel != null) {
+          token = regesterModel!.token!;
           userEmail = emailController.text;
+          role = regesterModel!.role!;
+          isUser = regesterModel!.role == "User";
+          isHallOwner = regesterModel!.role == "HallOwner";
+          box.write('token', token);
+          roleBox.write('role', role);
           box.write('token', token);
           Get.offAll(const DrawerPage());
-          Get.snackbar('Success', 'Registration successful',
-              snackPosition: SnackPosition.BOTTOM);
+          // Get.snackbar('Success', 'Registration successful',
+          //     snackPosition: SnackPosition.TOP);
         }
       }
     } catch (error) {

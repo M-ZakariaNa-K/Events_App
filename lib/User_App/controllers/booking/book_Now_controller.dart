@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BookNowController extends GetxController {
+  var isDataLoading = false.obs;
   TextEditingController startTimeController = TextEditingController();
   TextEditingController endTimeController = TextEditingController();
   TextEditingController audincesNumber = TextEditingController();
@@ -60,7 +61,25 @@ class BookNowController extends GetxController {
             "payment_type":
                 paymentController.selectedValue.value == 0 ? "cash" : "electro"
           },
-          "public_info": {},
+          "public_info": selectedServiceType.value == "public"
+              ? {
+                  "category": {
+                    "added": addedCategorriesMap,
+                    //0 for if i add an added category
+                    //-1 for validation which mean i didnt choose any category
+                    "existed": selectedChoosenCategoryId.value == -1 ||
+                            selectedChoosenCategoryId.value == 0
+                        ? {}
+                        : {"id": selectedChoosenCategoryId.value}
+                  },
+                  "info": {
+                    "description": descraptionController.text,
+                    "name": nameController.text,
+                    "address": addresaController.text,
+                    "ticket_price": ticketPriceController.text
+                  }
+                }
+              : {},
         });
     if (response["code"] == 200) {
       timesAvilableList.clear();
@@ -72,6 +91,7 @@ class BookNowController extends GetxController {
   Future<List<GetTimesAvailableListForReserveHallDataModel>>
       getTimesAvailbleList({required int assetId, required String date}) async {
     try {
+      isDataLoading.value = true;
       Map<String, dynamic> data1 = await DioHelper.get(
           url:
               "$baseUrl/reservations/list-times-hall?asset_id=$assetId&date=$date");
@@ -79,10 +99,13 @@ class BookNowController extends GetxController {
       final a = GetTimesAvailableListForReserveHallModel.fromJson(data1);
 
       timesAvilableList.value = a.data;
+
       return timesAvilableList;
     } catch (e) {
       print('Error fetching times available: $e');
       return timesAvilableList;
+    } finally {
+      isDataLoading.value = false;
     }
   }
 
@@ -90,6 +113,8 @@ class BookNowController extends GetxController {
       getTimesReservedOrgainzerList(
           {required int assetId, required String date}) async {
     try {
+      isDataLoading.value = true;
+
       Map<String, dynamic> data1 = await DioHelper.get(
           url:
               "$baseUrl/reservations/list-times-organizer?asset_id=$assetId&date=$date");
@@ -101,6 +126,8 @@ class BookNowController extends GetxController {
     } catch (e) {
       print('Error fetching times available: $e');
       return timesAvilableList;
+    } finally {
+      isDataLoading.value = false;
     }
   }
 
@@ -213,7 +240,6 @@ class BookNowController extends GetxController {
         addLoungeController.selectedImagePaths.value = [];
         addLoungeController.selectedImageSize.value = '';
         addLoungeController.selectedImagePath.value = '';
-        
       }
     } catch (e) {
       Get.snackbar("Erorr", "one of the fild is wrong");

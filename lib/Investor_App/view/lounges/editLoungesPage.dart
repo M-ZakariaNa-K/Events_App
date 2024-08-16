@@ -75,7 +75,7 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
 
   TextEditingController servicesPriceController = TextEditingController();
 
-  TextEditingController servicesProporationController = TextEditingController();
+  TextEditingController servicesproportionController = TextEditingController();
 
   final GlobalKey<FormState> _serviceFormKey = GlobalKey<FormState>();
 
@@ -1006,7 +1006,7 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                       height: 50,
                                       child: TextFormField(
                                         controller:
-                                            servicesProporationController,
+                                            servicesproportionController,
                                         enableSuggestions: false,
                                         keyboardType: TextInputType.number,
                                         obscureText: false,
@@ -1075,7 +1075,7 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                     //     return null;
                                     //   },
                                     //   textEditingController:
-                                    //       servicesProporationController,
+                                    //       servicesproportionController,
                                     //   obscureText: false,
                                     // ),
                                   ),
@@ -1098,12 +1098,12 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                         addLoungeController.serviceList.add({
                                           "name": addLoungeController
                                               .dropdownValue.value,
-                                          // "proporation":
-                                          //     servicesProporationController
+                                          // "proportion":
+                                          //     servicesproportionController
                                           //         .text,
                                           "price": servicesPriceController.text,
                                         });
-                                        servicesProporationController.clear();
+                                        servicesproportionController.clear();
                                         servicesPriceController.clear();
                                         addLoungeController
                                             .dropdownValue.value = '';
@@ -1412,12 +1412,12 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                       // addLoungeController.serviceList[index]["id"];
 
                                       TextEditingController
-                                          proporationController =
+                                          proportionController =
                                           TextEditingController();
                                       TextEditingController priceController =
                                           TextEditingController();
 
-                                      proporationController.text = "";
+                                      proportionController.text = "";
                                       // editLoungeController
                                       //         .editedList.isNotEmpty
                                       //     ? editLoungeController
@@ -1450,9 +1450,9 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                                     enabled: service.kind ==
                                                         "public",
                                                     controller:
-                                                        proporationController,
+                                                        proportionController,
                                                     decoration: InputDecoration(
-                                                      labelText: 'Proporation',
+                                                      labelText: 'proportion',
                                                       labelStyle:
                                                           const TextStyle(
                                                               color:
@@ -1517,7 +1517,7 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                                                 priceController
                                                                     .text,
                                                             "discounted-price":
-                                                                proporationController
+                                                                proportionController
                                                                     .text,
                                                           });
 
@@ -1640,7 +1640,7 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                             Text(
                                               addLoungeController
                                                           .serviceList[index]
-                                                      ["proporation"] ??
+                                                      ["proportion"] ??
                                                   "0",
                                               style: TextStyle(
                                                 color: ThemesStyles.textColor,
@@ -1788,7 +1788,7 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                         ),
                                       ),
                                       Text(
-                                        addeedItem["proporation"] ?? "0",
+                                        addeedItem["proportion"] ?? "0",
                                         style: TextStyle(
                                           color: ThemesStyles.textColor,
                                           fontSize: ThemesStyles.littelFontSize,

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/helper/show_toast.dart';
 import 'package:flutter/material.dart';
@@ -176,35 +177,49 @@ class DioHelper {
   }
 
   //=====================================================================================
-  static Future<Response> postDataWithAuth({
+  static Future<dynamic> postDataWithAuth({
     token,
     required String url,
     required Map<String, dynamic> data,
   }) async {
-    _dio.options.headers = {
-      'Accept': 'application/json',
-    };
+    try {
+      final headers = <String, dynamic>{
+        'Accept': 'application/json',
+      };
 
-    return _dio
-        .post(
-      url,
-      data: data,
-    )
-        // ignore: body_might_complete_normally_catch_error
-        .catchError((e) {
-      if (e.response.statusCode == 401) {
-        //Get.off(const LoginScreen());
-      } else if (e.response.statusCode == 422) {
-        print("zak ${e.response}");
-        print(e.response['message']);
-        print(e.response.statusCode);
+      final response = await _dio.post(
+        url,
+        data: data,
+      );
 
-        // showToast(text: e.response['message'], state: ToastStates.ERROR);
+      print('Request body: $data');
+      print('Response: ${response.data}');
+
+      if (response.statusCode == 200) {
+        GET.Get.snackbar("Gongrats🎉", "${response.data["message"]}");
+
+        return response.data;
       } else {
-        print(e.response.statusCode);
+        GET.Get.snackbar("Opps....",
+            "${response.data["message"]}. please correct email or password");
+        throw Exception(
+            'There is a problem with status code ${response.statusCode} with body ${response.data}');
       }
-      return 0;
-    });
+    } catch (e) {
+      if (e is DioException) {
+        if (e.response != null) {
+          GET.Get.snackbar("Opps....",
+              "${e.response?.data["message"]}. please correct email or password");
+          print('DioError: ${e.response?.data["message"]}');
+          print('DioError: ${e.response?.data}');
+        } else {
+          print('DioError: ${e.message}');
+        }
+      } else {
+        print('Error: $e');
+      }
+      // throw Exception('Failed to post data');
+    }
   }
 
   static Future<Response> putData(
@@ -246,19 +261,4 @@ class DioHelper {
       print("Error submitting rating: $e");
     }
   }
-
-  // Future<Response> deletData(
-  //     {required String path,
-  //     Map<String, dynamic>? query,
-  //     Map<String, dynamic>? body,
-  //     String? token}) async {
-  //   dio.options.headers = {
-  //     'Accept': 'application/json',
-  //     'Authorization': 'Bearer $token'
-  //   };
-  //   return await dio.delete(path, data: body).catchError((e) {
-  //     if (e.response != null) {
-  //     } else {}
-  //   });
-  // }
 }

@@ -1,14 +1,14 @@
 class LoginModel {
   int? code;
   String? message;
-  Data? data;
+  LoginDataModel? data;
 
   LoginModel({this.code, this.message, this.data});
 
   LoginModel.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? new LoginDataModel.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,16 +22,16 @@ class LoginModel {
   }
 }
 
-class Data {
+class LoginDataModel {
   String? token;
-  bool? role;
+  String? role;
 
-  Data({
+  LoginDataModel({
     this.token,
     this.role,
   });
 
-  Data.fromJson(Map<String, dynamic> json) {
+  LoginDataModel.fromJson(Map<String, dynamic> json) {
     token = json['token'];
     role = json['role'];
   }

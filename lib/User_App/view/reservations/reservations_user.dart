@@ -10,8 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ReservationsUserPage extends StatelessWidget {
-  ReservationsUserPage({super.key, required this.isCommingFromInvestorSide});
+  ReservationsUserPage({super.key, required this.isCommingFromInvestorSide, required this.isTheReservationDetailComeFromInvestorHalls});
   final bool isCommingFromInvestorSide;
+  final bool isTheReservationDetailComeFromInvestorHalls ;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +117,9 @@ class ReservationsUserPage extends StatelessWidget {
                           id: reservation.id,
                         );
                         Get.to(
-                          () => ReservationDetailsPage(),
+                          () => ReservationDetailsPage(
+                            isTheReservationDetailComeFromInvestorHalls: isTheReservationDetailComeFromInvestorHalls,
+                          ),
                           transition: ThemesStyles.mainTransation,
                           duration: const Duration(milliseconds: 300),
                         );
@@ -255,7 +258,7 @@ class ReservationsUserPage extends StatelessWidget {
                                   padding: const EdgeInsets.only(right: 10.0),
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      // Convert reservation.id to a string
+                                 
                                       _showRatingDialog(
                                           context, reservation.id.toString());
                                     },

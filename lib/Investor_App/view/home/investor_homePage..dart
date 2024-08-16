@@ -8,6 +8,7 @@ import 'package:events_app/User_App/components/home/person_kind_card.dart';
 import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/services_user_controller.dart';
+import 'package:events_app/User_App/controllers/publicEvent/public_eevent_controller.dart';
 import 'package:events_app/User_App/view/loanges&organizers/OrganizersPage.dart';
 import 'package:events_app/User_App/view/loanges&organizers/loanges_page.dart';
 import 'package:events_app/common/components/general/main_loading_widget.dart';
@@ -49,14 +50,14 @@ class InvestorHomePage extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: ThemesStyles.paddingprimary),
       child: Scaffold(
         floatingActionButton:
-            !(servicesController.isFirstTimeForOrganizer.value && !isHallOwner)
+            !(servicesController.isFirstTimeForOrganizer.value && !isHallOwner!)
                 ? FloatingActionButton(
                     backgroundColor:
                         Theme.of(context).brightness == Brightness.dark
                             ? const Color.fromARGB(255, 65, 65, 65)
                             : ThemesStyles.thirdColor,
                     onPressed: () {
-                      isHallOwner
+                      isHallOwner!
                           ? Get.to(() => AddLoungesPage())
                           : Get.to(
                               () => AddServicesPage(
@@ -76,7 +77,7 @@ class InvestorHomePage extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: Obx(() {
           final loungesController = Get.put(LoungesController());
-          if (isHallOwner) {
+          if (isHallOwner!) {
             if (loungesController.loangesLoading.value) {
               return const Center(child: MainLoadingWidget());
             }
@@ -139,6 +140,20 @@ class InvestorHomePage extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             Get.find<DrawerPageController>().changeTabIndex(3);
+                            // Here u will show the public events
+                            final publicEventsController =
+                                Get.put(PublicEventController());
+
+                            publicEventsController.existedCategoriesList
+                                .clear();
+                            publicEventsController.publicEventsItems.clear();
+                            publicEventsController.publicEventsItemsDependOnDate
+                                .clear();
+                            publicEventsController.getCategoriesList();
+                            publicEventsController.getPublicEventsItems(
+                                category_id: 0);
+                            publicEventsController.getPublicEventsItems(
+                                category_id: 1);
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -240,6 +255,19 @@ class InvestorHomePage extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Get.find<DrawerPageController>().changeTabIndex(3);
+                          // Here u will show the public events
+                          final publicEventsController =
+                              Get.put(PublicEventController());
+
+                          publicEventsController.existedCategoriesList.clear();
+                          publicEventsController.publicEventsItems.clear();
+                          publicEventsController.publicEventsItemsDependOnDate
+                              .clear();
+                          publicEventsController.getCategoriesList();
+                          publicEventsController.getPublicEventsItems(
+                              category_id: 0);
+                          publicEventsController.getPublicEventsItems(
+                              category_id: 1);
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -262,7 +290,8 @@ class InvestorHomePage extends StatelessWidget {
             if (servicesController.servicesLoading.value) {
               return const Center(child: MainLoadingWidget());
             }
-            if (servicesController.isFirstTimeForOrganizer.value) {
+            if (servicesController.isFirstTimeForOrganizer.value &&
+                servicesController.servicesItems.isEmpty) {
               // servicesController.isFirstTimeForOrganizer.value = true;
               return ScrollConfiguration(
                 behavior: const MaterialScrollBehavior(),
@@ -323,6 +352,19 @@ class InvestorHomePage extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Get.find<DrawerPageController>().changeTabIndex(3);
+                          // Here u will show the public events
+                          final publicEventsController =
+                              Get.put(PublicEventController());
+
+                          publicEventsController.existedCategoriesList.clear();
+                          publicEventsController.publicEventsItems.clear();
+                          publicEventsController.publicEventsItemsDependOnDate
+                              .clear();
+                          publicEventsController.getCategoriesList();
+                          publicEventsController.getPublicEventsItems(
+                              category_id: 0);
+                          publicEventsController.getPublicEventsItems(
+                              category_id: 1);
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -462,6 +504,19 @@ class InvestorHomePage extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Get.find<DrawerPageController>().changeTabIndex(3);
+                          // Here u will show the public events
+                          final publicEventsController =
+                              Get.put(PublicEventController());
+
+                          publicEventsController.existedCategoriesList.clear();
+                          publicEventsController.publicEventsItems.clear();
+                          publicEventsController.publicEventsItemsDependOnDate
+                              .clear();
+                          publicEventsController.getCategoriesList();
+                          publicEventsController.getPublicEventsItems(
+                              category_id: 0);
+                          publicEventsController.getPublicEventsItems(
+                              category_id: 1);
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -517,6 +572,7 @@ class HallCards extends GetView<LoungesController> {
                 id: loungeController.loungesItems[index].id,
               );
               Get.to(() => LoungesDetailsPage(
+                    isCommingAsUser: false,
                     id: loungeController.loungesItems[index].id,
                   ));
             },
@@ -811,12 +867,12 @@ class ServiceCard extends GetView<ServicesHomePageController> {
                   onPressed: () {
                     // addLoungeController.serviceList[index]["id"];
 
-                    TextEditingController proporationController =
+                    TextEditingController proportionController =
                         TextEditingController();
                     TextEditingController priceController =
                         TextEditingController();
 
-                    proporationController.text =
+                    proportionController.text =
                         servicesShowController.servicesItems.isNotEmpty
                             ? servicesShowController
                                     .servicesItems[index].discountedPrice ??
@@ -844,9 +900,9 @@ class ServiceCard extends GetView<ServicesHomePageController> {
                                   enabled: servicesShowController
                                           .servicesItems[index].kind ==
                                       "public",
-                                  controller: proporationController,
+                                  controller: proportionController,
                                   decoration: InputDecoration(
-                                    labelText: 'Proporation',
+                                    labelText: 'proportion',
                                     labelStyle: const TextStyle(
                                         color: ThemesStyles.primary),
                                     border: OutlineInputBorder(
@@ -893,7 +949,7 @@ class ServiceCard extends GetView<ServicesHomePageController> {
                                                       .kind ==
                                                   "public")
                                                 "discounted_price":
-                                                    proporationController.text
+                                                    proportionController.text
                                             });
                                         servicesShowController.servicesItems
                                             .clear();

@@ -115,6 +115,7 @@ class _DrawerPageState extends State<DrawerPage> {
     const HomePage(),
     ReservationsUserPage(
       isCommingFromInvestorSide: false,
+      isTheReservationDetailComeFromInvestorHalls: false,
     ),
 
     //here u will go to ADD page and also in the + button u gonna go to Add page
@@ -132,7 +133,7 @@ class _DrawerPageState extends State<DrawerPage> {
     PublicEventPage(
       isUserLoggedIn: true,
     ),
-    const SearchPage(),
+    const FavoratePage(),
   ];
 
   void _onItemTappedBottom(int index) {
@@ -144,17 +145,17 @@ class _DrawerPageState extends State<DrawerPage> {
     publicEventsController.publicEventsItemsDependOnDate.clear();
 
     setState(() {
-      if (index == 0 && !isUser && !isHallOwner) {
+      if (index == 0 && !isUser! && !isHallOwner!) {
         final servicesController = Get.put(ServicesHomePageController());
         servicesController.servicesItems.clear();
         servicesController.getServicesItems();
       }
-      if (index == 0 && !isUser && isHallOwner) {
+      if (index == 0 && !isUser! && isHallOwner!) {
         final loungeController = Get.put(LoungesController());
         loungeController.loungesItems.clear();
         loungeController.getloungesItems();
       }
-      if (index == 1 && isUser) {
+      if (index == 1 && isUser!) {
         final reservationController = Get.put(ReservationController());
         reservationController.reservationsUserList.clear();
         reservationController.isPrivateSelected.value = true;
@@ -170,7 +171,7 @@ class _DrawerPageState extends State<DrawerPage> {
         reservationController.reservationsUserList.clear();
         reservationController.reservationsInvestorList.clear();
       }
-      if (index == 1 && !isUser) {
+      if (index == 1 && !isUser!) {
         final loungesController = Get.put(LoungesController());
         loungesController.loungesItems.clear();
         loungesController.getloungesItems();
@@ -248,7 +249,7 @@ class _DrawerPageState extends State<DrawerPage> {
       body: Obx(() {
         return isButtomNavPressed
             ? Center(
-                child: isUser
+                child: isUser!
                     ? _userBottomBarOptions[controller.currentIndexBottom.value]
                     : _investorBottomBarOptions[
                         controller.currentIndexBottom.value],
@@ -257,7 +258,7 @@ class _DrawerPageState extends State<DrawerPage> {
                 children: [
                   // Page Content
                   Expanded(
-                    child: isUser
+                    child: isUser!
                         ? _userDrawerPages[controller.currentIndexDrawer.value]
                         : _investorDrawerPages[
                             controller.currentIndexDrawer.value],

@@ -17,7 +17,7 @@ class AddServicesPage extends GetView<AddServiceController> {
   final bool isTheFirstVisit;
   TextEditingController addressController = TextEditingController();
   TextEditingController servicesPriceController = TextEditingController();
-  TextEditingController servicesProporationController = TextEditingController();
+  TextEditingController servicesproportionController = TextEditingController();
   TextEditingController startTimeController = TextEditingController();
   TextEditingController endTimeController = TextEditingController();
 
@@ -367,7 +367,7 @@ class AddServicesPage extends GetView<AddServiceController> {
                           return Container(
                             width: width / 2.5,
                             child: TextFormField(
-                              controller: servicesProporationController,
+                              controller: servicesproportionController,
                               enableSuggestions: false,
                               keyboardType: TextInputType.number,
                               obscureText: false,
@@ -431,10 +431,10 @@ class AddServicesPage extends GetView<AddServiceController> {
                                   "name":
                                       addServiceController.dropdownValue.value,
                                   "discounted_price":
-                                      servicesProporationController.text,
+                                      servicesproportionController.text,
                                   "price": servicesPriceController.text,
                                 });
-                                servicesProporationController.clear();
+                                servicesproportionController.clear();
                                 servicesPriceController.clear();
                                 addServiceController.dropdownValue.value = '';
                               }
@@ -472,7 +472,10 @@ class AddServicesPage extends GetView<AddServiceController> {
                 ).marginOnly(top: height * 0.01),
               ).marginSymmetric(horizontal: width * 0.02, vertical: 10),
             ),
-            Text("Exicted Services:"),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text("Exicted Services:"),
+            ),
             Obx(
               () => GridView.builder(
                 shrinkWrap: true,
@@ -596,7 +599,10 @@ class AddServicesPage extends GetView<AddServiceController> {
                 },
               ).marginSymmetric(horizontal: width * 0.03),
             ),
-            Text("Added Services:"),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text("Added Services:"),
+            ),
             Obx(
               () => GridView.builder(
                 shrinkWrap: true,
@@ -668,7 +674,7 @@ class AddServicesPage extends GetView<AddServiceController> {
                                 ),
                               ),
                               Text(
-                                addeedItem["proporation"] ?? "0",
+                                addeedItem["proportion"] ?? "0",
                                 style: TextStyle(
                                   color: ThemesStyles.textColor,
                                   fontSize: ThemesStyles.littelFontSize,

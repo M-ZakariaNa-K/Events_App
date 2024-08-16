@@ -226,7 +226,7 @@ class PublicEventPage extends StatelessWidget {
                                             const EdgeInsets.only(bottom: 10),
                                         child: Text(
                                           publicEventsController
-                                              .publicEventsItems[i].eventName,
+                                              .publicEventsItems[i].name,
                                           style: TextStyle(
                                             fontSize: ThemesStyles.mainFontSize,
                                             fontWeight: FontWeight.bold,

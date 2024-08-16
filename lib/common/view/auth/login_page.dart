@@ -18,8 +18,7 @@ class LoginPage extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-       AppBar(
+      appBar: AppBar(
         title: GestureDetector(
           onTap: () {
             Get.to(() => PublicEventPage(
@@ -174,62 +173,37 @@ class LoginPage extends GetView<LoginController> {
                     //====================================Forget password =====================================
                     //=====================================Google==========================================
 
-                    //5
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            height: 20,
-                            thickness: 2,
-                            color: Colors.grey.shade300,
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 20),
-                          child: Text(
-                            "or continue with",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            height: 20,
-                            thickness: 2,
-                            color: Colors.grey.shade300,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //Sign in by Google
-                    Center(
-                      child: SizedBox(
-                        width: 90,
-                        child: LoginDefultButton(
-                          buttonColor: ThemesStyles.background,
-                          textColor:
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? ThemesStyles.seconndTextColor
-                                  : ThemesStyles.textColor,
-                          borderColor: Colors.grey,
-                          title: "",
-                          icon: Image.asset(
-                            'assets/images/Google.png',
-                            width: 40,
-                            height: 40,
-                          ),
-                          onPressed: () {
-                            //Sign in by GOOGLE
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    // //5
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: Divider(
+                    //         height: 20,
+                    //         thickness: 2,
+                    //         color: Colors.grey.shade300,
+                    //       ),
+                    //     ),
+                    //     const Padding(
+                    //       padding: EdgeInsets.symmetric(
+                    //           horizontal: 8.0, vertical: 20),
+                    //       child: Text(
+                    //         "or continue with",
+                    //         style: TextStyle(color: Colors.grey),
+                    //       ),
+                    //     ),
+                    //     Expanded(
+                    //       child: Divider(
+                    //         height: 20,
+                    //         thickness: 2,
+                    //         color: Colors.grey.shade300,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+
                     Center(
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

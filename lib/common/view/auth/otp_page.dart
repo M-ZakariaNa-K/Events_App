@@ -79,33 +79,33 @@ class OtpPage extends StatelessWidget {
                             fontWeight: ThemesStyles.fontWeightBold,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () async {
-                            final shouldNavigate =
-                                await showConfirmationDialogOTP(
-                                    forgetPasswordController: controller,
-                                    context: context,
-                                    imagePath:
-                                        'assets/images/shield (1).png', // Replace with your image path
-                                    title: 'Change Email',
-                                    changeEmailController:
-                                        changeNumberController);
+                        // GestureDetector(
+                        //   onTap: () async {
+                        //     final shouldNavigate =
+                        //         await showConfirmationDialogOTP(
+                        //             forgetPasswordController: controller,
+                        //             context: context,
+                        //             imagePath:
+                        //                 'assets/images/shield (1).png', // Replace with your image path
+                        //             title: 'Change Email',
+                        //             changeEmailController:
+                        //                 changeNumberController);
 
-                            if (shouldNavigate ?? false) {
-                              //Here will make the post request which has the changing number
-                            }
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: Text(
-                              "Change Email Addres?",
-                              style: TextStyle(
-                                color: ThemesStyles.primary,
-                                fontWeight: ThemesStyles.fontWeightBold,
-                              ),
-                            ),
-                          ),
-                        ),
+                        //     if (shouldNavigate ?? false) {
+                        //       //Here will make the post request which has the changing number
+                        //     }
+                        //   },
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.symmetric(horizontal: 15),
+                        //     child: Text(
+                        //       "Change Email Addres?",
+                        //       style: TextStyle(
+                        //         color: ThemesStyles.primary,
+                        //         fontWeight: ThemesStyles.fontWeightBold,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -260,10 +260,10 @@ class OtpPage extends StatelessWidget {
                                           },
                                         ),
                                       );
-                                      controller.otpNumber1='';
-                                      controller.otpNumber2='';
-                                      controller.otpNumber3='';
-                                      controller.otpNumber4='';
+                                controller.otpNumber1 = '';
+                                controller.otpNumber2 = '';
+                                controller.otpNumber3 = '';
+                                controller.otpNumber4 = '';
                               } else {
                                 Get.snackbar(
                                   'Warning',
@@ -314,7 +314,7 @@ Future<bool?> showConfirmationDialogOTP({
             padding: const EdgeInsets.symmetric(vertical: 20.0),
             child: CustomeTextFormField(
               hintText:
-                  'forgetPasswordController.maskEmailOtp(forgetPasswordController.email)',
+                  '${forgetPasswordController.maskEmailOtp(forgetPasswordController.email)}',
               inputType: TextInputType.emailAddress,
               title: "",
               controller: changeEmailController,

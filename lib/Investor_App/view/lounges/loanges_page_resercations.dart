@@ -130,6 +130,7 @@ class HallUserCards extends GetView<LoungesUserController> {
                 );
 
                 Get.to(() => ReservationsPage(
+                  isTheReservationDetailComeFromInvestorHalls: true,
                       assetId: loungeController.loungesItems[i].id,
                     ));
               },
