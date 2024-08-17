@@ -1,3 +1,4 @@
+import 'package:events_app/Investor_App/controllers/lounges/lounges_controller.dart';
 import 'package:events_app/Investor_App/view/lounges/LoungesDetailsPage.dart';
 import 'package:events_app/User_App/controllers/booking/reservation_filter_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
@@ -13,6 +14,7 @@ class ReservationAfterFilterPage extends GetView<ReservationFilterController> {
 
   @override
   Widget build(BuildContext context) {
+    final loungeController = Get.put(LoungesUserController());
     final reservationFilterController = Get.put(ReservationFilterController());
     return Scaffold(
       appBar: AppBar(
@@ -183,11 +185,6 @@ class ReservationAfterFilterPage extends GetView<ReservationFilterController> {
                                   ),
                                 ),
                                 const SizedBox(width: 30),
-                                const Icon(
-                                  Icons.favorite,
-                                  size: 18,
-                                  color: ThemesStyles.primary,
-                                ),
                               ],
                             ),
                           ],

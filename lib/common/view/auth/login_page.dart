@@ -19,23 +19,23 @@ class LoginPage extends GetView<LoginController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: GestureDetector(
-          onTap: () {
-            Get.to(() => PublicEventPage(
-                  isUserLoggedIn: false,
-                ));
-          },
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "SKIP",
-              ),
-            ],
-          ),
-        ),
-        titleTextStyle: const TextStyle(color: Color(0xff464646), fontSize: 16),
+        // title: GestureDetector(
+        //   onTap: () {
+        //     Get.to(() => PublicEventPage(
+        //           isUserLoggedIn: false,
+        //         ));
+        //   },
+        //   child: const Row(
+        //     mainAxisAlignment: MainAxisAlignment.end,
+        //     crossAxisAlignment: CrossAxisAlignment.end,
+        //     children: [
+        //       Text(
+        //         "SKIP",
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // titleTextStyle: const TextStyle(color: Color(0xff464646), fontSize: 16),
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         elevation: 0.0,

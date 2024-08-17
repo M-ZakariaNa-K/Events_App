@@ -17,12 +17,23 @@ class LangLocale implements Translations {
           "Offers Card": "بطاقة العروض",
           "OffersCardQuestion": "ماذا تنتظر ! تصفح الآن",
           //========================================Drawer=================================
-          "Home":"Home",
-          "Settings":"Settings",
-          "Logout":"Settings",
+          "Home": "الصفحة الرئيسية",
+          "Settings": "الإعدادات ",
+          "Logout": "تسجيل الخروج",
+          "Profile": "الملف الشخصي",
+          "Help Center": "مركز المساعدة",
+          //========================================Profile=================================
+            "Account": "الحساب",
+            "See Profile": "رؤية الملف الشخصي",
+            "Notifaction": "الإشعارات",
+            "Other": "أُخرى",
+            "Dark Mode": "الوضع المظلم",
+            "Language": "اللغة",
+            "Region": "المنطقة",
+            "About Us": "حول التطبيق",
           //========================================Booking=================================
-          "Back":"رجوع",
-          "NEXT":"التالي",
+          "Back": "رجوع",
+          "NEXT": "التالي",
 
           "public": "عامة",
           "privte": "خاصة",
@@ -40,8 +51,7 @@ class LangLocale implements Translations {
           "Birthday Party": "حفلة عيد ميلاد",
           "Graduation": "حفلة عيد ميلاد",
 
-          "What is the number of your audiences?":
-              "ما هو عدد حضورك؟",
+          "What is the number of your audiences?": "ما هو عدد حضورك؟",
 
           "Do you want any of the following services:":
               "هل تريد أي من الخدمات التالية:",
@@ -53,6 +63,13 @@ class LangLocale implements Translations {
           "Yes": "نعم",
         },
         "en": {
+          //==============drawer=====================
+          "Home": "Home",
+          "Settings": "Settings",
+          "Logout": "Logout",
+          "Profile": "Profile",
+          "Help Center": "Help Center",
+          //==============drawer=====================
           "organizers": "Organizers",
           "Lounges": "Lounges",
           "PublicEvents": "Public Events",
@@ -64,9 +81,26 @@ class LangLocale implements Translations {
           "OffersCardQuestion": "What are you wating for! Browse now",
           "Arabic": "Arabic",
           "English": "English",
+           //========================================Profile=================================
+            "Account": "Account",
+            "See Profile": "See Profile",
+            "Notifaction": "Notifaction",
+            "Other": "Other",
+            "Dark Mode": "Dark Mode",
+            "Language": "Language",
+            "Region": "Region",
+            "About Us": "About Us",
+          //=======================================Homepage=================================
+           'Are you loking for public or private event? What are you wating for! Book Now':"Are you loking for public or private event? What are you wating for! Book Now",
+           'Book Now':"Book Now",
+           'New to the app (Lounges)':"New to the app (Lounges)",
+           'New to the app (organizers)':"New to the app (organizers)",
+           'offers Card':"offers Card",
+           'See Offers':"See Offers",
+           'What are you wating for! Browse now':"What are you wating for! Browse now",
           //========================================Booking=================================
-          "Back":"BACK",
-          "NEXT":"NEXT",
+          "Back": "BACK",
+          "NEXT": "NEXT",
 
           "public": "Public",
           "privte": "Privte",

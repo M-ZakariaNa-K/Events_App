@@ -98,7 +98,7 @@ class DrawerWidget extends StatelessWidget {
               children: [
                 DrawerItem(
                   isLogout: false,
-                  title: 'Home',
+                  title: 'Home'.tr,
                   icon: Icons.home_work_outlined,
                   index: 0,
                   selectedIndex: selectedIndex,
@@ -107,7 +107,7 @@ class DrawerWidget extends StatelessWidget {
                 ),
                 DrawerItem(
                   isLogout: false,
-                  title: 'Profile',
+                  title: 'Profile'.tr,
                   icon: Icons.person_2_outlined,
                   index: 1,
                   selectedIndex: selectedIndex,
@@ -134,7 +134,7 @@ class DrawerWidget extends StatelessWidget {
                 // ),
                 DrawerItem(
                   isLogout: false,
-                  title: "Settings",
+                  title: "Settings".tr,
                   icon: Icons.settings,
                   index: 2,
                   selectedIndex: selectedIndex,
@@ -143,7 +143,7 @@ class DrawerWidget extends StatelessWidget {
                 ),
                 DrawerItem(
                   isLogout: false,
-                  title: "Help Center",
+                  title: "Help Center".tr,
                   icon: Icons.info_outline_rounded,
                   index: 3,
                   selectedIndex: selectedIndex,
@@ -196,7 +196,7 @@ class DrawerWidget extends StatelessWidget {
             ),
             DrawerItem(
               isLogout: true,
-              title: "Logout",
+              title: "Logout".tr,
               icon: Icons.logout,
               index: 6,
               selectedIndex: selectedIndex,

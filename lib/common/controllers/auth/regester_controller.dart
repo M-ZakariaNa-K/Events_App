@@ -1,4 +1,5 @@
 import 'package:events_app/User_App/view/home/drawer-page.dart';
+import 'package:events_app/common/controllers/auth/forget_password_controller.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/helper/api.dart';
 import 'package:events_app/common/models/regester_model.dart';
@@ -34,7 +35,7 @@ class RegisterController extends GetxController {
     }
   }
 
-  void regesterState() async {
+  Future<void> regesterState() async {
     isLoading.value = true; // Show loading indicator
 
     try {
@@ -49,6 +50,7 @@ class RegisterController extends GetxController {
           'confirm_password': confirmPasswordController.text,
           'address': addressController.text,
           'phone_number': phoneNumberController.text,
+          "client_token": "ahmaddeeb"
         },
       );
 
@@ -64,7 +66,20 @@ class RegisterController extends GetxController {
           box.write('token', token);
           roleBox.write('role', role);
           box.write('token', token);
-          Get.offAll(const DrawerPage());
+
+          firstNameController.clear();
+          lastNameController.clear();
+          usernameController.clear();
+          passwordController.clear();
+          // emailController.clear();
+          phoneNumberController.clear();
+          addressController.clear();
+          addressController.clear();
+          confirmPasswordController.clear();
+          Get.to(OtpPage(
+            email: emailController.text,
+            isForgetPassword: false,
+          ));
           // Get.snackbar('Success', 'Registration successful',
           //     snackPosition: SnackPosition.TOP);
         }

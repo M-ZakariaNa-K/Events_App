@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:events_app/User_App/view/home/drawer-page.dart';
 import 'package:events_app/common/Util/slide_to_page_route.dart';
+import 'package:events_app/common/controllers/auth/regester_controller.dart';
 import 'package:events_app/common/view/auth/create_new_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -212,48 +213,58 @@ class OtpPage extends StatelessWidget {
                           title: "Confirm",
                           onPressed: () async {
                             print(email);
+                            print(email);
                             print(
                                 '${controller.otpNumber1}${controller.otpNumber2}${controller.otpNumber3}${controller.otpNumber4}');
-
+                            final regesterController =
+                                Get.put(RegisterController());
+                            print(
+                                'regesterController.emailController.text: ${regesterController.emailController.text}');
                             final response = await DioHelper.post(
                                 url: "$baseUrl/auth/res-pass-verification",
                                 body: {
-                                  'email': '${email}',
+                                  'email':
+                                      '${isForgetPassword ? email : regesterController.emailController.text}',
                                   'otp':
                                       '${controller.otpNumber1}${controller.otpNumber2}${controller.otpNumber3}${controller.otpNumber4}'
                                 });
-                            print(response["data"]);
 
                             // Check the status code and perform the corresponding action
                             if (response != null) {
                               if (response["data"]) {
-                                isForgetPassword
-                                    ? Navigator.push(
-                                        context,
-                                        SlidToPage(
-                                          page: const CreateNewPasswordPage(),
-                                          onComplete: () {
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const CreateNewPasswordPage()));
-                                          },
-                                        ),
-                                      )
-                                    : Navigator.push(
-                                        context,
-                                        SlidToPage(
-                                          page: const DrawerPage(),
-                                          onComplete: () {
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const DrawerPage()));
-                                          },
-                                        ),
-                                      );
+                                if (isForgetPassword) {
+                                  Navigator.push(
+                                    context,
+                                    SlidToPage(
+                                      page: const CreateNewPasswordPage(),
+                                      onComplete: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const CreateNewPasswordPage()));
+                                      },
+                                    ),
+                                  );
+                                } else {
+                                  // final rcontroller =
+                                  //     Get.put(RegisterController());
+
+                                  // await rcontroller.regesterState();
+                                  Navigator.push(
+                                    context,
+                                    SlidToPage(
+                                      page: const DrawerPage(),
+                                      onComplete: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const DrawerPage()));
+                                      },
+                                    ),
+                                  );
+                                }
                                 controller.otpNumber1 = '';
                                 controller.otpNumber2 = '';
                                 controller.otpNumber3 = '';

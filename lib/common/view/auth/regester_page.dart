@@ -1,9 +1,12 @@
 import 'package:events_app/common/components/auth/Costume_login_TextField_widget.dart';
 import 'package:events_app/common/components/auth/login-defult_button.dart';
 import 'package:events_app/common/components/general/main_loading_widget.dart';
+import 'package:events_app/common/controllers/auth/forget_password_controller.dart';
 import 'package:events_app/common/controllers/auth/regester_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
+import 'package:events_app/common/core/shared/shared.dart';
 import 'package:events_app/common/view/auth/login_page.dart';
+import 'package:events_app/common/view/auth/otp_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +15,7 @@ class RegisterPage extends GetView<RegisterController> {
 
   @override
   Widget build(BuildContext context) {
+    final regesterController = Get.put(RegisterController());
     return Stack(
       children: [
         Scaffold(
@@ -202,10 +206,11 @@ class RegisterPage extends GetView<RegisterController> {
                         borderColor: Colors.transparent,
                         textColor: ThemesStyles.seconndTextColor,
                         title: "Sign up",
-                        onPressed: () {
+                        onPressed: () async {
                           if (controller.formKey.currentState!.validate()) {
-                            // If the form is valid, proceed with sign up logic
-                            controller.regesterState();
+                            final rcontroller = Get.put(RegisterController());
+
+                            await rcontroller.regesterState();
                           }
                         },
                       ),

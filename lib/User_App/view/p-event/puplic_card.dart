@@ -30,9 +30,9 @@ class PuplicEventCard extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Image(
-                    image: AssetImage('assets/images/searchNotFoundImage.png'),
-                  ),
+                  // const Image(
+                  //   image: AssetImage('assets/images/searchNotFoundImage.png'),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 0.0),
                     child: Text(

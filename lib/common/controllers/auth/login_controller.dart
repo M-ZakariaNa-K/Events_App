@@ -17,7 +17,12 @@ class LoginController extends GetxController {
     try {
       final response = await DioHelper.postDataWithAuth(
         url: '$baseUrl/auth/login',
-        data: {'login': userName, 'password': password},
+        //zak
+        data: {
+          'login': userName,
+          'password': password,
+          "client_token": "ahmaddeeb"
+        },
       );
       print("Response data: $response");
       if (response != null) {

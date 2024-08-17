@@ -31,9 +31,7 @@ class NewOnAppCard extends StatelessWidget {
         itemCount: recentlyAddedItems!.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: (){
-              
-            },
+            onTap: () {},
             child: Stack(
               children: [
                 Padding(
@@ -64,7 +62,8 @@ class NewOnAppCard extends StatelessWidget {
                                   Radius.circular(
                                       ThemesStyles.borderradiusprimary),
                                 ),
-                                border: Border.all(color: Colors.white, width: 1),
+                                border:
+                                    Border.all(color: Colors.white, width: 1),
                               ),
                               width: 80,
                               height: 80,
@@ -86,7 +85,7 @@ class NewOnAppCard extends StatelessWidget {
                           const SizedBox(
                             width: 180,
                             child: Text(
-                              "Damascus-Mohajerenzzzzzzzzzzzzzzzzz",
+                              "Damascus-Mohajeren",
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),

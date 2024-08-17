@@ -12,12 +12,12 @@ import 'package:events_app/common/core/constants/theme.dart';
 import 'package:intl/intl.dart';
 
 class PublicEventPage extends StatelessWidget {
-  const PublicEventPage({
+  PublicEventPage({
     Key? key,
     required this.isUserLoggedIn,
   }) : super(key: key);
   final bool isUserLoggedIn;
-
+  int? selectedCardIndex = 0;
   @override
   Widget build(BuildContext context) {
     final publicEventsController = Get.put(PublicEventController());
@@ -76,9 +76,15 @@ class PublicEventPage extends StatelessWidget {
                             itemCount: publicEventsController
                                 .existedCategoriesList.length,
                             itemBuilder: (context, index) {
+                              int currentIndex = index;
+                              bool isSelected =
+                                  selectedCardIndex == currentIndex;
                               final isAll = index == 0;
+
                               return GestureDetector(
                                 onTap: () async {
+                                  selectedCardIndex = currentIndex;
+
                                   publicEventsController.isAllSelected.value =
                                       isAll;
 
@@ -93,13 +99,13 @@ class PublicEventPage extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 3),
                                   decoration: BoxDecoration(
-                                      color: isAll
+                                      color: isSelected
                                           ? ThemesStyles.primary
                                           : Colors.transparent,
                                       borderRadius: const BorderRadius.all(
                                         Radius.circular(20),
                                       ),
-                                      border: isAll
+                                      border: isSelected
                                           ? null
                                           : Border.all(
                                               color: ThemesStyles.primary,
@@ -109,7 +115,7 @@ class PublicEventPage extends StatelessWidget {
                                     publicEventsController
                                         .existedCategoriesList[index].name,
                                     style: TextStyle(
-                                      color: isAll
+                                      color: isSelected
                                           ? ThemesStyles.seconndTextColor
                                           : ThemesStyles.primary,
                                       fontSize: 12,

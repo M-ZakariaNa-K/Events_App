@@ -42,26 +42,26 @@ class _SettingsListState extends State<SettingsList> {
       padding: const EdgeInsets.all(20.0),
       children: [
         SettingsSection(
-          title: 'Account',
+          title: 'Account'.tr,
           children: [
             SettingsTile(
               isDarkMode: isDarkMode,
-              title: 'See Profile',
+              title: 'See Profile'.tr,
               icon: Icons.person,
               onPressed: () {
-                Get.to(() => const ProfilePage(
-                      isComeFromSettings: true,
-                    ));
+                // Get.to(() => const ProfilePage(
+                //       isComeFromSettings: true,
+                //     ));
               },
             ),
           ],
         ),
         SettingsSection(
-          title: 'Notification',
+          title: 'Notifacation'.tr,
           children: [
             SwitchListTile(
               title: Text(
-                'Notification',
+                'Notifacation'.tr,
                 style: TextStyle(
                     color: isDarkMode ? Colors.white : Colors.black,
                     fontSize: ThemesStyles.littelFontSize),
@@ -78,11 +78,11 @@ class _SettingsListState extends State<SettingsList> {
           ],
         ),
         SettingsSection(
-          title: 'Other',
+          title: 'Other'.tr,
           children: [
             SwitchListTile(
               title: Text(
-                'Dark Mode',
+                'Dark Mode'.tr,
                 style: TextStyle(
                     color: isDarkMode ? Colors.white : Colors.black,
                     fontSize: 16),
@@ -115,7 +115,7 @@ class _SettingsListState extends State<SettingsList> {
             ),
             ListTile(
               title: Text(
-                'Language',
+                'Language'.tr,
                 style: TextStyle(
                     color: isDarkMode ? Colors.white : Colors.black,
                     fontSize: ThemesStyles.littelFontSize),
@@ -162,14 +162,14 @@ class _SettingsListState extends State<SettingsList> {
                 }),
             ListTile(
               title: Text(
-                'Region',
+                'Region'.tr,
                 style: TextStyle(
                   fontSize: ThemesStyles.littelFontSize,
                   color: isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
               trailing: Text(
-                'Damascus',
+                'Damascus'.tr,
                 style: TextStyle(
                     fontSize: ThemesStyles.littelFontSize,
                     color: const Color.fromARGB(255, 198, 198, 198)),
@@ -181,7 +181,7 @@ class _SettingsListState extends State<SettingsList> {
               },
               child: ListTile(
                 title: Text(
-                  'About Us',
+                  'About Us'.tr,
                   style: TextStyle(
                       color: isDarkMode ? Colors.white : Colors.black,
                       fontSize: ThemesStyles.littelFontSize),
@@ -201,7 +201,7 @@ class _SettingsListState extends State<SettingsList> {
           buttonColor: ThemesStyles.background,
           borderColor: ThemesStyles.background,
           textColor: Colors.red,
-          title: 'Log Out',
+          title: 'Logout'.tr,
           onPressed: () {
             showCustomeLogOutDialog(context);
           },

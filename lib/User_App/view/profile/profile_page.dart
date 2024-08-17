@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: widget.isComeFromSettings
           ? AppBar(
-              title: const Text("Profile"),
+              title:  Text("Profile".tr),
               titleTextStyle: const TextStyle(
                 color: Color(0xff464646),
                 fontSize: 20,
@@ -149,92 +149,92 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         ),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          child: Container(
-                            width: 35,
-                            height: 35,
-                            decoration: BoxDecoration(
-                                color: ThemesStyles.seconndTextColor,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: ThemesStyles.secondary,
-                                    spreadRadius: 1,
-                                    blurRadius: 7,
-                                    offset: Offset(0, 0),
-                                  ),
-                                ]),
-                            child: IconButton(
-                              onPressed: () async {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Dialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const SizedBox(height: 20),
-                                            const Icon(
-                                              Icons.error_outline,
-                                              color: ThemesStyles.primary,
-                                              size: 50,
-                                            ),
-                                            const SizedBox(height: 20),
-                                            Text(
-                                              "Are you sure about deletation?",
-                                              style: TextStyle(
-                                                fontSize:
-                                                    ThemesStyles.mainFontSize,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 20),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text('Cancel'),
-                                                ),
-                                                const SizedBox(width: 10),
-                                                ElevatedButton(
-                                                  onPressed: () async {
-                                                    profileController.removeImage(
-                                                        profileController
-                                                            .selectedImagePaths[0]);
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text('Submit'),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                              //===================================
+                        // Positioned(
+                        //   bottom: 0,
+                        //   left: 0,
+                        //   child: Container(
+                        //     width: 35,
+                        //     height: 35,
+                        //     decoration: BoxDecoration(
+                        //         color: ThemesStyles.seconndTextColor,
+                        //         borderRadius: BorderRadius.circular(10),
+                        //         boxShadow: const [
+                        //           BoxShadow(
+                        //             color: ThemesStyles.secondary,
+                        //             spreadRadius: 1,
+                        //             blurRadius: 7,
+                        //             offset: Offset(0, 0),
+                        //           ),
+                        //         ]),
+                        //     child: IconButton(
+                        //       onPressed: () async {
+                        //         showDialog(
+                        //           context: context,
+                        //           builder: (BuildContext context) {
+                        //             return Dialog(
+                        //               shape: RoundedRectangleBorder(
+                        //                 borderRadius:
+                        //                     BorderRadius.circular(20.0),
+                        //               ),
+                        //               child: Padding(
+                        //                 padding: const EdgeInsets.all(20.0),
+                        //                 child: Column(
+                        //                   mainAxisSize: MainAxisSize.min,
+                        //                   children: [
+                        //                     const SizedBox(height: 20),
+                        //                     const Icon(
+                        //                       Icons.error_outline,
+                        //                       color: ThemesStyles.primary,
+                        //                       size: 50,
+                        //                     ),
+                        //                     const SizedBox(height: 20),
+                        //                     Text(
+                        //                       "Are you sure about deletation?",
+                        //                       style: TextStyle(
+                        //                         fontSize:
+                        //                             ThemesStyles.mainFontSize,
+                        //                       ),
+                        //                     ),
+                        //                     const SizedBox(height: 20),
+                        //                     Row(
+                        //                       mainAxisAlignment:
+                        //                           MainAxisAlignment.end,
+                        //                       children: [
+                        //                         TextButton(
+                        //                           onPressed: () {
+                        //                             Navigator.of(context).pop();
+                        //                           },
+                        //                           child: const Text('Cancel'),
+                        //                         ),
+                        //                         const SizedBox(width: 10),
+                        //                         ElevatedButton(
+                        //                           onPressed: () async {
+                        //                             profileController.removeImage(
+                        //                                 profileController
+                        //                                     .selectedImagePaths[0]);
+                        //                             Navigator.of(context).pop();
+                        //                           },
+                        //                           child: const Text('Submit'),
+                        //                         ),
+                        //                       ],
+                        //                     ),
+                        //                   ],
+                        //                 ),
+                        //               ),
+                        //             );
+                        //           },
+                        //         );
+                        //       },
+                        //       //===================================
 
-                              icon: const Icon(
-                                Icons.delete,
-                                size: 20,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        )
+                        //       icon: const Icon(
+                        //         Icons.delete,
+                        //         size: 20,
+                        //         color: Colors.red,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // )
                       ],
                     ),
                   ),

@@ -1,6 +1,7 @@
 import 'package:events_app/common/Util/lang_controller.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class OrderNowCardWidget extends StatefulWidget {
   @override
@@ -51,9 +52,7 @@ class _OrderNowCardWidgetState extends State<OrderNowCardWidget>
                   ),
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child:
-                      
-                          Stack(
+                      child: Stack(
                         children: [
                           GestureDetector(
                             onTap: () {},
@@ -122,7 +121,7 @@ class _OrderNowCardWidgetState extends State<OrderNowCardWidget>
                                         child: SizedBox(
                                           width: 170,
                                           child: Text(
-                                            'Are you loking for publec or private event? What are you wating for! Book Now',
+                                            'Are you loking for public or private event? What are you wating for! Book Now'.tr,
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize:

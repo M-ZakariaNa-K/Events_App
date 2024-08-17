@@ -134,7 +134,7 @@ class HallUserCards extends GetView<LoungesUserController> {
                     loungeController.loungesItems[i].id;
                 //end for have the asset_id for get the list of the avilable times
                 Get.to(() => LoungesDetailsPage(
-                  isCommingAsUser: true,
+                      isCommingAsUser: true,
                       id: loungeController.loungesItems[i].id,
                     ));
               },

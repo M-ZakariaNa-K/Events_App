@@ -67,7 +67,8 @@ class DioHelper {
       final headers = <String, dynamic>{
         if (token != "") 'Authorization': 'Bearer $token',
         'Connection': 'Keep-Alive',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Localization-X-App': "${Get.locale?.languageCode}",
       };
 
       final response = await _dio.get(url,
@@ -109,6 +110,7 @@ class DioHelper {
       final headers = <String, dynamic>{
         if (token != "") 'Authorization': 'Bearer $token',
         'Accept': 'application/json',
+        'Localization-X-App': "${Get.locale?.languageCode}",
       };
 
       final response =
@@ -148,6 +150,7 @@ class DioHelper {
       final headers = <String, dynamic>{
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
+        'Localization-X-App': "${Get.locale?.languageCode}",
       };
 
       final response = await _dio.delete(
@@ -185,6 +188,7 @@ class DioHelper {
     try {
       final headers = <String, dynamic>{
         'Accept': 'application/json',
+        'Localization-X-App': "${Get.locale?.languageCode}",
       };
 
       final response = await _dio.post(
@@ -231,7 +235,8 @@ class DioHelper {
     _dio.options.headers = {
       'Content-Type': 'application/json',
       // 'lang': lang,
-      'Authorization': token ?? ''
+      'Authorization': token ?? '',
+      'Localization-X-App': "${Get.locale?.languageCode}",
     };
     return _dio.put(baseURL);
   }
@@ -248,6 +253,7 @@ class DioHelper {
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer $token",
+            'Localization-X-App': "${Get.locale?.languageCode}",
           },
         ),
       );
