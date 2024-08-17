@@ -18,7 +18,8 @@ import 'package:events_app/common/core/constants/theme.dart';
 
 class LoungesDetailsPage extends StatelessWidget {
   LoungesDetailsPage({
-    required this.id, required this.isCommingAsUser,
+    required this.id,
+    required this.isCommingAsUser,
   });
   final int id;
   final bool isCommingAsUser;
@@ -210,7 +211,7 @@ class LoungesDetailsPage extends StatelessWidget {
                 loungeDetailsController.loungeDetailsItems.clear();
                 Get.back();
               } else {
-                                loungeDetailsUserController.loungeDetailsItems.clear();
+                loungeDetailsUserController.loungeDetailsItems.clear();
 
                 loungeDetailsController.loungeDetailsItems.clear();
                 Get.back();
@@ -222,7 +223,7 @@ class LoungesDetailsPage extends StatelessWidget {
         ),
         body: Obx(() {
           if (!isUser! && !isCommingAsUser) {
-            if (loungeDetailsController.loungeDetailsItems.isEmpty ) {
+            if (loungeDetailsController.loungeDetailsItems.isEmpty) {
               return const MainLoadingWidget();
             } else {
               return ListView(
@@ -465,12 +466,16 @@ class LoungesDetailsPage extends StatelessWidget {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text(
-                                      "${loungeDetailsController.loungeDetailsItems[0].services[index].name}",
-                                      style: TextStyle(
-                                        color: ThemesStyles.textColor,
-                                        fontSize: ThemesStyles.littelFontSize,
-                                        fontWeight: FontWeight.normal,
+                                    SizedBox(
+                                      width: 70,
+                                      child: Text(
+                                        "${loungeDetailsController.loungeDetailsItems[0].services[index].name}",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.normal,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -918,13 +923,17 @@ class LoungesDetailsPage extends StatelessWidget {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text(
-                                          "${loungeDetailsUserController.loungeDetailsItems[0].services[index].name}",
-                                          style: TextStyle(
-                                            color: ThemesStyles.textColor,
-                                            fontSize:
-                                                ThemesStyles.littelFontSize,
-                                            fontWeight: FontWeight.normal,
+                                        SizedBox(
+                                          width: 70,
+                                          child: Text(
+                                            "${loungeDetailsUserController.loungeDetailsItems[0].services[index].name}",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: ThemesStyles.textColor,
+                                              fontSize:
+                                                  ThemesStyles.littelFontSize,
+                                              fontWeight: FontWeight.normal,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -1056,51 +1065,51 @@ class LoungesDetailsPage extends StatelessWidget {
                               ),
                             ),
                           ),
+                          // DefultButton(
+                          //   buttonColor: ThemesStyles.secondary,
+                          //   borderColor: Colors.transparent,
+                          //   textColor: Colors.white,
+                          //   title: "BOOK NOW",
+                          //   onPressed: () async {
+                          //     Get.to(
+                          //       () => const BookNowPage(isOrganizer: false),
+                          //     );
+                          //   },
+                          // ),
+                          // Row(
+                          //   children: [
+                          //     Expanded(
+                          //       child: Divider(
+                          //         height: 20,
+                          //         thickness: 2,
+                          //         color: Colors.grey.shade300,
+                          //       ),
+                          //     ),
+                          //     const Padding(
+                          //       padding: EdgeInsets.symmetric(
+                          //           horizontal: 8.0, vertical: 20),
+                          //       child: Text(
+                          //         "or",
+                          //         style: TextStyle(color: Colors.grey),
+                          //       ),
+                          //     ),
+                          //     Expanded(
+                          //       child: Divider(
+                          //         height: 20,
+                          //         thickness: 2,
+                          //         color: Colors.grey.shade300,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
                           DefultButton(
                             buttonColor: ThemesStyles.secondary,
                             borderColor: Colors.transparent,
                             textColor: Colors.white,
-                            title: "BOOK NOW",
-                            onPressed: () async {
-                              Get.to(
-                                () => const BookNowPage(isOrganizer: false),
-                              );
-                            },
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Divider(
-                                  height: 20,
-                                  thickness: 2,
-                                  color: Colors.grey.shade300,
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 20),
-                                child: Text(
-                                  "or",
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ),
-                              Expanded(
-                                child: Divider(
-                                  height: 20,
-                                  thickness: 2,
-                                  color: Colors.grey.shade300,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          DefultButton(
-                            buttonColor: ThemesStyles.secondary,
-                            borderColor: Colors.transparent,
-                            textColor: Colors.white,
-                            title: "Make a public event with us 😊",
+                            title: "Make a public or private event with us 😊",
                             onPressed: () async {
                               Get.to(
                                 () => PublicEventsBookNowPage(),

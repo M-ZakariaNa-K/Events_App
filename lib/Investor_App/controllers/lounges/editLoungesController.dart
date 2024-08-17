@@ -13,6 +13,7 @@ class EditLoungesController extends GetxController {
   var allApiData = <String, dynamic>{}.obs;
   var editedList = <Map<String, dynamic>>[].obs;
   var addedList = <Map<String, dynamic>>[].obs;
+  
 
   void addWorkHourController() {
     workHourControllers.clear();

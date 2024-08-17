@@ -208,12 +208,16 @@ class OrganizerDetailsPage extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Text(
-                                    "${servicesDetailsController.servicesDetailsItems[0].services[index].name}",
-                                    style: TextStyle(
-                                      color: ThemesStyles.textColor,
-                                      fontSize: ThemesStyles.littelFontSize,
-                                      fontWeight: FontWeight.normal,
+                                  SizedBox(
+                                    width: 60,
+                                    child: Text(
+                                      "${servicesDetailsController.servicesDetailsItems[0].services[index].name}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: ThemesStyles.textColor,
+                                        fontSize: ThemesStyles.littelFontSize,
+                                        fontWeight: FontWeight.normal,
+                                      ),
                                     ),
                                   ),
                                 ],

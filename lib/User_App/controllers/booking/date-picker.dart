@@ -22,6 +22,20 @@ class _CalendarDialogState extends State<CalendarDialog> {
   DateTime today = DateTime.now();
 
   void _onDaySelected(DateTime day, DateTime focusedDay) {
+    // Check if the selected date is before today's date
+    if (day.isBefore(today)) {
+      // Show a snackbar if the date is in the past
+      Get.snackbar(
+        "Invalid Date",
+        "You cannot select a date in the past.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+      return; // Stop further execution
+    }
+
     setState(() {
       today = day;
       widget.isStart
@@ -31,17 +45,20 @@ class _CalendarDialogState extends State<CalendarDialog> {
           : showEndDateMap.addAll({
               "date": today.toString().split(' ')[0],
             });
+
       final bookNowController = Get.find<BookNowController>();
       if (!widget.isOrganizer) {
         bookNowController.timesAvilableList.clear();
         bookNowController.getTimesAvailbleList(
-            assetId: bookNowController.enteredHallId.value,
-            date: showStartDateMap["date"]);
+          assetId: bookNowController.enteredHallId.value,
+          date: showStartDateMap["date"],
+        );
       } else {
         bookNowController.timesReservedOrganizerList.clear();
         bookNowController.getTimesReservedOrgainzerList(
-            assetId: bookNowController.enteredOrganizerId.value,
-            date: showStartDateMap["date"]);
+          assetId: bookNowController.enteredOrganizerId.value,
+          date: showStartDateMap["date"],
+        );
       }
     });
   }
@@ -62,19 +79,15 @@ class _CalendarDialogState extends State<CalendarDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Text("Selected day = " + today.toString().split(' ')[0]),
-            //===================Calendar========================
             TableCalendar(
               locale: "en_US",
               rowHeight: 43,
-              //-----------Header decoration----------------
               headerStyle: const HeaderStyle(
                 formatButtonVisible: false,
                 titleCentered: true,
                 titleTextStyle: TextStyle(fontSize: 16),
                 leftChevronIcon: Icon(
                   Icons.arrow_back_ios,
-                  // color: ThemesStyles.textColor,
                   size: 14,
                 ),
                 rightChevronIcon: Icon(
@@ -87,19 +100,8 @@ class _CalendarDialogState extends State<CalendarDialog> {
               focusedDay: today,
               firstDay: DateTime.utc(2024, 1, 1),
               lastDay: DateTime.utc(2030, 12, 31),
-              //-----------end Header decoration----------------
-
-              //-----------decoration----------------
               calendarStyle: CalendarStyle(
-                // Customize the color of the calendar
-                // defaultTextStyle:
-                //     const TextStyle(color: ThemesStyles.textColor),
-                // selectedTextStyle:
-                //     const TextStyle(color: ThemesStyles.textColor),
                 outsideTextStyle: const TextStyle(color: Colors.grey),
-                // weekendTextStyle:
-                //     const TextStyle(color: ThemesStyles.textColor),
-                // Customize the size of the calendar
                 outsideDaysVisible: true,
                 cellMargin: const EdgeInsets.all(8),
                 defaultDecoration: BoxDecoration(
@@ -121,11 +123,8 @@ class _CalendarDialogState extends State<CalendarDialog> {
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
-              //-----------decoration----------------
-
               daysOfWeekStyle: const DaysOfWeekStyle(
                 weekdayStyle: TextStyle(
-                  // color: ThemesStyles.textColor,
                   fontWeight: FontWeight.bold,
                 ),
                 weekendStyle: TextStyle(

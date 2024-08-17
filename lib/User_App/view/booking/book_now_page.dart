@@ -393,8 +393,7 @@ class _BookNowPageState extends State<BookNowPage> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: widget.isOrganizer
-                        ? 
-                        servicesDetailsController
+                        ? servicesDetailsController
                             .servicesDetailsItems[0].services.length
                         : loungeDetailsController.loungeDetailsItems[0].services
                             .length, // Adjust this based on your actual data
@@ -408,12 +407,15 @@ class _BookNowPageState extends State<BookNowPage> {
                     ),
                     itemBuilder: (context, index) {
                       int currentIndex = widget.isOrganizer
-                          ? servicesDetailsController.servicesItems.indexOf(
-                              servicesDetailsController.servicesItems[index])
+                          ? servicesDetailsController
+                              .servicesDetailsItems[0].services
+                              .indexOf(servicesDetailsController
+                                  .servicesDetailsItems[0].services[index])
                           : loungeDetailsController
                               .loungeDetailsItems[0].services
                               .indexOf(loungeDetailsController
                                   .loungeDetailsItems[0].services[index]);
+                      print('currentIndex: ${currentIndex}');
                       bool isSelected = selectedCardIndex == currentIndex;
                       return GestureDetector(
                         onTap: () {
@@ -468,14 +470,18 @@ class _BookNowPageState extends State<BookNowPage> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text(
-                                      widget.isOrganizer
-                                          ? "${servicesDetailsController.servicesDetailsItems[0].services[index].name}"
-                                          : "${loungeDetailsController.loungeDetailsItems[0].services[index].name}",
-                                      style: TextStyle(
-                                        color: ThemesStyles.textColor,
-                                        fontSize: ThemesStyles.littelFontSize,
-                                        fontWeight: FontWeight.normal,
+                                    SizedBox(
+                                      width: 70,
+                                      child: Text(
+                                        widget.isOrganizer
+                                            ? "${servicesDetailsController.servicesDetailsItems[0].services[index].name}"
+                                            : "${loungeDetailsController.loungeDetailsItems[0].services[index].name}",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: ThemesStyles.textColor,
+                                          fontSize: ThemesStyles.littelFontSize,
+                                          fontWeight: FontWeight.normal,
+                                        ),
                                       ),
                                     ),
                                   ],

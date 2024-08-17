@@ -211,7 +211,7 @@ class AddLoungesController extends GetxController {
         //   kind.value = matchingItem["kind"];
         // }
         existedList.add({
-          'proportion': item1["proportion"],
+          'proportion': item1["proportion"] ?? 0,
           'id': "${matchingItem['id']}",
           'price': "${item1['price']}",
         });

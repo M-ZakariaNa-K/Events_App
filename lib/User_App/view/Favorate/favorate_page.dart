@@ -66,7 +66,7 @@ class FavoratePage extends GetView<FavorateController> {
                     height: 100,
                     decoration: BoxDecoration(
                       image: const DecorationImage(
-                        image: AssetImage("assets/images/ballons.jpeg"),
+                        image: AssetImage("assets/images/Logo.png"),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(20),

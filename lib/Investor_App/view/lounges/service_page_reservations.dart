@@ -1,40 +1,34 @@
 import 'package:events_app/Investor_App/components/lounges/reservationsAsUserWidget.dart';
-import 'package:events_app/Investor_App/controllers/lounges/lounges_controller.dart';
 import 'package:events_app/Investor_App/controllers/services/services_controller.dart';
-import 'package:events_app/Investor_App/view/lounges/LoungesDetailsPage.dart';
 import 'package:events_app/Investor_App/view/reservations/reservations_Investor_Page.dart';
-import 'package:events_app/User_App/components/home/book_now_card.dart';
-import 'package:events_app/User_App/components/search/search_taps_widget.dart';
-import 'package:events_app/User_App/controllers/booking/book_Now_controller.dart';
 import 'package:events_app/User_App/controllers/loungees&organizers/lounges_user_controller.dart';
 import 'package:events_app/User_App/controllers/reservation/reservation_controller.dart';
-import 'package:events_app/User_App/view/reservations/reservations_user.dart';
-import 'package:events_app/common/Util/lang_controller.dart';
+
 import 'package:events_app/common/components/general/main_loading_widget.dart';
 import 'package:events_app/common/core/constants/theme.dart';
 import 'package:events_app/common/core/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoungesReservationsInvestorPage extends StatelessWidget {
-  const LoungesReservationsInvestorPage({super.key});
+class ServicesReservationsInvestorPage extends StatelessWidget {
+  const ServicesReservationsInvestorPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final loungesController = Get.put(LoungesController());
+    final servicesController = Get.put(ServicesHomePageController());
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             Obx(() {
-              if (loungesController.loangesLoading.value && isHallOwner!) {
+              if (servicesController.servicesLoading.value && !isHallOwner!) {
                 return Container(
                     height: MediaQuery.sizeOf(context).height * .85,
                     alignment: Alignment.center,
                     child: const Center(child: MainLoadingWidget()));
               }
 
-              if (loungesController.loungesItems.isEmpty) {
+              if (servicesController.servicesItems.isEmpty) {
                 return Column(
                   children: [
                     const InvestorReservationsAsUserWidget(
@@ -54,7 +48,7 @@ class LoungesReservationsInvestorPage extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 0.0),
                               child: Text(
-                                'There are no lounges to show',
+                                'There are no services to show',
                                 style: TextStyle(
                                   fontSize: ThemesStyles.mainFontSize,
                                   fontWeight: FontWeight.bold,
@@ -78,14 +72,14 @@ class LoungesReservationsInvestorPage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 0.0, horizontal: 10),
                       child: Text(
-                        "Select Your Hall To See It's Reservations",
+                        "Select Your service To See It's Reservations",
                         style: TextStyle(
                           color: const Color.fromARGB(255, 203, 203, 203),
                           fontSize: ThemesStyles.mainFontSize,
                         ),
                       ),
                     ).marginOnly(top: 20),
-                    HallUserCards(
+                    OrganizerUserCards(
                       width: MediaQuery.sizeOf(context).width,
                       height: MediaQuery.sizeOf(context).height,
                     ),
@@ -100,8 +94,8 @@ class LoungesReservationsInvestorPage extends StatelessWidget {
   }
 }
 
-class HallUserCards extends GetView<LoungesUserController> {
-  HallUserCards({
+class OrganizerUserCards extends GetView<LoungesUserController> {
+  OrganizerUserCards({
     super.key,
     required this.width,
     required this.height,
@@ -112,28 +106,28 @@ class HallUserCards extends GetView<LoungesUserController> {
 
   @override
   Widget build(BuildContext context) {
-    final loungeController = Get.put(LoungesController());
+    final serviceController = Get.put(ServicesHomePageController());
     return Obx(
       () => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: loungeController.loungesItems.length,
+          itemCount: serviceController.servicesItems.length,
           itemBuilder: (context, i) {
             return GestureDetector(
               onTap: () async {
                 final reservationController = Get.put(ReservationController());
                 reservationController.reservationsInvestorList.clear();
                 await reservationController.getInvestorReservationItems(
-                  asset_id: loungeController.loungesItems[i].id,
+                  asset_id: serviceController.servicesItems[i].id,
                   service_kind: "private",
                   date: ">=",
                 );
 
                 Get.to(() => ReservationsPage(
                       isTheReservationDetailComeFromInvestorHalls: true,
-                      assetId: loungeController.loungesItems[i].id,
+                      assetId: serviceController.servicesItems[i].id,
                     ));
               },
               child: Container(
@@ -162,16 +156,8 @@ class HallUserCards extends GetView<LoungesUserController> {
                         ),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.network(
-                          "$photoBaseUrl${loungeController.loungesItems[i].photos[0]}",
-                          fit: BoxFit.fill,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                            return Image.asset("assets/images/hall.png");
-                          },
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset("assets/images/Logo.png")),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -182,7 +168,7 @@ class HallUserCards extends GetView<LoungesUserController> {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: Text(
-                              "${loungeController.loungesItems[i].name} lounge",
+                              "${serviceController.servicesItems[i].name} service",
                               style: TextStyle(
                                 fontSize: ThemesStyles.mainFontSize,
                                 fontWeight: FontWeight.bold,
@@ -193,20 +179,12 @@ class HallUserCards extends GetView<LoungesUserController> {
                             padding: const EdgeInsets.only(bottom: 10),
                             child: Container(
                               width: 200,
-                              child: loungeController
-                                      .loungesItems[i].activeTimes.isNotEmpty
-                                  ? Text(
-                                      'Capacity: ${loungeController.loungesItems[i].capacity}',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          color: ThemesStyles.primary),
-                                    )
-                                  : Text(
-                                      'Capicity:${loungeController.loungesItems[i].capacity}',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          color: ThemesStyles.primary),
-                                    ),
+                              child: Text(
+                                'Kind:  ${serviceController.servicesItems[i].kind}',
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: ThemesStyles.primary),
+                              ),
                             ),
                           ),
                           Row(
@@ -215,7 +193,7 @@ class HallUserCards extends GetView<LoungesUserController> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               const Icon(
-                                Icons.location_on,
+                                Icons.price_change,
                                 size: 18,
                                 color: ThemesStyles.primary,
                               ),
@@ -224,7 +202,7 @@ class HallUserCards extends GetView<LoungesUserController> {
                                 child: SizedBox(
                                   width: 140,
                                   child: Text(
-                                    loungeController.loungesItems[i].address,
+                                    serviceController.servicesItems[i].price,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       color: Color.fromARGB(255, 170, 170, 170),

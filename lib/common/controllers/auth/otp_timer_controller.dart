@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:events_app/common/controllers/auth/forget_password_controller.dart';
+import 'package:events_app/common/core/shared/shared.dart';
 import 'package:get/get.dart';
 
 class TimerController extends GetxController {
@@ -11,10 +13,28 @@ class TimerController extends GetxController {
     int secondsLeft = 60; // Initial timer duration in seconds
     timer = Timer.periodic(
       oneSec,
-      (Timer timer) {
+      (Timer timer) async {
         if (secondsLeft == -1) {
           timer.cancel();
           // Send request or perform action here after timer ends
+          final forgetPasswordController = Get.put(ForgetPasswordController());
+          final response = await forgetPasswordController.post(
+            theEmail: createPasswordEmail,
+            body: {"email": createPasswordEmail},
+            url: '$baseUrl/auth/forget-password',
+          );
+
+          if (forgetPasswordController.statusCode.value == 200) {
+            Get.snackbar(
+              'Cool',
+              'Check your masseging box',
+            );
+          } else {
+            Get.snackbar(
+              'Warning',
+              'Somthing went wrong...',
+            );
+          }
           print('Timer ended');
         } else {
           // Convert seconds to "mm:ss" format
@@ -32,7 +52,6 @@ class TimerController extends GetxController {
     timer?.cancel();
     isTimerEnd = true;
     super.onClose();
-    
   }
 
   @override

@@ -34,4 +34,32 @@ class SearchUserController extends GetxController {
       searchLoading.value = false;
     }
   }
+    Future<void> toggleFavorite(int loungeId) async {
+    final loungeIndex =
+        searchItems.indexWhere((lounge) => lounge.id == loungeId);
+    if (loungeIndex == -1) return;
+
+    final currentStatus = searchItems[loungeIndex].isFavorite;
+    searchItems[loungeIndex].isFavorite = !currentStatus;
+    searchItems.refresh();
+
+    try {
+      if (!currentStatus) {
+        // Add to favorites
+        await DioHelper.get(
+          url: "$baseUrl/assets/favorite?id=$loungeId",
+        );
+      } else {
+        // Remove from favorites
+        await DioHelper.delete(
+          url: "$baseUrl/assets/delete-favorite?id=$loungeId",
+        );
+      }
+    } catch (e) {
+      // Revert the change in case of an error
+      searchItems[loungeIndex].isFavorite = currentStatus;
+      searchItems.refresh();
+      print('Error toggling favorite status: $e');
+    }
+  }
 }

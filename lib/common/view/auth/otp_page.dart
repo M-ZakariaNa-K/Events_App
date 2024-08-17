@@ -79,33 +79,6 @@ class OtpPage extends StatelessWidget {
                             fontWeight: ThemesStyles.fontWeightBold,
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () async {
-                        //     final shouldNavigate =
-                        //         await showConfirmationDialogOTP(
-                        //             forgetPasswordController: controller,
-                        //             context: context,
-                        //             imagePath:
-                        //                 'assets/images/shield (1).png', // Replace with your image path
-                        //             title: 'Change Email',
-                        //             changeEmailController:
-                        //                 changeNumberController);
-
-                        //     if (shouldNavigate ?? false) {
-                        //       //Here will make the post request which has the changing number
-                        //     }
-                        //   },
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.symmetric(horizontal: 15),
-                        //     child: Text(
-                        //       "Change Email Addres?",
-                        //       style: TextStyle(
-                        //         color: ThemesStyles.primary,
-                        //         fontWeight: ThemesStyles.fontWeightBold,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -201,8 +174,29 @@ class OtpPage extends StatelessWidget {
                                   : ThemesStyles.seconndTextColor,
                           borderColor: ThemesStyles.primary,
                           title: "Resend",
-                          onPressed: () {
+                          onPressed: () async {
                             //Here we will Resend the OTP code again
+                            final forgetPasswordController =
+                                Get.put(ForgetPasswordController());
+                            final response =
+                                await forgetPasswordController.post(
+                              theEmail: createPasswordEmail,
+                              body: {"email": createPasswordEmail},
+                              url: '$baseUrl/auth/forget-password',
+                            );
+
+                            if (forgetPasswordController.statusCode.value ==
+                                200) {
+                              Get.snackbar(
+                                'Cool',
+                                'Check your masseging box',
+                              );
+                            } else {
+                              Get.snackbar(
+                                'Warning',
+                                'Somthing went wrong...',
+                              );
+                            }
                           },
                         ),
                       ),

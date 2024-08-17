@@ -1,3 +1,4 @@
+import 'package:events_app/User_App/controllers/home/drawer_page_controller.dart';
 import 'package:events_app/common/Util/lang_controller.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer_item.dart';
 import 'package:events_app/common/components/general/custome_show_dialog.dart';
@@ -25,6 +26,8 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final profileController = Get.put(DrawerPageController());
+
     return Container(
       width: 220,
       color: Theme.of(context).brightness == Brightness.dark
@@ -58,7 +61,9 @@ class DrawerWidget extends StatelessWidget {
               ),
             ),
             Text(
-              "Zakaria Al-nabulsi",
+              profileController.profileItems.isNotEmpty
+                  ? profileController.profileItems[0].username
+                  : "Zakaria Al-nabulsi",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: ThemesStyles.mainFontSize,
@@ -67,7 +72,9 @@ class DrawerWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
               child: Text(
-                "zakariana2003@gmail.com",
+                profileController.profileItems.isNotEmpty
+                    ? profileController.profileItems[0].email
+                    : "zakariana2003@gmail.com",
                 style: TextStyle(
                   fontSize: ThemesStyles.littelFontSize,
                   color: const Color.fromARGB(255, 119, 119, 119),
@@ -107,29 +114,29 @@ class DrawerWidget extends StatelessWidget {
                   onItemTapped: onItemTapped,
                   selectedColor: selectedColor,
                 ),
-                DrawerItem(
-                  isLogout: false,
-                  title: "Budget",
-                  icon: Icons.money,
-                  index: 2,
-                  selectedIndex: selectedIndex,
-                  onItemTapped: onItemTapped,
-                  selectedColor: selectedColor,
-                ),
-                DrawerItem(
-                  isLogout: false,
-                  title: "History",
-                  icon: Icons.history,
-                  index: 3,
-                  selectedIndex: selectedIndex,
-                  onItemTapped: onItemTapped,
-                  selectedColor: selectedColor,
-                ),
+                // DrawerItem(
+                //   isLogout: false,
+                //   title: "Budget",
+                //   icon: Icons.money,
+                //   index: 2,
+                //   selectedIndex: selectedIndex,
+                //   onItemTapped: onItemTapped,
+                //   selectedColor: selectedColor,
+                // ),
+                // DrawerItem(
+                //   isLogout: false,
+                //   title: "History",
+                //   icon: Icons.history,
+                //   index: 3,
+                //   selectedIndex: selectedIndex,
+                //   onItemTapped: onItemTapped,
+                //   selectedColor: selectedColor,
+                // ),
                 DrawerItem(
                   isLogout: false,
                   title: "Settings",
                   icon: Icons.settings,
-                  index: 4,
+                  index: 2,
                   selectedIndex: selectedIndex,
                   onItemTapped: onItemTapped,
                   selectedColor: selectedColor,
@@ -138,7 +145,7 @@ class DrawerWidget extends StatelessWidget {
                   isLogout: false,
                   title: "Help Center",
                   icon: Icons.info_outline_rounded,
-                  index: 5,
+                  index: 3,
                   selectedIndex: selectedIndex,
                   onItemTapped: onItemTapped,
                   selectedColor: selectedColor,

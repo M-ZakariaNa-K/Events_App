@@ -42,143 +42,86 @@ class _HiddenBudgetDataWidgetState extends State<HiddenBudgetDataWidget> {
             color: Color.fromARGB(255, 165, 165, 165),
           ),
         ),
-        _isFirstTextFildEditing
-            ? TextField(
-                controller: _firstTextEditingController,
-                onSubmitted: (value) {
-                  setState(() {
-                    _isFirstTextFildEditing = false;
-                    _enteredFirstTextFildText = "$value SYP";
-                    try {
-                      DioHelper.post(url: "$baseUrl/auth/add-cart", body: {
-                        "money": _firstTextEditingController.text,
-                      });
-                    } catch (e) {
-                      Get.snackbar(
-                          "Error", "Somthing get wrong please try again");
-                    }
-                  });
-                },
-                style: const TextStyle(
-                  color: ThemesStyles.textColor,
-                ),
-                decoration: InputDecoration(
-                  hintText:
-                      '${profileController.profileItems[0].money ?? 0} SYP',
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff979797),
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: ThemesStyles.textColor,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 5.0, // Adjust vertical padding
-                    horizontal: 10.0, // Adjust horizontal padding
-                  ),
-                  // Set custom height
-                  isDense: true,
-                ),
-              )
-            : InkWell(
-                onTap: () {
-                  setState(() {
-                    _isFirstTextFildEditing = true;
-                  });
-                },
-                child: _enteredFirstTextFildText.isNotEmpty
-                    ? Text(
-                        _enteredFirstTextFildText,
-                        style: const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: ThemesStyles.textColor,
-                        ),
-                      )
-                    : Text(
-                        '${profileController.profileItems[0].money ?? 0} SYP',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-              ),
         Container(
           padding: const EdgeInsets.all(20),
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xffFAFAFA),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? const Color.fromARGB(255, 52, 52, 52)
+                : const Color(0xffFAFAFA),
             border: Border.all(
                 width: 1, color: const Color.fromARGB(255, 206, 206, 206)),
             borderRadius: BorderRadius.circular(
               ThemesStyles.borderradiusprimary,
             ),
           ),
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      "Left to spend",
-                      style: TextStyle(
-                        fontSize: ThemesStyles.littelFontSize,
-                        color: Colors.grey,
+          child: _isFirstTextFildEditing
+              ? TextField(
+                  controller: _firstTextEditingController,
+                  onSubmitted: (value) {
+                    setState(() {
+                      _isFirstTextFildEditing = false;
+                      _enteredFirstTextFildText = "$value SYP";
+                      try {
+                        DioHelper.post(url: "$baseUrl/auth/add-cart", body: {
+                          "money": _firstTextEditingController.text,
+                        });
+                      } catch (e) {
+                        Get.snackbar(
+                            "Error", "Somthing get wrong please try again");
+                      }
+                    });
+                  },
+                  style: const TextStyle(
+                    color: ThemesStyles.textColor,
+                  ),
+                  decoration: InputDecoration(
+                    hintText:
+                        '${profileController.profileItems[0].money ?? 0} SYP',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xff979797),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      "Monthly budget",
-                      style: TextStyle(
-                        fontSize: ThemesStyles.littelFontSize,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              //===============================
-              const Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      "2400\$",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
                         color: ThemesStyles.textColor,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      "20,490\$",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: ThemesStyles.textColor,
-                      ),
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 5.0, // Adjust vertical padding
+                      horizontal: 10.0, // Adjust horizontal padding
                     ),
+                    // Set custom height
+                    isDense: true,
                   ),
-                ],
-              ),
-            ],
-          ),
+                )
+              : InkWell(
+                  onTap: () {
+                    setState(() {
+                      _isFirstTextFildEditing = true;
+                    });
+                  },
+                  child: _enteredFirstTextFildText.isNotEmpty
+                      ? Text(
+                          _enteredFirstTextFildText,
+                          style: const TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: ThemesStyles.textColor,
+                          ),
+                        )
+                      : Text(
+                          '${profileController.profileItems[0].money ?? 0} SYP',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
         ),
       ],
     );

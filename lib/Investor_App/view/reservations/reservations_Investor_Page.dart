@@ -7,13 +7,12 @@ import 'package:get/get.dart';
 import '../../../common/core/constants/theme.dart';
 
 class ReservationsPage extends StatelessWidget {
-  ReservationsPage({
-    super.key,
-    required this.assetId,
-    required this.isTheReservationDetailComeFromInvestorHalls
-  });
+  ReservationsPage(
+      {super.key,
+      required this.assetId,
+      required this.isTheReservationDetailComeFromInvestorHalls});
 
-  final bool isTheReservationDetailComeFromInvestorHalls ;
+  final bool isTheReservationDetailComeFromInvestorHalls;
   final int assetId;
   @override
   Widget build(BuildContext context) {
@@ -22,8 +21,10 @@ class ReservationsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Back"),
-        titleTextStyle: const TextStyle(
-          color: Color(0xff464646),
+        titleTextStyle: TextStyle(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.grey.shade300
+              : const Color(0xff464646),
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
@@ -31,7 +32,9 @@ class ReservationsPage extends StatelessWidget {
         automaticallyImplyLeading: false,
         elevation: 0.0,
         leading: IconButton(
-          color: ThemesStyles.textColor,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.grey.shade300
+              : const Color(0xff464646),
           onPressed: () {
             reservationsController.reservationsInvestorList.clear();
             reservationsController.isInvestorPrivateSelected.value = true;
@@ -288,7 +291,7 @@ class ReservationsPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 0.0),
                             child: Text(
-                              'There are no lounges to show',
+                              'There are no reservations to show',
                               style: TextStyle(
                                 fontSize: ThemesStyles.mainFontSize,
                                 fontWeight: FontWeight.bold,
@@ -328,21 +331,31 @@ class ReservationsPage extends StatelessWidget {
                       print(
                           ' reservationDetailsController.reservationsDetalisUserListzzzzzzzzzz: ${reservationDetailsController.reservationsDetalisUserList}');
                       Get.to(() => ReservationDetailsPage(
-                            isTheReservationDetailComeFromInvestorHalls:isTheReservationDetailComeFromInvestorHalls,
+                            isTheReservationDetailComeFromInvestorHalls:
+                                isTheReservationDetailComeFromInvestorHalls,
                           ));
                     },
                     child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? const Color.fromARGB(255, 68, 68, 68)
+                              : const Color(0xffF5F5F5),
                           border: Border.all(
-                              color: ThemesStyles.secondary, width: 2),
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Color.fromARGB(255, 0, 0, 0)
+                                  : ThemesStyles.secondary,
+                              width: 2),
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.shade300,
-                              offset: const Offset(5, 5),
-                              blurRadius: 10,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Color.fromARGB(255, 0, 0, 0)
+                                  : Colors.grey.shade300,
+                              offset: const Offset(4, 2),
+                              blurRadius: 1,
                             )
                           ],
                         ),
@@ -364,7 +377,6 @@ class ReservationsPage extends StatelessWidget {
                                     .reservationsInvestorList[index]
                                     .confirmedGuestId,
                                 style: TextStyle(
-                                  color: ThemesStyles.textColor,
                                   fontSize: ThemesStyles.mainFontSize,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -389,7 +401,6 @@ class ReservationsPage extends StatelessWidget {
                                         .reservationsInvestorList[index]
                                         .eventName,
                                     style: TextStyle(
-                                      color: ThemesStyles.textColor,
                                       fontSize: ThemesStyles.littelFontSize,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -410,7 +421,6 @@ class ReservationsPage extends StatelessWidget {
                                   child: Text(
                                     "${reservationsController.reservationsInvestorList[index].startDate}",
                                     style: TextStyle(
-                                      color: ThemesStyles.textColor,
                                       fontSize: ThemesStyles.littelFontSize,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -435,7 +445,6 @@ class ReservationsPage extends StatelessWidget {
                                             .reservationsInvestorList[index]
                                             .startTime,
                                         style: TextStyle(
-                                          color: ThemesStyles.textColor,
                                           fontSize: ThemesStyles.littelFontSize,
                                           fontWeight: FontWeight.bold,
                                         ),

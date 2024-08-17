@@ -72,9 +72,9 @@ class HiddenResetPasswordDataWidget extends StatelessWidget {
                 borderColor: const Color.fromARGB(255, 206, 206, 206),
                 textColor: ThemesStyles.primary,
                 title: "Reset Password",
-                onPressed: () {
+                onPressed: () async {
                   final profileController = Get.put(ProfileController());
-                  DioHelper.post(
+                  await DioHelper.post(
                     url: "$baseUrl/auth/reset-password",
                     body: {
                       'password': newPasswordController.text,
@@ -83,6 +83,9 @@ class HiddenResetPasswordDataWidget extends StatelessWidget {
                       'email': profileController.emailController.text,
                     },
                   );
+                  oldPasswordController.clear();
+                  newPasswordController.clear();
+                  confirmNewPasswordController.clear();
                 },
               )
             ],

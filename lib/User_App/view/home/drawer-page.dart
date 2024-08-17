@@ -3,6 +3,7 @@ import 'package:events_app/Investor_App/controllers/lounges/lounges_controller.d
 import 'package:events_app/Investor_App/controllers/services/services_controller.dart';
 import 'package:events_app/Investor_App/view/home/investor_homePage..dart';
 import 'package:events_app/Investor_App/view/lounges/loanges_page_resercations.dart';
+import 'package:events_app/Investor_App/view/lounges/service_page_reservations.dart';
 import 'package:events_app/Investor_App/view/reservations/reservations_Investor_Page.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/appbar_building.dart';
 import 'package:events_app/User_App/components/Drawer&Appbar&bottomNavBar/custome_drawer.dart';
@@ -125,9 +126,12 @@ class _DrawerPageState extends State<DrawerPage> {
     ),
     const FavoratePage(),
   ];
+
   static final List<Widget> _investorBottomBarOptions = <Widget>[
     InvestorHomePage(),
-    LoungesReservationsInvestorPage(),
+    isHallOwner!
+        ? LoungesReservationsInvestorPage()
+        : ServicesReservationsInvestorPage(),
     //here u will go to ADD page and also in the + button u gonna go to Add page
     MainBookingPage(),
     PublicEventPage(
@@ -171,10 +175,15 @@ class _DrawerPageState extends State<DrawerPage> {
         reservationController.reservationsUserList.clear();
         reservationController.reservationsInvestorList.clear();
       }
-      if (index == 1 && !isUser!) {
+      if (index == 1 && !isUser! && isHallOwner!) {
         final loungesController = Get.put(LoungesController());
         loungesController.loungesItems.clear();
         loungesController.getloungesItems();
+      }
+      if (index == 1 && !isUser! && !isHallOwner!) {
+        final serviceController = Get.put(ServicesHomePageController());
+        serviceController.servicesItems.clear();
+        serviceController.getServicesItems();
       }
       if (index == 3) {
         // Here u will show the public events
@@ -207,10 +216,10 @@ class _DrawerPageState extends State<DrawerPage> {
     const ProfilePage(
       isComeFromSettings: false,
     ),
-    //Budget
-    const HomePage(),
-    //History
-    const SearchPage(),
+    // //Budget
+    // const HomePage(),
+    // //History
+    // const SearchPage(),
     //Settings
     SettingsPage(),
     //about us
@@ -223,10 +232,10 @@ class _DrawerPageState extends State<DrawerPage> {
     const ProfilePage(
       isComeFromSettings: false,
     ),
-    //Budget
-    InvestorHomePage(),
-    //History
-    const SearchPage(),
+    // //Budget
+    // InvestorHomePage(),
+    // //History
+    // const SearchPage(),
     //Settings
     SettingsPage(),
     //about us

@@ -692,16 +692,14 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                     textInputType: TextInputType.number,
                                     autoFoucs: false,
                                     hintText: "Price",
-                                    validator: addLoungeController.kind.value ==
-                                            'public'
-                                        ? (String? value) {
+                                    validator:  (String? value) {
                                             if (value == null ||
                                                 value.isEmpty) {
                                               return "This field is required";
                                             }
                                             return null;
                                           }
-                                        : null,
+                                      ,
                                     textEditingController:
                                         servicesPriceController,
                                     obscureText: false,
@@ -712,7 +710,9 @@ class AddLoungesPage extends GetView<AddLoungesController> {
                                     width: width / 2.5,
                                     child: TextFormField(
                                       validator: (String? value) {
-                                        if (value == null || value.isEmpty) {
+                                        
+                                        if (value == null || value.isEmpty && addLoungeController.kind.value ==
+                                          'public') {
                                           return "This field is required";
                                         }
                                         return null;

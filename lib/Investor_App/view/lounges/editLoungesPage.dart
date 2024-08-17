@@ -90,7 +90,8 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
     capcityController.text = widget.loungeDetailsItems.capacity.toString();
     addressController.text = widget.loungeDetailsItems.address;
     _mixedController.selectedValue.value =
-        int.parse(widget.loungeDetailsItems.mixedPrice);
+        double.parse(widget.loungeDetailsItems.mixedPrice).round();
+
     _dinnerController.selectedValue.value = widget.loungeDetailsItems.dinner;
     dinnerPriceController.text =
         widget.loungeDetailsItems.dinnerPrice.toString();
@@ -964,6 +965,8 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                   onChanged: (value) {
                                     addLoungeController.dropdownValue.value =
                                         value!;
+                                    addLoungeController
+                                        .updateKindBasedOnSelection(value);
                                   },
                                   items: addLoungeController.dropdownItems
                                       .map<DropdownMenuItem<String>>(
@@ -999,87 +1002,73 @@ class _EditLoungesPageState extends State<EditLoungesPage> {
                                     obscureText: false,
                                   ),
                                 ),
-                                Container(
-                                  width: width / 2.5,
-                                  child: Obx(
-                                    () => Container(
-                                      height: 50,
-                                      child: TextFormField(
-                                        controller:
-                                            servicesproportionController,
-                                        enableSuggestions: false,
-                                        keyboardType: TextInputType.number,
-                                        obscureText: false,
-                                        textInputAction: TextInputAction.next,
-                                        cursorColor: ThemesStyles.primary,
-                                        enabled: addLoungeController
-                                                .dropdownValue.value ==
-                                            "Birhtday", // Adjust the condition as per your logic
-                                        validator: (String? value) {
-                                          if (addLoungeController
-                                                      .dropdownValue.value ==
-                                                  "Birhtday" &&
-                                              (value == null ||
-                                                  value.isEmpty)) {
-                                            return "This field is required";
-                                          }
-                                          return null;
-                                        },
-                                        autofocus: false,
-                                        decoration: InputDecoration(
-                                            hintText: "Proportion",
-                                            hintStyle: TextStyle(
-                                                color: ThemesStyles.textColor
-                                                    .withAlpha(80),
-                                                fontSize:
-                                                    ThemesStyles.mainFontSize -
-                                                        2),
-                                            floatingLabelStyle: TextStyle(
-                                              color: ThemesStyles.primary,
-                                            ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              borderSide: BorderSide(
-                                                color: ThemesStyles.primary
-                                                    .withAlpha(80),
-                                              ),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                borderSide: BorderSide(
-                                                  color: ThemesStyles.primary,
-                                                )),
-                                            errorBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                borderSide: const BorderSide(
-                                                  color: Colors.red,
-                                                )),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                borderSide: BorderSide(
-                                                  color: ThemesStyles.primary,
-                                                ))),
+                                Obx(() {
+                                  return Container(
+                                    width: width / 2.5,
+                                    child: TextFormField(
+                                      validator: (String? value) {
+                                        if (value == null ||
+                                            value.isEmpty &&
+                                                addLoungeController
+                                                        .kind.value ==
+                                                    'public') {
+                                          return "This field is required";
+                                        }
+                                        return null;
+                                      },
+                                      controller: servicesproportionController,
+                                      enableSuggestions: false,
+                                      keyboardType: TextInputType.number,
+                                      obscureText: false,
+                                      textInputAction: TextInputAction.next,
+                                      cursorColor: ThemesStyles.primary,
+                                      enabled: addLoungeController.kind.value ==
+                                          'public',
+                                      autofocus: false,
+                                      decoration: InputDecoration(
+                                        hintText: "Proportion",
+                                        hintStyle: TextStyle(
+                                          color: ThemesStyles.textColor
+                                              .withAlpha(80),
+                                          fontSize:
+                                              ThemesStyles.mainFontSize - 2,
+                                        ),
+                                        floatingLabelStyle: const TextStyle(
+                                          color: ThemesStyles.primary,
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: BorderSide(
+                                            color: ThemesStyles.primary
+                                                .withAlpha(80),
+                                          ),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: BorderSide(
+                                            color: ThemesStyles.primary,
+                                          ),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: const BorderSide(
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: BorderSide(
+                                            color: ThemesStyles.primary,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    // DefaultFormFeild(
-                                    //   autoFoucs: false,
-                                    //   hintText: "Proportion",
-                                    //   validator: (String? value) {
-                                    //     if (value == '') {
-                                    //       return "this field is required";
-                                    //     }
-                                    //     return null;
-                                    //   },
-                                    //   textEditingController:
-                                    //       servicesproportionController,
-                                    //   obscureText: false,
-                                    // ),
-                                  ),
-                                ),
+                                  );
+                                }),
                               ],
                             ),
                             Row(

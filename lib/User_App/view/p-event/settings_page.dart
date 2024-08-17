@@ -34,7 +34,7 @@ class SettingsList extends StatefulWidget {
 }
 
 class _SettingsListState extends State<SettingsList> {
-  bool isdark = false;
+  bool isDarkMode = false;
   bool isnoti = false;
   @override
   Widget build(BuildContext context) {
@@ -45,10 +45,13 @@ class _SettingsListState extends State<SettingsList> {
           title: 'Account',
           children: [
             SettingsTile(
+              isDarkMode: isDarkMode,
               title: 'See Profile',
               icon: Icons.person,
               onPressed: () {
-                Get.to(() => const ProfilePage(isComeFromSettings: true,));
+                Get.to(() => const ProfilePage(
+                      isComeFromSettings: true,
+                    ));
               },
             ),
           ],
@@ -59,7 +62,9 @@ class _SettingsListState extends State<SettingsList> {
             SwitchListTile(
               title: Text(
                 'Notification',
-                style: TextStyle(fontSize: ThemesStyles.littelFontSize),
+                style: TextStyle(
+                    color: isDarkMode ? Colors.white : Colors.black,
+                    fontSize: ThemesStyles.littelFontSize),
               ),
               activeColor: const Color(0xFFECB5E2),
               inactiveThumbColor: ThemesStyles.primary,
@@ -78,37 +83,42 @@ class _SettingsListState extends State<SettingsList> {
             SwitchListTile(
               title: Text(
                 'Dark Mode',
-                style: TextStyle(fontSize: ThemesStyles.littelFontSize),
+                style: TextStyle(
+                    color: isDarkMode ? Colors.white : Colors.black,
+                    fontSize: 16),
               ),
               activeColor: const Color(0xFF9AD9FE),
-              inactiveThumbColor: ThemesStyles.primary,
-              value: isdark ? false : true,
+              inactiveThumbColor: Colors.blue,
+              value: isDarkMode,
               onChanged: (bool value) {
                 setState(() {
-                  if (isdark) {
-                    ValueListenableBuilder<ThemeMode>(
-                        valueListenable: notifier,
-                        builder: (_, mode, ___) {
-                          return GestureDetector(
-                            onTap: () => notifier.value =
-                                mode == ThemeMode.light
-                                    ? ThemeMode.dark
-                                    : ThemeMode.light,
-                            child: const Icon(
-                              Icons.dark_mode,
-                              color: ThemesStyles.background,
-                            ),
-                          );
-                        });
-                  }
-                  isdark = !isdark;
+                  isDarkMode = value;
+                  notifier.value =
+                      isDarkMode ? ThemeMode.dark : ThemeMode.light;
                 });
               },
+              secondary: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    return ScaleTransition(scale: animation, child: child);
+                  },
+                  child: Icon(
+                    isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                    color: isDarkMode ? Colors.yellow : Colors.grey,
+                    key: ValueKey<bool>(isDarkMode),
+                  ),
+                ),
+              ),
             ),
             ListTile(
               title: Text(
                 'Language',
-                style: TextStyle(fontSize: ThemesStyles.littelFontSize),
+                style: TextStyle(
+                    color: isDarkMode ? Colors.white : Colors.black,
+                    fontSize: ThemesStyles.littelFontSize),
               ),
             ),
             GetBuilder<LanguageRadioController>(
@@ -125,6 +135,7 @@ class _SettingsListState extends State<SettingsList> {
                           Text(
                             "Arabic".tr,
                             style: TextStyle(
+                              color: isDarkMode ? Colors.white : Colors.black,
                               fontSize: ThemesStyles.littelFontSize,
                             ),
                           ),
@@ -132,14 +143,15 @@ class _SettingsListState extends State<SettingsList> {
                               onPressed: () {
                                 controller.toggleLanguage();
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.swap_horiz_rounded,
-                                color: Colors.black,
+                                color: isDarkMode ? Colors.white : Colors.black,
                                 size: 18,
                               )),
                           Text(
                             "English".tr,
                             style: TextStyle(
+                              color: isDarkMode ? Colors.white : Colors.black,
                               fontSize: ThemesStyles.littelFontSize,
                             ),
                           ),
@@ -151,10 +163,13 @@ class _SettingsListState extends State<SettingsList> {
             ListTile(
               title: Text(
                 'Region',
-                style: TextStyle(fontSize: ThemesStyles.littelFontSize),
+                style: TextStyle(
+                  fontSize: ThemesStyles.littelFontSize,
+                  color: isDarkMode ? Colors.white : Colors.black,
+                ),
               ),
               trailing: Text(
-                'Pakistan',
+                'Damascus',
                 style: TextStyle(
                     fontSize: ThemesStyles.littelFontSize,
                     color: const Color.fromARGB(255, 198, 198, 198)),
@@ -167,7 +182,9 @@ class _SettingsListState extends State<SettingsList> {
               child: ListTile(
                 title: Text(
                   'About Us',
-                  style: TextStyle(fontSize: ThemesStyles.littelFontSize),
+                  style: TextStyle(
+                      color: isDarkMode ? Colors.white : Colors.black,
+                      fontSize: ThemesStyles.littelFontSize),
                 ),
               ),
             ),
@@ -194,35 +211,6 @@ class _SettingsListState extends State<SettingsList> {
   }
 }
 
-/**
-  bottomNavigationBar: BottomAppBar(
-       color: Colors.transparent,
-        child: ElevatedButton(
-                      onPressed: () {
-                       Get.to(LoginPage());
-                      },
-                      // ignore: sort_child_properties_last
-                      child:const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Spacer(flex: 3,),
-
-                          Icon(Icons.logout,color:  Color(0xFFFBEFF6),),
-                          Spacer(flex: 1,),
-                           Text('Log Out',style: TextStyle(color: Color(0xFFFBEFF6),),),
-                           Spacer(flex:3,),
-                        ],
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: ThemesStyles.primary,
-                        padding:const  EdgeInsets.symmetric(horizontal: 55, vertical: 25),
-                        textStyle: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-        
-        ),
- */
 class SettingsSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
@@ -255,6 +243,7 @@ class SettingsSection extends StatelessWidget {
 class SettingsTile extends StatelessWidget {
   final String title;
   final IconData icon;
+  final bool isDarkMode;
   final void Function()? onPressed;
 
   const SettingsTile({
@@ -262,6 +251,7 @@ class SettingsTile extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.onPressed,
+    required this.isDarkMode,
   }) : super(key: key);
 
   @override
@@ -271,6 +261,7 @@ class SettingsTile extends StatelessWidget {
       title: Text(
         title,
         style: TextStyle(
+          color: isDarkMode ? Colors.white : Colors.black,
           fontSize: ThemesStyles.littelFontSize,
         ),
       ),
